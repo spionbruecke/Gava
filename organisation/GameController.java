@@ -1,6 +1,6 @@
 package organisation;
 
-public class Game_Controller {
+public class GameController {
   
     
 }

@@ -1,6 +1,6 @@
 package organisation;
 
-Public class Game_Master{
+Public class GameMaster{
 
 
 }
