@@ -1,4 +1,4 @@
-<diagram program="umletino" version="14.4.0-SNAPSHOT"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>160</x><y>820</y><w>210</w><h>150</h></coordinates><panel_attributes>&lt;&lt;abstract class&gt;&gt;
+<diagram program="umletino" version="14.3.0"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>160</x><y>820</y><w>210</w><h>150</h></coordinates><panel_attributes>&lt;&lt;abstract class&gt;&gt;
 Games
 --
 
@@ -35,10 +35,19 @@ Rules
 --
 
 --
-+ isFieldOccupied(): boolean</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>360</x><y>250</y><w>90</w><h>30</h></coordinates><panel_attributes>Database</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLPackage</id><coordinates><x>860</x><y>0</y><w>430</w><h>210</h></coordinates><panel_attributes>Frontend
++ isFieldOccupied(): boolean</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>360</x><y>250</y><w>90</w><h>30</h></coordinates><panel_attributes>Database</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLPackage</id><coordinates><x>860</x><y>0</y><w>430</w><h>260</h></coordinates><panel_attributes>Frontend
 --
-bg=blue</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>900</x><y>90</y><w>100</w><h>40</h></coordinates><panel_attributes>Interface
-Clients</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1090</x><y>60</y><w>100</w><h>30</h></coordinates><panel_attributes>Desktop</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1090</x><y>120</y><w>100</w><h>30</h></coordinates><panel_attributes>Web</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>990</x><y>60</y><w>120</w><h>70</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;50;100;10</additional_attributes></element><element><id>Relation</id><coordinates><x>990</x><y>110</y><w>120</w><h>40</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;10;100;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>320</x><y>480</y><w>210</w><h>140</h></coordinates><panel_attributes>Einstellungen
+bg=blue</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>900</x><y>60</y><w>240</w><h>170</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
+Clients
+--
+
+--
++ connect(): void
++ login(): void
++ selectGame(): Game
++ setupGUI(): void
++ updateBoard(Gameboard): Gameboard
++ makeAction()</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1180</x><y>50</y><w>100</w><h>30</h></coordinates><panel_attributes>Desktop</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1180</x><y>130</y><w>100</w><h>30</h></coordinates><panel_attributes>Web</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1130</x><y>50</y><w>70</w><h>50</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;30;50;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1130</x><y>80</y><w>70</w><h>80</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;10;50;60</additional_attributes></element><element><id>UMLClass</id><coordinates><x>320</x><y>480</y><w>210</w><h>140</h></coordinates><panel_attributes>Einstellungen
 --
 - Volumen: int
 --
