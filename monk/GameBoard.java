@@ -1,4 +1,4 @@
-package game_structur;
+package monk;
 
 public abstract class GameBoard {
     

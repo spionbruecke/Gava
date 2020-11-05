@@ -1,7 +1,7 @@
 package organisation;
 
-import game_structur.Games;
-import game_structur.GameBoard;
+import monk.Games;
+import monk.GameBoard;
 
 public class Player {
 
@@ -10,6 +10,10 @@ public class Player {
     private Games chosedGame;
     private int points;
 
+    public Player(){
+        ID ++;
+        name = "anonymus" + (int) (Math.random() * 100000);
+    }
     public Boolean logIn(String name, String password) {
         return false;
     }
