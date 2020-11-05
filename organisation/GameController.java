@@ -6,10 +6,14 @@ package organisation;
 // This Class starts automatically if the server starts
 public class GameController{
   
-    GameMaster Current_Games;
+    static GameMaster currentGames;
 
-    public GameMaster openNewRoom(){
-        Current_Games = new GameMaster();
+    public static void main(String[] args) {
+        currentGames = new GameMaster();
+        System.out.println(currentGames);
+    }
+    public static GameMaster openNewRoom(){
+        currentGames = new GameMaster();
         return null;
     }
 
@@ -17,7 +21,7 @@ public class GameController{
         return false;
     }
     
-    private Boolean getInput(Player player,GameMaster gamemaster, Input input){
+    private Boolean getInput(Player player,GameMaster gamemaster, String input){
         return false;
     }
 
