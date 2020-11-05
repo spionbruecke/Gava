@@ -1,4 +1,4 @@
-<diagram program="umletino" version="14.3.0"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>160</x><y>820</y><w>210</w><h>150</h></coordinates><panel_attributes>&lt;&lt;abstract class&gt;&gt;
+<diagram program="umletino" version="14.4.0-SNAPSHOT"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>160</x><y>820</y><w>210</w><h>150</h></coordinates><panel_attributes>&lt;&lt;abstract class&gt;&gt;
 Games
 --
 
