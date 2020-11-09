@@ -1,5 +1,14 @@
 package monk;
 
-public abstract class Games {
+public class Games {
     
+    private String name;
+
+    public Games(String name){
+        this.name = name;
+    }
+
+    public String toString(){
+        return name;
+    }
 }

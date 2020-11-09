@@ -1,19 +1,34 @@
 package organisation;
 
 import monk.Games;
-import monk.GameBoard;
+
+import java.net.Socket;
+import java.util.Random;
+import java.util.UUID;
+
 
 public class Player {
 
-    private long ID;
+    private String playerID;
     private String name;
     private Games chosedGame;
-    private int points;
+    //private int points;
+    private GameMaster gameMaster;
+    private Socket connection;
 
     public Player(){
-        ID ++;
-        name = "anonymus" + (int) (Math.random() * 100000);
+        //A random name will be generated until the Player log in
+        Random r = new Random();
+        name = "anonymus" + r.nextInt(10000);
+
+        // Each Player get a unique ID
+        playerID = UUID.randomUUID().toString();
+
+        //Connection with the client
+        //this.connection = connection;
     }
+
+    /* Benötigt Zugang zur Datenbank
     public Boolean logIn(String name, String password) {
         return false;
     }
@@ -22,14 +37,34 @@ public class Player {
             this.name = name;
             return true;
     }
+    */
+
+    public String getPlayerID(){
+        return playerID;
+    }
+
     public String getName(){
         return name;
     }
+
+    public Games getGame(){
+        return chosedGame;
+    }
+
+    public void setGameMaster(GameMaster gameMaster){
+        this.gameMaster = gameMaster;
+    }
+
+    public GameMaster getGameMaster(){
+        return gameMaster;
+    }
+
     public Boolean choseGame(Games game){
         this.chosedGame = game;
         return false;
     }
 
+    /*
     protected Boolean setInput(GameBoard gameboard){
         return false;
     }
@@ -39,5 +74,9 @@ public class Player {
     protected Boolean notify(Games game){
         return false;
     }
+    */
 
+    public String toString(){
+        return "ID: " + playerID + " | Name: " + name;
+    }
 }
