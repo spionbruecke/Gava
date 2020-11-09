@@ -21,49 +21,48 @@ public class ClientHandler extends Thread {
         this.controller = controller;
     }
 
+    // The class have some Features who are temporary because, we need them to test the Code, after the implementation of some Rules we delete most of them
     @Override
     public void run() {
         Player player;
-        Games schach = new Games("Schach");
+        Games schach = new Games("Schach"); //these are the two games we want to implement fully
         Games mill = new Games("Mühle");
-        GameMaster gameMaster;
-        //while(true){
+        GameRoom gameRoom;
+
             try {
                 if(newConnection != null){
                     System.out.println("Client " + this.newConnection + " connected");
-                    outputStream.writeUTF("You're now connected");
+                    outputStream.writeUTF("You're now connected"); //for test purpose
                     player = new Player();
                     
-                    outputStream.writeUTF("You're Player: " + player.getName() + " with ID: " + player.getPlayerID());
+                    outputStream.writeUTF("You're Player: " + player.getName() + " with ID: " + player.getPlayerID()); //for test purpose
 
-                    outputStream.writeUTF("Please choose a Game");
-                    outputStream.writeUTF("1. Schach \n2. Mühle");
+                    outputStream.writeUTF("Please choose a Game"); //for test purpose
+                    outputStream.writeUTF("1. Schach \n2. Mühle"); //for test purpose
                     switch (inputStream.readUTF()){
                         case "1":
-                            player.choseGame(schach);
+                            player.setGame(schach);
                             break;
                         case "2":
-                            player.choseGame(mill);
+                            player.setGame(mill);
                             break;
                         default:
                             break;
                     }
 
-                    gameMaster = controller.addPlayer(player);
+                    gameRoom = controller.addPlayer(player);
 
-                    outputStream.writeUTF("You're connectet with Player: " + gameMaster.getTheOtherPlayer(player) +" with the Game: " + gameMaster.getGame());
+                    outputStream.writeUTF("You're connectet with Player: " + gameRoom.getTheOtherPlayer(player) +" with the Game: " + gameRoom.getGame()); //for test purpose 
 
                     
-                    outputStream.writeUTF("You disconnect now");
+                    outputStream.writeUTF("You disconnect now"); //for test purpose
                     newConnection.close();
                     inputStream.close();
                     outputStream.close();
                     newConnection = null;
                 }
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-        //}
     }
 }

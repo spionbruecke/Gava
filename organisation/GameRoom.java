@@ -4,7 +4,7 @@ package organisation;
 //import monk.GameBoard;
 import monk.Games;
 
-public class GameMaster{
+public class GameRoom{
 
     //private GameBoard currentGameBoard;
     private Games currentGame;
@@ -12,24 +12,14 @@ public class GameMaster{
     private Player player2;
     private int numberOfPlayer;
 
-    public GameMaster(Games game){
+    public GameRoom(Games game){
         currentGame = game;
 
     }
+
+    //****  Getter ****
     protected int getNumberOfPlayer(){
         return numberOfPlayer;
-    }
-    protected boolean addPlayer(Player player){
-        if(numberOfPlayer == 0) {
-            player1 = player;
-            numberOfPlayer ++;
-        } else if(numberOfPlayer == 1) {
-            player2 = player;
-            numberOfPlayer ++;
-        } else {
-            return false;
-        }
-        return true;
     }
 
     public Games getGame(){
@@ -44,6 +34,7 @@ public class GameMaster{
         return player2;
     }
 
+    //for test purpose (and mayby later for the gui?)
     public String getTheOtherPlayer( Player player){
         if (player1 == player && player2 != null)
             return player2.getName();
@@ -57,11 +48,12 @@ public class GameMaster{
     protected void getStart(){
         
     }
-
     
     protected Boolean get_Input(GameBoard gameboard, Player player){
         return false;
     }
+
+    //****  Functions ****
     protected GameBoard notify(GameBoard gameboard){
         return null;
     }
@@ -69,6 +61,20 @@ public class GameMaster{
         return null;
     }
     */
+
+     //check which position is free and add the player to this position
+     protected boolean addPlayer(Player player){
+        if(numberOfPlayer == 0) {
+            player1 = player;
+            numberOfPlayer ++;
+        } else if(numberOfPlayer == 1) {
+            player2 = player;
+            numberOfPlayer ++;
+        } else {
+            return false;
+        }
+        return true;
+    }
 
     public String toString(){
         StringBuilder output = new StringBuilder();
