@@ -1,5 +1,6 @@
 package organisation;
 
+
 //import monk.GameBoard;
 import monk.Games;
 
@@ -31,7 +32,7 @@ public class GameMaster{
         return true;
     }
 
-    protected Games getGame(){
+    public Games getGame(){
         return currentGame;
     }
 
@@ -41,6 +42,15 @@ public class GameMaster{
 
     protected Player getPlayer2(){
         return player2;
+    }
+
+    public String getTheOtherPlayer( Player player){
+        if (player1 == player && player2 != null)
+            return player2.getName();
+        else if( player2 == player && player1 != null)
+            return player1.getName();
+        else
+            return " with none";
     }
 
     /*

@@ -2,7 +2,6 @@ package organisation;
 
 import monk.Games;
 
-import java.net.Socket;
 import java.util.Random;
 import java.util.UUID;
 
@@ -14,7 +13,6 @@ public class Player {
     private Games chosedGame;
     //private int points;
     private GameMaster gameMaster;
-    private Socket connection;
 
     public Player(){
         //A random name will be generated until the Player log in
@@ -23,9 +21,6 @@ public class Player {
 
         // Each Player get a unique ID
         playerID = UUID.randomUUID().toString();
-
-        //Connection with the client
-        //this.connection = connection;
     }
 
     /* Benötigt Zugang zur Datenbank

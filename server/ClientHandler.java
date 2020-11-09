@@ -1,8 +1,7 @@
 package server;
 
 import java.io.*;
-import java.text.*;
-import java.util.*;
+
 import java.net.*;
 import organisation.*;
 import monk.*;
@@ -28,7 +27,7 @@ public class ClientHandler extends Thread {
         Games schach = new Games("Schach");
         Games mill = new Games("Mühle");
         GameMaster gameMaster;
-        while(true){
+        //while(true){
             try {
                 if(newConnection != null){
                     System.out.println("Client " + this.newConnection + " connected");
@@ -38,7 +37,7 @@ public class ClientHandler extends Thread {
                     outputStream.writeUTF("You're Player: " + player.getName() + " with ID: " + player.getPlayerID());
 
                     outputStream.writeUTF("Please choose a Game");
-                    
+                    outputStream.writeUTF("1. Schach \n2. Mühle");
                     switch (inputStream.readUTF()){
                         case "1":
                             player.choseGame(schach);
@@ -52,10 +51,9 @@ public class ClientHandler extends Thread {
 
                     gameMaster = controller.addPlayer(player);
 
+                    outputStream.writeUTF("You're connectet with Player: " + gameMaster.getTheOtherPlayer(player) +" with the Game: " + gameMaster.getGame());
 
-
-                    outputStream.writeUTF("You're connectet with Player: ");
-
+                    
                     outputStream.writeUTF("You disconnect now");
                     newConnection.close();
                     inputStream.close();
@@ -66,6 +64,6 @@ public class ClientHandler extends Thread {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-        }
+        //}
     }
 }
