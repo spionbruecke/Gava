@@ -1,5 +1,16 @@
-<diagram program="umletino" version="14.4.0-SNAPSHOT"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>160</x><y>820</y><w>210</w><h>150</h></coordinates><panel_attributes>&lt;&lt;abstract class&gt;&gt;
-Games
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>7</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>112</x>
+      <y>574</y>
+      <w>147</w>
+      <h>105</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;abstract class&gt;&gt;
+Game
 --
 
 --
@@ -8,7 +19,18 @@ Games
 + end(): void
 + play(): void
 + timer(): void
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>410</x><y>820</y><w>290</w><h>150</h></coordinates><panel_attributes>&lt;&lt;abstract class&gt;&gt;
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>287</x>
+      <y>574</y>
+      <w>203</w>
+      <h>105</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;abstract class&gt;&gt;
 GameBoard
 --
 - state: (type?)
@@ -17,12 +39,45 @@ GameBoard
 + getState(): (type?)
 + saveStateToMemento(): Memento
 + getStateFromMemento(Memento memento)
-  : void</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>740</x><y>820</y><w>210</w><h>90</h></coordinates><panel_attributes>Memento
+  : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>518</x>
+      <y>574</y>
+      <w>147</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>Memento
 --
 - state: (type?)
 --
 + Mememento(type? state)
-+ getState(): (type?)</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>690</x><y>820</y><w>70</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>50;10;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>970</x><y>820</y><w>210</w><h>130</h></coordinates><panel_attributes>&lt;&lt;abstract class&gt;&gt;
++ getState(): (type?)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>483</x>
+      <y>574</y>
+      <w>49</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>50.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>679</x>
+      <y>574</y>
+      <w>147</w>
+      <h>91</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;abstract class&gt;&gt;
 PlayingPiece
 --
 - name: String
@@ -30,14 +85,58 @@ PlayingPiece
 - state: boolean
 --
 + move(): void
-+ swap(): void</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1200</x><y>820</y><w>210</w><h>90</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
++ swap(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>840</x>
+      <y>574</y>
+      <w>147</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Interface&gt;&gt;
 Rules
 --
 
 --
-+ isFieldOccupied(): boolean</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>360</x><y>250</y><w>90</w><h>30</h></coordinates><panel_attributes>Database</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLPackage</id><coordinates><x>860</x><y>0</y><w>430</w><h>260</h></coordinates><panel_attributes>Frontend
++ isFieldOccupied(): boolean</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>252</x>
+      <y>175</y>
+      <w>63</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>Database</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>602</x>
+      <y>0</y>
+      <w>301</w>
+      <h>182</h>
+    </coordinates>
+    <panel_attributes>Frontend
 --
-bg=blue</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>900</x><y>60</y><w>240</w><h>170</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>630</x>
+      <y>42</y>
+      <w>168</w>
+      <h>119</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Interface&gt;&gt;
 Clients
 --
 
@@ -47,13 +146,90 @@ Clients
 + selectGame(): Game
 + setupGUI(): void
 + updateBoard(Gameboard): Gameboard
-+ makeAction()</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1180</x><y>50</y><w>100</w><h>30</h></coordinates><panel_attributes>Desktop</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1180</x><y>130</y><w>100</w><h>30</h></coordinates><panel_attributes>Web</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1130</x><y>50</y><w>70</w><h>50</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;30;50;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1130</x><y>80</y><w>70</w><h>80</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;10;50;60</additional_attributes></element><element><id>UMLClass</id><coordinates><x>320</x><y>480</y><w>210</w><h>140</h></coordinates><panel_attributes>Einstellungen
++ makeAction()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>826</x>
+      <y>35</y>
+      <w>70</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>Desktop</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>826</x>
+      <y>91</y>
+      <w>70</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>Web</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>791</x>
+      <y>35</y>
+      <w>49</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;30.0;50.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>791</x>
+      <y>56</y>
+      <w>49</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;50.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>224</x>
+      <y>266</y>
+      <w>147</w>
+      <h>98</h>
+    </coordinates>
+    <panel_attributes>Einstellungen
 --
 - Volumen: int
 --
-+ change_Volumen(int): Boolean</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLPackage</id><coordinates><x>1820</x><y>1150</y><w>240</w><h>230</h></coordinates><panel_attributes>OtherGames
++ change_Volumen(int): Boolean</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>1274</x>
+      <y>805</y>
+      <w>168</w>
+      <h>161</h>
+    </coordinates>
+    <panel_attributes>OtherGames
 --
-bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>10</x><y>1210</y><w>210</w><h>120</h></coordinates><panel_attributes>ChessGame
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>7</x>
+      <y>847</y>
+      <w>147</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>ChessGame
 --
 --
 + initialize(): void
@@ -61,7 +237,18 @@ bg=orange</panel_attributes><additional_attributes></additional_attributes></ele
 + end(): void
 + play(): void
 + timer(): void
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>970</x><y>1210</y><w>210</w><h>120</h></coordinates><panel_attributes>MillsGame
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>679</x>
+      <y>847</y>
+      <w>147</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>MillsGame
 --
 --
 + initialize(): void
@@ -69,17 +256,50 @@ bg=orange</panel_attributes><additional_attributes></additional_attributes></ele
 + end(): void
 + play(): void
 + timer(): void
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>240</x><y>1210</y><w>210</w><h>90</h></coordinates><panel_attributes>ChessBoard
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>168</x>
+      <y>847</y>
+      <w>147</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>ChessBoard
 --
 - fields: array[8][8]
 - Board: GameBoard
 --
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1190</x><y>1210</y><w>210</w><h>90</h></coordinates><panel_attributes>MillsBoard
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>833</x>
+      <y>847</y>
+      <w>147</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>MillsBoard
 --
 - fields: array[3][3]
 - Board: GameBoard
 --
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>470</x><y>1210</y><w>260</w><h>220</h></coordinates><panel_attributes>ChessPlayingPiece
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>329</x>
+      <y>847</y>
+      <w>182</w>
+      <h>154</h>
+    </coordinates>
+    <panel_attributes>ChessPlayingPiece
 --
 - playingPiece: PlayingPiece
 --
@@ -92,53 +312,394 @@ bg=orange</panel_attributes><additional_attributes></additional_attributes></ele
   :boolean
 + knightMove(String direction) boolean
 + pawnMove(String direction, int steps)
-  :boolean</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1220</x><y>640</y><w>210</w><h>80</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
+  :boolean</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>854</x>
+      <y>406</y>
+      <w>147</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Interface&gt;&gt;
 Observer
 --
 --
 + update(Observable obj):void
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1130</x><y>670</y><w>110</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>90;10;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1430</x><y>820</y><w>240</w><h>100</h></coordinates><panel_attributes>&lt;&lt;abstract class&gt;&gt;
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>798</x>
+      <y>392</y>
+      <w>70</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>80.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1001</x>
+      <y>574</y>
+      <w>168</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;abstract class&gt;&gt;
 Observable
 --
-- observers: Observer
+- observers: ArrayList&lt;Observer&gt;
 --
 + setChanged(): void
 + notifyObservers(Gameboard Board)
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1420</x><y>650</y><w>150</w><h>190</h></coordinates><panel_attributes>lt=&lt;-
-notify</panel_attributes><additional_attributes>10;20;130;20;130;170</additional_attributes></element><element><id>UMLClass</id><coordinates><x>750</x><y>1210</y><w>170</w><h>90</h></coordinates><panel_attributes>ChessRules
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>994</x>
+      <y>420</y>
+      <w>105</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+notify</panel_attributes>
+    <additional_attributes>10.0;10.0;130.0;70.0;130.0;220.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>525</x>
+      <y>847</y>
+      <w>119</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>ChessRules
 --
 - validMove: boolean
 --
-Rules to check...</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLPackage</id><coordinates><x>0</x><y>1150</y><w>940</w><h>300</h></coordinates><panel_attributes>Chess
+Rules to check...</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>0</x>
+      <y>805</y>
+      <w>658</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>Chess
 --
-bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1410</x><y>1210</y><w>210</w><h>80</h></coordinates><panel_attributes>MillsPlayingPiece
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>987</x>
+      <y>847</y>
+      <w>147</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>MillsPlayingPiece
 --
 - playingPiece: PlayingPiece
 --
-+ move(String direction):boolean</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1630</x><y>1210</y><w>170</w><h>90</h></coordinates><panel_attributes>MillsRules
++ move(String direction):boolean</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1141</x>
+      <y>847</y>
+      <w>119</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>MillsRules
 --
 - validMove: boolean
 --
-Rules to check...</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLPackage</id><coordinates><x>950</x><y>1150</y><w>860</w><h>300</h></coordinates><panel_attributes>Mills
+Rules to check...</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>665</x>
+      <y>805</y>
+      <w>602</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>Mills
 --
-bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLPackage</id><coordinates><x>60</x><y>420</y><w>1640</w><h>560</h></coordinates><panel_attributes>Backend (mir fällt kein passender Name ein)
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>42</x>
+      <y>224</y>
+      <w>1148</w>
+      <h>462</h>
+    </coordinates>
+    <panel_attributes>Backend (mir fällt kein passender Name ein)
 --
-bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>120</x><y>1070</y><w>980</w><h>40</h></coordinates><panel_attributes>lt=-
-</panel_attributes><additional_attributes>10;20;960;20</additional_attributes></element><element><id>Relation</id><coordinates><x>120</x><y>1080</y><w>30</w><h>150</h></coordinates><panel_attributes>lt=-
-</panel_attributes><additional_attributes>10;130;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1070</x><y>1080</y><w>30</w><h>150</h></coordinates><panel_attributes>lt=-
-</panel_attributes><additional_attributes>10;130;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>240</x><y>960</y><w>30</w><h>150</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;130</additional_attributes></element><element><id>Relation</id><coordinates><x>540</x><y>960</y><w>30</w><h>130</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;110</additional_attributes></element><element><id>Relation</id><coordinates><x>320</x><y>1050</y><w>980</w><h>40</h></coordinates><panel_attributes>lt=-
-</panel_attributes><additional_attributes>10;20;960;20</additional_attributes></element><element><id>Relation</id><coordinates><x>320</x><y>1060</y><w>30</w><h>170</h></coordinates><panel_attributes>lt=-
-</panel_attributes><additional_attributes>10;150;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1270</x><y>1060</y><w>30</w><h>170</h></coordinates><panel_attributes>lt=-
-</panel_attributes><additional_attributes>10;150;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1030</x><y>940</y><w>30</w><h>200</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;180</additional_attributes></element><element><id>Relation</id><coordinates><x>580</x><y>1100</y><w>980</w><h>40</h></coordinates><panel_attributes>lt=-
-</panel_attributes><additional_attributes>10;20;960;20</additional_attributes></element><element><id>Relation</id><coordinates><x>580</x><y>1110</y><w>30</w><h>120</h></coordinates><panel_attributes>lt=-
-</panel_attributes><additional_attributes>10;100;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1530</x><y>1110</y><w>30</w><h>120</h></coordinates><panel_attributes>lt=-
-</panel_attributes><additional_attributes>10;100;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1300</x><y>900</y><w>30</w><h>120</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;10;10;100</additional_attributes></element><element><id>Relation</id><coordinates><x>820</x><y>980</y><w>920</w><h>40</h></coordinates><panel_attributes>lt=.
-</panel_attributes><additional_attributes>10;20;900;20</additional_attributes></element><element><id>Relation</id><coordinates><x>820</x><y>990</y><w>30</w><h>240</h></coordinates><panel_attributes>lt=.
-</panel_attributes><additional_attributes>10;220;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1710</x><y>990</y><w>30</w><h>240</h></coordinates><panel_attributes>lt=.
-</panel_attributes><additional_attributes>10;220;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1540</x><y>910</y><w>30</w><h>140</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;120</additional_attributes></element><element><id>Relation</id><coordinates><x>390</x><y>1010</y><w>1180</w><h>40</h></coordinates><panel_attributes>lt=-
-</panel_attributes><additional_attributes>10;20;1160;20</additional_attributes></element><element><id>Relation</id><coordinates><x>390</x><y>1020</y><w>30</w><h>210</h></coordinates><panel_attributes>lt=-
-</panel_attributes><additional_attributes>10;190;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1350</x><y>1020</y><w>30</w><h>210</h></coordinates><panel_attributes>lt=-
-</panel_attributes><additional_attributes>10;190;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>900</x><y>580</y><w>240</w><h>180</h></coordinates><panel_attributes>Game_Master
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>84</x>
+      <y>749</y>
+      <w>686</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=-
+</panel_attributes>
+    <additional_attributes>10.0;20.0;960.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>84</x>
+      <y>756</y>
+      <w>21</w>
+      <h>105</h>
+    </coordinates>
+    <panel_attributes>lt=-
+</panel_attributes>
+    <additional_attributes>10.0;130.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>749</x>
+      <y>756</y>
+      <w>21</w>
+      <h>105</h>
+    </coordinates>
+    <panel_attributes>lt=-
+</panel_attributes>
+    <additional_attributes>10.0;130.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>168</x>
+      <y>672</y>
+      <w>21</w>
+      <h>105</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>378</x>
+      <y>672</y>
+      <w>21</w>
+      <h>91</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>224</x>
+      <y>735</y>
+      <w>686</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=-
+</panel_attributes>
+    <additional_attributes>10.0;20.0;960.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>224</x>
+      <y>742</y>
+      <w>21</w>
+      <h>119</h>
+    </coordinates>
+    <panel_attributes>lt=-
+</panel_attributes>
+    <additional_attributes>10.0;150.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>889</x>
+      <y>742</y>
+      <w>21</w>
+      <h>119</h>
+    </coordinates>
+    <panel_attributes>lt=-
+</panel_attributes>
+    <additional_attributes>10.0;150.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>721</x>
+      <y>658</y>
+      <w>21</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;180.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>406</x>
+      <y>770</y>
+      <w>686</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=-
+</panel_attributes>
+    <additional_attributes>10.0;20.0;960.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>406</x>
+      <y>777</y>
+      <w>21</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>lt=-
+</panel_attributes>
+    <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1071</x>
+      <y>777</y>
+      <w>21</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>lt=-
+</panel_attributes>
+    <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>910</x>
+      <y>630</y>
+      <w>21</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>574</x>
+      <y>686</y>
+      <w>644</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=.
+</panel_attributes>
+    <additional_attributes>10.0;20.0;900.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>574</x>
+      <y>693</y>
+      <w>21</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>lt=.
+</panel_attributes>
+    <additional_attributes>10.0;220.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1197</x>
+      <y>693</y>
+      <w>21</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>lt=.
+</panel_attributes>
+    <additional_attributes>10.0;220.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1078</x>
+      <y>637</y>
+      <w>21</w>
+      <h>98</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>273</x>
+      <y>707</y>
+      <w>826</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=-
+</panel_attributes>
+    <additional_attributes>10.0;20.0;1160.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>273</x>
+      <y>714</y>
+      <w>21</w>
+      <h>147</h>
+    </coordinates>
+    <panel_attributes>lt=-
+</panel_attributes>
+    <additional_attributes>10.0;190.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>945</x>
+      <y>714</y>
+      <w>21</w>
+      <h>147</h>
+    </coordinates>
+    <panel_attributes>lt=-
+</panel_attributes>
+    <additional_attributes>10.0;190.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>637</x>
+      <y>329</y>
+      <w>168</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>Game_Master
 --
 - GameBoard current_GameBoard
 - Games current_Game
@@ -149,10 +710,43 @@ bg=orange</panel_attributes><additional_attributes></additional_attributes></ele
 ~ get_Input(GameBoard, Player): Boolean
 ~ notify(GameBoard): GameBoard
 ~ notify(Player): Game 
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>150</x><y>90</y><w>730</w><h>410</h></coordinates><panel_attributes>m1=1
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>105</x>
+      <y>63</y>
+      <w>511</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>m1=1
 
 m2=1
-</panel_attributes><additional_attributes>710;20;10;20;10;390</additional_attributes></element><element><id>Relation</id><coordinates><x>200</x><y>250</y><w>180</w><h>250</h></coordinates><panel_attributes></panel_attributes><additional_attributes>160;20;10;20;10;230</additional_attributes></element><element><id>UMLClass</id><coordinates><x>70</x><y>480</y><w>210</w><h>310</h></coordinates><panel_attributes>Player
+</panel_attributes>
+    <additional_attributes>710.0;20.0;10.0;20.0;10.0;280.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>140</x>
+      <y>175</y>
+      <w>126</w>
+      <h>98</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>160.0;20.0;10.0;20.0;10.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>49</x>
+      <y>259</y>
+      <w>147</w>
+      <h>217</h>
+    </coordinates>
+    <panel_attributes>Player
 --
 - ID: Long
 - Name: String
@@ -166,11 +760,87 @@ m2=1
 ~ set_Input(GameBoard): Boolean
 ~ notify(GameBoard): GameBoard
 ~ notify(Game): Game 
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>270</x><y>640</y><w>290</w><h>40</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;20;270;20</additional_attributes></element><element><id>Relation</id><coordinates><x>490</x><y>180</y><w>390</w><h>320</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;300;10;10;370;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>540</x><y>570</y><w>330</w><h>190</h></coordinates><panel_attributes>Game Controller
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>189</x>
+      <y>371</y>
+      <w>203</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;20.0;270.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>343</x>
+      <y>126</y>
+      <w>273</w>
+      <h>154</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;200.0;10.0;10.0;370.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>378</x>
+      <y>322</y>
+      <w>231</w>
+      <h>133</h>
+    </coordinates>
+    <panel_attributes>Game Controller
 --
 - Current_Games: Game_Master
 --
 - open_new_Room(): Game_Master
 - add_Player(Player, Game_Master): Boolean
 - get_input(Player,Game_Master, Input): Boolean
-- notify (Player): Boolean</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>860</x><y>650</y><w>60</w><h>40</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;20;40;20</additional_attributes></element></diagram>
+- notify (Player): Boolean</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>602</x>
+      <y>378</y>
+      <w>49</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;20.0;50.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>434</x>
+      <y>462</y>
+      <w>196</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>MementoManager
+--
+- previousStates: ArrayList&lt;Memento&gt;
+--
++ MemementoManager()
++ getPreviousStates(): ArrayList&lt;Memento&gt;
++ hasEntry(int gameBoardID): int</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>581</x>
+      <y>525</y>
+      <w>21</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+</diagram>
