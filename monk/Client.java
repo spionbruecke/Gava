@@ -48,7 +48,6 @@ public class Client {
                 if (text.equals("You disconnect now"))
                     break;
             }
-            verbindung.close();
         } catch (UnknownHostException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

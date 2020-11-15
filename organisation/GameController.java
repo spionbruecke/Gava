@@ -1,7 +1,7 @@
 package organisation;
 
 import java.util.*;
-import monk.*;
+import Games.*;
 //import game_structur.Games;
 //import game_structur.GameBoard;
 
@@ -11,7 +11,7 @@ public class GameController {
     private static List<GameRoom> currentGames = new ArrayList<>();
 
 
-    public static GameRoom openNewRoom(Games game) {
+    public static GameRoom openNewRoom(Game game) {
         currentGames.add(new GameRoom(game));
         return currentGames.get(currentGames.size() - 1);
     }

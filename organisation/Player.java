@@ -1,23 +1,23 @@
 package organisation;
 
-import monk.Games;
-
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
+import Games.*;
 
 
 public class Player {
 
     private String playerID;
-    private String name;
-    private Games chosedGame;
+    private StringBuilder name;
+    private Game chosedGame;
     //private int points;
     private GameRoom gameRoom;
+    //private ArrayList<PlayingPiece> palyingPieces;
 
     public Player(){
         //A random name will be generated until the Player log in
         Random r = new Random();
-        name = "anonymus" + r.nextInt(10000);
+        name = new StringBuilder();
+        name.append("anonymus").append(r.nextInt(10000));
 
         // Each Player get a unique ID
         playerID = UUID.randomUUID().toString();
@@ -26,12 +26,12 @@ public class Player {
     //**** Setter und Getter ****
 
     public Boolean setName(String name){
-            this.name = name;
+            this.name.append(name);
             return true;
     }
 
     public String getName(){
-        return name;
+        return name.toString();
     }
 
     public void setGameRoom(GameRoom gameRoom){
@@ -42,11 +42,11 @@ public class Player {
         return gameRoom;
     }
     
-    public void setGame(Games game){
+    public void setGame(Game game){
         this.chosedGame = game;
     }
 
-    public Games getGame(){
+    public Game getGame(){
         return chosedGame;
     }
 
@@ -54,21 +54,8 @@ public class Player {
         return playerID;
     }
 
-    /**** Functions ****
-     
-
-    /*
-    protected Boolean setInput(GameBoard gameboard){
-        return false;
-    }
-    protected Boolean notify(GameBoard gameboard){
-        return false;
-    }
-    protected Boolean notify(Games game){
-        return false;
-    }
-    */
-    
+    //**** Functions ****
+         
     /* Benötigt Zugang zur Datenbank
     public Boolean logIn(String name, String password) {
         return false;

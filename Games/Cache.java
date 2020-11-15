@@ -8,18 +8,18 @@ package Games;
 public class Cache {
 
     private int gameBoardID;
-    private String[][] state;
+    private PlayingPiece[][] state;
 
-    public Cache(String[][] state, int gameBoardID){
+    public Cache(PlayingPiece[][] state, int gameBoardID){
         this.state = state;
         this.gameBoardID = gameBoardID;
     }
 
-    public String[][] getState(){
+    public PlayingPiece[][] getState(){
         return state;
     }
 
-    public void setState(String[][] state){
+    public void setState(PlayingPiece[][] state){
         this.state = state;
     }
 

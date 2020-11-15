@@ -4,7 +4,7 @@ import java.io.*;
 
 import java.net.*;
 import organisation.*;
-import monk.*;
+import Games.*;
 
 public class ClientHandler extends Thread {
 
@@ -25,9 +25,9 @@ public class ClientHandler extends Thread {
     @Override
     public void run() {
         Player player;
-        Games schach = new Games("Schach"); //these are the two games we want to implement fully
-        Games mill = new Games("Mühle");
+        Schach schach = new Schach("Schach"); //these one game we want to implement later
         GameRoom gameRoom;
+        String input;
 
             try {
                 if(newConnection != null){
@@ -38,13 +38,15 @@ public class ClientHandler extends Thread {
                     outputStream.writeUTF("You're Player: " + player.getName() + " with ID: " + player.getPlayerID()); //for test purpose
 
                     outputStream.writeUTF("Please choose a Game"); //for test purpose
-                    outputStream.writeUTF("1. Schach \n2. Mühle"); //for test purpose
-                    switch (inputStream.readUTF()){
+                    outputStream.writeUTF("1. Schach"); //for test purpose
+
+                    
+
+                    input = inputStream.readUTF();
+
+                    switch (input){
                         case "1":
                             player.setGame(schach);
-                            break;
-                        case "2":
-                            player.setGame(mill);
                             break;
                         default:
                             break;
@@ -52,8 +54,18 @@ public class ClientHandler extends Thread {
 
                     gameRoom = controller.addPlayer(player);
 
-                    outputStream.writeUTF("You're connectet with Player: " + gameRoom.getTheOtherPlayer(player) +" with the Game: " + gameRoom.getGame()); //for test purpose 
+                    if(gameRoom.getTheOtherPlayer(player) != null)
+                        outputStream.writeUTF("You're connectet with Player: " + gameRoom.getTheOtherPlayer(player).getName() +" in the Game: " + gameRoom.getGame().getName()); //for test purpose 
+                    else   
+                        outputStream.writeUTF("You're connectet with no one in the Game: " + gameRoom.getGame().getName()); //for test purpose 
+                    
 
+                    //Game
+                    while(true){
+                        input = inputStream.readUTF();
+                        if(input.equals("Exit"))
+                            break;                    
+                    }
                     
                     outputStream.writeUTF("You disconnect now"); //for test purpose
                     newConnection.close();
@@ -61,7 +73,7 @@ public class ClientHandler extends Thread {
                     outputStream.close();
                     newConnection = null;
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
     }

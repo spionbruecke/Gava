@@ -2,7 +2,11 @@ package Games;
 
 public abstract class Game {
 
-    public Game(String gameName){
+    private StringBuilder gameName;
+
+    Game(String gameName){
+        this.gameName = new StringBuilder();
+        this.gameName.append(gameName);
         /*
         ChessGame and MillsGame will be implemented later therefore, this piece of code
         does not work yet.
@@ -33,9 +37,16 @@ public abstract class Game {
 
     public abstract void play();
 
+    public String getName(){
+        return gameName.toString();
+    }
     /*
     public abstract void timer();
     Do we need this method?
      */
+
+     public String toString(){
+         return gameName.toString();
+     }
 
 }

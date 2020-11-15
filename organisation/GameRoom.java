@@ -1,20 +1,28 @@
 package organisation;
 
-
-//import monk.GameBoard;
-import monk.Games;
+import Games.*;
+import monk.SchachRules;
 
 public class GameRoom{
 
     //private GameBoard currentGameBoard;
-    private Games currentGame;
+    private Game currentGame;
     private Player player1;
     private Player player2;
+    private Player turnOfPlayer;
+    private boolean newDataSet;
     private int numberOfPlayer;
+    private GameBoard gameBoard;
+    private Rules rule;
 
-    public GameRoom(Games game){
+    public GameRoom(Game game){
         currentGame = game;
-
+        //if ((int) ( Math.random() * 2 + 1) == 1)
+            turnOfPlayer = player1;
+        //else
+           // turnOfPlayer = player2;
+        if(game instanceof Schach)
+            rule = new SchachRules();
     }
 
     //****  Getter ****
@@ -22,7 +30,7 @@ public class GameRoom{
         return numberOfPlayer;
     }
 
-    public Games getGame(){
+    public Game getGame(){
         return currentGame;
     }
 
@@ -34,39 +42,51 @@ public class GameRoom{
         return player2;
     }
 
-    //for test purpose (and mayby later for the gui?)
-    public String getTheOtherPlayer( Player player){
-        if (player1 == player && player2 != null)
-            return player2.getName();
-        else if( player2 == player && player1 != null)
-            return player1.getName();
-        else
-            return " with none";
+    public Boolean getNewDataSet(){
+        return newDataSet;
     }
 
-    /*
-    protected void getStart(){
-        
+    public GameBoard getGameBoard(){
+        return gameBoard;
     }
+
+    public boolean getTurn(Player player){
+        if(player == turnOfPlayer)
+            return true;
+        else    
+            return false;
+    }
+
+    //for test purpose (and mayby later for the gui?)
+    public Player getTheOtherPlayer( Player player){
+        if (player1 == player && player2 != null)
+            return player2;
+        else if( player2 == player && player1 != null)
+            return player1;
+        else
+            return null;
+    }
+
+    //protected void getStart(){}
     
-    protected Boolean get_Input(GameBoard gameboard, Player player){
-        return false;
+    public Boolean setInput(PlayingPiece[][] newState, Player player){
+        if(rule.isMoveAllowed(gameBoard.getState(),newState)){
+            this.gameBoard.setState(newState);
+            newDataSet = true;
+            turnOfPlayer = getTheOtherPlayer(player);
+            return true;
+        } else
+            return false;
     }
 
     //****  Functions ****
-    protected GameBoard notify(GameBoard gameboard){
-        return null;
-    }
-    protected Games notify(Player player){
-        return null;
-    }
-    */
 
-     //check which position is free and add the player to this position
+    //check which position is free and add the player to this position
      protected boolean addPlayer(Player player){
         if(numberOfPlayer == 0) {
             player1 = player;
             numberOfPlayer ++;
+
         } else if(numberOfPlayer == 1) {
             player2 = player;
             numberOfPlayer ++;

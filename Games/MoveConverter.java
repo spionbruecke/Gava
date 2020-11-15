@@ -2,15 +2,16 @@ package Games;
 
 public class MoveConverter {
 
-    public MoveConverter(){}
+    
+    //public MoveConverter(){}
 
     /*
        This method gets a String description of the move
        and converts it onto the current game board state
        which is a two dimensional String array.
     */
-    public String[][] convertStringToState(GameBoard gameBoard, String move){
-        String[][] currentState = gameBoard.getState();
+    public static PlayingPiece[][] convertStringToState(GameBoard gameBoard, String move){
+        PlayingPiece[][] currentState = gameBoard.getState();
         int newPosX = convertPosIntoArrayCoordinate(move.charAt(4));
         int newPosY = convertPosIntoArrayCoordinate(move.charAt(3));
         int oldPosX = convertPosIntoArrayCoordinate(move.charAt(1));
@@ -18,13 +19,13 @@ public class MoveConverter {
 
         currentState[newPosX][newPosY] = currentState[oldPosX][oldPosY];
 
-        currentState[oldPosX][oldPosY] = "";
+        currentState[oldPosX][oldPosY] = null;
 
         return currentState;
     }
 
     // converts field name into array coordinate
-    private int convertPosIntoArrayCoordinate(char c){
+    private static int convertPosIntoArrayCoordinate(char c) {
         switch(c){
             case 'A':
             case '8':

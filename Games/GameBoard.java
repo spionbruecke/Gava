@@ -1,19 +1,17 @@
 package Games;
 
-import com.sun.istack.internal.Nullable;
-
 public abstract class GameBoard {
 
-    private String[][] state;
+    private PlayingPiece[][] state;
     private int gameBoardID;
     private CacheManager cacheList;
 
-    public void setState(String[][] state){
+    public void setState(PlayingPiece[][] state){
         this.state = state;
         saveStateToMemento(state);
     }
 
-    public String[][] getState(){
+    public PlayingPiece[][] getState(){
         return state;
     }
 
@@ -22,9 +20,9 @@ public abstract class GameBoard {
     public int getGameBoardID(){
         return gameBoardID;
     }
-
-    public @Nullable Cache getStateFromMemento(){
-
+    
+    //@Nullable
+    public Cache getStateFromMemento(){
         if(cacheList.hasEntry(gameBoardID) > -1) {
             return cacheList.getPreviousStates().get(cacheList.hasEntry(gameBoardID));
         } else {
@@ -33,7 +31,7 @@ public abstract class GameBoard {
         }
     }
 
-    public void saveStateToMemento(String[][] state) {
+    public void saveStateToMemento(PlayingPiece[][] state) {
 
         if(cacheList.hasEntry(gameBoardID) > -1) {
             cacheList.getPreviousStates().get(cacheList.hasEntry(gameBoardID)).setState(state);
