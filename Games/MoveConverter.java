@@ -11,10 +11,10 @@ public class MoveConverter {
     */
     public String[][] convertStringToState(GameBoard gameBoard, String move){
         String[][] currentState = gameBoard.getState();
-        int newPosX = convertPosIntoArrayCoordinate(move.charAt(5));
-        int newPosY = convertPosIntoArrayCoordinate(move.charAt(4));
-        int oldPosX = convertPosIntoArrayCoordinate(move.charAt(2));
-        int oldPosY = convertPosIntoArrayCoordinate(move.charAt(1));
+        int newPosX = convertPosIntoArrayCoordinate(move.charAt(4));
+        int newPosY = convertPosIntoArrayCoordinate(move.charAt(3));
+        int oldPosX = convertPosIntoArrayCoordinate(move.charAt(1));
+        int oldPosY = convertPosIntoArrayCoordinate(move.charAt(0));
 
         currentState[newPosX][newPosY] = currentState[oldPosX][oldPosY];
 
