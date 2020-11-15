@@ -6,7 +6,7 @@ public abstract class GameBoard {
 
     private String[][] state;
     private int gameBoardID;
-    private MementoManager cache;
+    private CacheManager cacheList;
 
     public void setState(String[][] state){
         this.state = state;
@@ -23,10 +23,10 @@ public abstract class GameBoard {
         return gameBoardID;
     }
 
-    public @Nullable Memento getStateFromMemento(){
+    public @Nullable Cache getStateFromMemento(){
 
-        if(cache.hasEntry(gameBoardID) > -1) {
-            return cache.getPreviousStates().get(cache.hasEntry(gameBoardID));
+        if(cacheList.hasEntry(gameBoardID) > -1) {
+            return cacheList.getPreviousStates().get(cacheList.hasEntry(gameBoardID));
         } else {
             System.out.println("GameBoard has no entry in cache!");
             return null;
@@ -35,11 +35,11 @@ public abstract class GameBoard {
 
     public void saveStateToMemento(String[][] state) {
 
-        if(cache.hasEntry(gameBoardID) > -1) {
-            cache.getPreviousStates().get(cache.hasEntry(gameBoardID)).setState(state);
+        if(cacheList.hasEntry(gameBoardID) > -1) {
+            cacheList.getPreviousStates().get(cacheList.hasEntry(gameBoardID)).setState(state);
         } else {
-            Memento memento = new Memento(state, gameBoardID);
-            cache.getPreviousStates().add(memento);
+            Cache memento = new Cache(state, gameBoardID);
+            cacheList.getPreviousStates().add(memento);
         }
     }
 }

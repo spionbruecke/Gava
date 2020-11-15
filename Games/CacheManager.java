@@ -2,15 +2,15 @@ package Games;
 
 import java.util.ArrayList;
 
-public class MementoManager {
+public class CacheManager {
 
-    private ArrayList<Memento> previousStates;
+    private ArrayList<Cache> previousStates;
 
-    public MementoManager(){
-        previousStates = new ArrayList<Memento>();
+    public CacheManager(){
+        previousStates = new ArrayList<Cache>();
     }
 
-    public ArrayList<Memento> getPreviousStates(){
+    public ArrayList<Cache> getPreviousStates(){
         return previousStates;
     }
 

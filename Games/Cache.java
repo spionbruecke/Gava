@@ -1,15 +1,16 @@
 package Games;
 
 /*
+  Memento Design Pattern
   This class is used for undoing the last move.
  */
 
-public class Memento {
+public class Cache {
 
     private int gameBoardID;
     private String[][] state;
 
-    public Memento(String[][] state, int gameBoardID){
+    public Cache(String[][] state, int gameBoardID){
         this.state = state;
         this.gameBoardID = gameBoardID;
     }

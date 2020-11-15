@@ -1,10 +1,8 @@
 package Games;
 
-import monk.Games;
-
 public abstract class Game {
 
-    public Game(Games gameName){
+    public Game(String gameName){
         /*
         ChessGame and MillsGame will be implemented later therefore, this piece of code
         does not work yet.
@@ -27,7 +25,7 @@ public abstract class Game {
     }
 
     // Creates new Gameboard
-    public abstract void initialize(Games gameName);
+    public abstract void initialize(String gameName);
 
     public abstract void start();
 

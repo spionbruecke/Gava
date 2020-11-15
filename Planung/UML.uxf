@@ -37,8 +37,8 @@ GameBoard
 --
 + setState(): void
 + getState(): (type?)
-+ saveStateToMemento(): Memento
-+ getStateFromMemento(Memento memento)
++ saveStateToMemento(): Cache
++ getStateFromMemento(Cache memento)
   : void</panel_attributes>
     <additional_attributes/>
   </element>
@@ -47,14 +47,14 @@ GameBoard
     <coordinates>
       <x>518</x>
       <y>574</y>
-      <w>147</w>
+      <w>119</w>
       <h>63</h>
     </coordinates>
-    <panel_attributes>Memento
+    <panel_attributes>Cache
 --
 - state: (type?)
 --
-+ Mememento(type? state)
++ Cache(type? state)
 + getState(): (type?)</panel_attributes>
     <additional_attributes/>
   </element>
@@ -348,14 +348,13 @@ Observer
       <x>1001</x>
       <y>574</y>
       <w>168</w>
-      <h>70</h>
+      <h>63</h>
     </coordinates>
     <panel_attributes>&lt;&lt;abstract class&gt;&gt;
 Observable
 --
 - observers: ArrayList&lt;Observer&gt;
 --
-+ setChanged(): void
 + notifyObservers(Gameboard Board)
 </panel_attributes>
     <additional_attributes/>
@@ -648,12 +647,12 @@ bg=orange</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1078</x>
-      <y>637</y>
+      <y>630</y>
       <w>21</w>
-      <h>98</h>
+      <h>105</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;120.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;130.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -822,12 +821,12 @@ m2=1
       <w>196</w>
       <h>70</h>
     </coordinates>
-    <panel_attributes>MementoManager
+    <panel_attributes>CacheManager
 --
-- previousStates: ArrayList&lt;Memento&gt;
+- previousStates: ArrayList&lt;Cache&gt;
 --
-+ MemementoManager()
-+ getPreviousStates(): ArrayList&lt;Memento&gt;
++ CacheManager()
++ getPreviousStates(): ArrayList&lt;Cache&gt;
 + hasEntry(int gameBoardID): int</panel_attributes>
     <additional_attributes/>
   </element>
