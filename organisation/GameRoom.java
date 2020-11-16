@@ -10,7 +10,6 @@ public class GameRoom{
     private Player player1;
     private Player player2;
     private Player turnOfPlayer;
-    private boolean newDataSet;
     private int numberOfPlayer;
     private GameBoard gameBoard;
     private Rules rule;
@@ -42,10 +41,6 @@ public class GameRoom{
         return player2;
     }
 
-    public Boolean getNewDataSet(){
-        return newDataSet;
-    }
-
     public GameBoard getGameBoard(){
         return gameBoard;
     }
@@ -69,11 +64,13 @@ public class GameRoom{
 
     //protected void getStart(){}
     
-    public Boolean setInput(PlayingPiece[][] newState, Player player){
+    public Boolean setInput(String move, Player player){
+        PlayingPiece[][] newState = MoveConverter.convertStringToState(gameBoard, move);
         if(rule.isMoveAllowed(gameBoard.getState(),newState)){
             this.gameBoard.setState(newState);
-            newDataSet = true;
             turnOfPlayer = getTheOtherPlayer(player);
+            turnOfPlayer.setNewStateAvaible(true);
+            turnOfPlayer.setLatestMove(move);
             return true;
         } else
             return false;
