@@ -1,10 +1,7 @@
-package client;
-
 import java.io.*;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Scanner;
-
-import com.sun.jdi.connect.spi.Connection;
 
 
 public class Client {
@@ -20,7 +17,7 @@ public class Client {
 	
 	
 	
-	public User(String name) {
+	public Client(String name) {
 		this.name = name;
 	}
 	
@@ -38,12 +35,10 @@ public class Client {
 		String incommingData;
 		String outcommingData;
 		login();
-		
-		
+			
 		while(isStillPlaying) {
 			
 			incommingData = getServerOutput();
-
 			
 			if (incommingData.equals("1. Schach")) {
 				outcommingData = getUserInput();
@@ -51,8 +46,7 @@ public class Client {
 					dos.writeUTF(outcommingData);
 				} catch (IOException e) {
 					e.printStackTrace();
-				}
-				
+				}			
 			}
 		}
 	}
@@ -73,7 +67,7 @@ public class Client {
 		try {
 			text = dis.readUTF();
 		} catch (IOException e) {
-			e.printStackTrace();
+			isStillPlaying = false;
 		}
 		System.out.println(text);
 		return text;
@@ -81,19 +75,29 @@ public class Client {
 
 
 	public void connectToServer() {
+		Socket server = null;
 		
 		try {
-			Socket connection = new Socket(host, port);
+			server = new Socket(host, port);
 			
-            dis = new DataInputStream(connection.getInputStream()); 
-            dos = new DataOutputStream(connection.getOutputStream());
+            dis = new DataInputStream(server.getInputStream()); 
+            dos = new DataOutputStream(server.getOutputStream());
             
 			run();
 			
-			connection.close();
-		} catch (Exception e) {
-			// TODO: handle exception
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		finally {		
+			if (server != null)
+				try {
+					server.close();
+					System.out.println("Disconnected");
+				}
+			catch (IOException e) {				
+			}
 		}
 	}
 }
-
