@@ -3,6 +3,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
+package client;
 
 public class Client {
 	
@@ -30,7 +31,7 @@ public class Client {
 		
 	}
 	
-	public void run(){
+	private void run(){
 		
 		String incommingData;
 		String outcommingData;
@@ -80,13 +81,13 @@ public class Client {
 		try {
 			server = new Socket(host, port);
 			
-            dis = new DataInputStream(server.getInputStream()); 
-            dos = new DataOutputStream(server.getOutputStream());
+            dis = new DataInputStream(server.getInputStream()); // get data from sever
+            dos = new DataOutputStream(server.getOutputStream()); // get data to server
             
 			run();
 			
 		} catch (UnknownHostException e) {
-			e.printStackTrace();
+			System.err.println("Server host could not be found");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -100,4 +101,22 @@ public class Client {
 			}
 		}
 	}
+	
+//	private void processServerCommands() {
+//		
+//	}
+//	
+//	private void showGUI() {
+//		
+//	}
+//	
+//	private void showGrid() {
+//		
+//	}
+//	
+//	private void updategrid() {
+//		
+//	}
+	
+	
 }
