@@ -11,6 +11,8 @@ public class Player {
     private Game chosedGame;
     //private int points;
     private GameRoom gameRoom;
+    private boolean newStateAvaible;
+    private String latestMove;
     //private ArrayList<PlayingPiece> palyingPieces;
 
     public Player(){
@@ -54,6 +56,21 @@ public class Player {
         return playerID;
     }
 
+    public void setNewStateAvaible(boolean newStateAvaible){
+        this.newStateAvaible = newStateAvaible;
+    }
+
+    public boolean getNewStateAvaible(){
+        return newStateAvaible;
+    }
+
+    public void setLatestMove(String turn){
+        latestMove = turn;
+    }
+
+    public String getLatestMove(){
+        return latestMove;
+    }
     //**** Functions ****
          
     /* Benötigt Zugang zur Datenbank

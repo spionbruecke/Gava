@@ -64,7 +64,16 @@ public class ClientHandler extends Thread {
                     while(true){
                         input = inputStream.readUTF();
                         if(input.equals("Exit"))
-                            break;                    
+                            break;
+                        
+                        if(input.length() == 5) { //every move of a Playing Piece is describt as start field and end field (example: "A2 A3") <- its always 5 chars long
+                            gameRoom.setInput(input, player);
+                        }
+
+                        if(player.getNewStateAvaible()){
+                            outputStream.writeUTF(player.getLatestMove());
+                            player.setNewStateAvaible(false);
+                        }
                     }
                     
                     outputStream.writeUTF("You disconnect now"); //for test purpose
