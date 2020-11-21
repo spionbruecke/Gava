@@ -1,7 +1,7 @@
-package organisation;
+package src.organisation;
 
-import Games.*;
-import monk.SchachRules;
+import src.games.*;
+import src.monk.SchachRules;
 
 public class GameRoom{
 

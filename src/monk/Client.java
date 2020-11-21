@@ -1,4 +1,4 @@
-package monk;
+package src.monk;
 
 import java.io.*;
 import java.io.IOException;

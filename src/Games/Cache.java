@@ -1,4 +1,4 @@
-package Games;
+package src.games;
 
 /*
   Memento Design Pattern

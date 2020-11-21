@@ -1,7 +1,7 @@
-package monk;
+package src.monk;
 
-import Games.PlayingPiece;
-import Games.Rules;
+import src.games.PlayingPiece;
+import src.games.Rules;
 
 public class SchachRules implements Rules {
 

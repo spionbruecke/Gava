@@ -1,4 +1,4 @@
-package Games;
+package src.games;
 
 public abstract class GameBoard {
 

@@ -1,4 +1,4 @@
-package monk;
+package src.monk;
 
 public abstract class GameBoard {
     

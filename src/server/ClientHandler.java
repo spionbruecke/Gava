@@ -1,10 +1,10 @@
-package server;
+package src.server;
 
 import java.io.*;
 
 import java.net.*;
-import organisation.*;
-import Games.*;
+import src.organisation.*;
+import src.games.*;
 
 public class ClientHandler extends Thread {
 

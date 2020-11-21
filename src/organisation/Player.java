@@ -1,7 +1,7 @@
-package organisation;
+package src.organisation;
 
 import java.util.*;
-import Games.*;
+import src.games.*;
 
 
 public class Player {
