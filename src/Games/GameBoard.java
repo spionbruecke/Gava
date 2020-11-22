@@ -1,4 +1,4 @@
-package src.games;
+package src.Games;
 
 /**
  * @author Begüm Tosun

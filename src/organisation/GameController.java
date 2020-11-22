@@ -1,7 +1,7 @@
 package src.organisation;
 
 import java.util.*;
-import src.games.*;
+import src.Games.*;
 //import game_structur.Games;
 //import game_structur.GameBoard;
 
