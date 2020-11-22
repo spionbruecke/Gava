@@ -1,5 +1,8 @@
 package src.games;
 
+/**
+ * @author Begüm Tosun
+ */
 public abstract class Game {
 
     private StringBuilder gameName;

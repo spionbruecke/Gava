@@ -1,15 +1,27 @@
 package src.games;
 
+/**
+ * The client only returns a simple String-description
+ * of the move. MoveConverter converts this String into
+ * the current state of the gameBoard.
+ * @author Begüm Tosun
+ */
+
 public class MoveConverter {
 
-    
-    //public MoveConverter(){}
+    /**
+     * Default constructor
+     */
+    public MoveConverter(){}
 
-    /*
-       This method gets a String description of the move
-       and converts it onto the current game board state
-       which is a two dimensional String array.
-    */
+    /**
+     * This method gets a String description of the move
+     * and converts it onto the current game board state
+     * which is a two dimensional PlayingPiece array.
+     * @param gameBoard GameBoard
+     * @param move String
+     * @return currentState: PlayingPiece[][]
+     */
     public static PlayingPiece[][] convertStringToState(GameBoard gameBoard, String move){
         PlayingPiece[][] currentState = gameBoard.getState();
         int newPosX = convertPosIntoArrayCoordinate(move.charAt(4));
@@ -24,7 +36,11 @@ public class MoveConverter {
         return currentState;
     }
 
-    // converts field name into array coordinate
+    /**
+     * Converts field name into array coordinate
+     * @param c field-description
+     * @return array coordinate
+     */
     private static int convertPosIntoArrayCoordinate(char c) {
         switch(c){
             case 'A':

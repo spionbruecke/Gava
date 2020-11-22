@@ -6,7 +6,7 @@ import src.games.Rules;
 public class SchachRules implements Rules {
 
     @Override
-    public boolean isFieldOccupied(int field) {
+    public boolean isFieldOccupied(int x, int y) {
         // TODO Auto-generated method stub
         return false;
     }

@@ -1,7 +1,7 @@
-package server;
+package src.server;
 
 import java.io.*; 
-import organisation.*;
+import src.organisation.*;
 import java.net.*;
 
 

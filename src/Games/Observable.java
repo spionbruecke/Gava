@@ -1,7 +1,8 @@
 package src.games;
 
-import java.util.ArrayList;
-
+/**
+ * @author Begüm Tosun
+ */
 public abstract class Observable {
     //private ArrayList<Observer> observers;
 
