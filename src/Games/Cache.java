@@ -1,4 +1,4 @@
-package src.games;
+package src.Games;
 
 /**
  * Memento Design Pattern
@@ -6,23 +6,14 @@ package src.games;
  * @author Begüm Tosun
  */
 public class Cache {
-
-    private int gameBoardID;
-
-    /**
-     * A multidimensional array of type PlayingPiece
-     * which represents the state of a game board.
-     */
-    private PlayingPiece[][] state;
+    private GameBoard board;
 
     /**
      * Constructs a Cache-object.
-     * @param state a multidimensional PlayingPiece array
-     * @param gameBoardID integer value
+     * @param board GameBoard-object
      */
-    public Cache(PlayingPiece[][] state, int gameBoardID){
-        this.state = state;
-        this.gameBoardID = gameBoardID;
+    public Cache(GameBoard board){
+        this.board = board;
     }
 
     /**
@@ -30,7 +21,7 @@ public class Cache {
      * @return state
      */
     public PlayingPiece[][] getState(){
-        return state;
+        return board.getState();
     }
 
     /**
@@ -38,14 +29,14 @@ public class Cache {
      * @param state a multidimensional PlayingPiece array
      */
     public void setState(PlayingPiece[][] state){
-        this.state = state;
+        board.setState(state);
     }
 
     /**
-     * returns an int value
+     * returns an long value
      * @return gameBoardID
      */
-    public int getGameBoardID(){
-        return gameBoardID;
+    public long getGameBoardID(){
+        return board.getGameBoardID();
     }
 }

@@ -1,4 +1,5 @@
-package src.games;
+package src.Games;
+
 
 /**
  * @author Begüm Tosun
@@ -12,20 +13,23 @@ public abstract class GameBoard {
     private PlayingPiece[][] state;
 
     /**
-     * Int value for identifying the game board.
+     * long value for identifying the game board.
      */
-    private int gameBoardID;
+    protected long gameBoardID;
 
-    //private CacheManager cacheList;
+    /**
+     *
+     */
+    private Cache prevState;
 
     /**
      * Sets state to the current state and saves the current
-     * state in a ArrayList of type Cache.
+     * state in prevState.
      * @param state PlayingPiece[][]
      */
-    public void setState(PlayingPiece[][] state, CacheManager cacheList){
+    public void setState(PlayingPiece[][] state){
         this.state = state;
-        saveStateToMemento(state, cacheList);
+        saveStateToMemento();
     }
 
     /**
@@ -36,29 +40,29 @@ public abstract class GameBoard {
         return state;
     }
 
-    public abstract void setGameBoardID();
+    /**
+     * Sets the gameBoard ID to the given value.
+     * @param id long
+     */
+    public void setGameBoardID(long id){
+        gameBoardID = id;
+    }
 
     /**
-     * Returns int value.
+     * Returns a long value.
      * @return gameBoardID
      */
-    public int getGameBoardID(){
+    public long getGameBoardID(){
         return gameBoardID;
     }
 
     /**
      * Returns the previous state from cache for undoing the last move.
-     * @param cacheList List where the previous state is saved (if it exists)
-     * @return Cache-element or null if there is no entry for the given gameBoardID
+     * @return Cache-element or null if there is no entry
      */
     //@Nullable
-    public Cache getStateFromMemento(CacheManager cacheList){
-        if(cacheList.hasEntry(gameBoardID) > -1) {
-            return cacheList.getPreviousStates().get(cacheList.hasEntry(gameBoardID));
-        } else {
-            System.out.println("GameBoard has no entry in cache!");
-            return null;
-        }
+    public Cache getStateFromMemento(){
+        return prevState;
     }
 
     /**
@@ -66,16 +70,10 @@ public abstract class GameBoard {
      * into the CacheManager. If there already exists a previous state for the gameBoardID
      * it will be overwritten otherwise the method will create a new list element and add
      * it to the list.
-     * @param state PlayingPiece[]
-     * @param cacheList CacheManager
      */
-    public void saveStateToMemento(PlayingPiece[][] state, CacheManager cacheList) {
-
-        if(cacheList.hasEntry(gameBoardID) > -1) {
-            cacheList.getPreviousStates().get(cacheList.hasEntry(gameBoardID)).setState(state);
-        } else {
-            Cache memento = new Cache(state, gameBoardID);
-            cacheList.getPreviousStates().add(memento);
-        }
+    public void saveStateToMemento() {
+        prevState = new Cache(this);
     }
+
+    protected abstract PlayingPiece[][] setUpPlayingPieces();
 }

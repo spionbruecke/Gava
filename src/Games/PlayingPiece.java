@@ -1,4 +1,4 @@
-package src.games;
+package src.Games;
 
 /**
  * @author Begüm Tosun
@@ -10,17 +10,27 @@ public abstract class PlayingPiece {
      */
     private String name;
 
-
     /**
-     * State is 1 if the playing piece is still in the game else 0
+     * Colour is used to differ the PlayingPieces from each Player.
      */
-    private boolean state;
+    private String colour;
 
-    /**
-     * Color is used to differ the PlayingPieces from each Player.
-     */
-    private String color;
 
-    public abstract void move();
-    public abstract void swap();
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getColour() {
+        return colour;
+    }
+
+    public void setColour(String colour) {
+        this.colour = colour;
+    }
+
+    public abstract void move(GameBoard board, String move);
 }

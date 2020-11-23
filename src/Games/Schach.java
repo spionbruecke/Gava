@@ -1,4 +1,4 @@
-package src.games;
+package src.Games;
 
 public class Schach extends Game {
 

@@ -1,4 +1,4 @@
-package src.games;
+package src.Games;
 
 /**
  * The client only returns a simple String-description
