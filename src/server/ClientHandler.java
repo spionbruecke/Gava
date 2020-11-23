@@ -4,7 +4,7 @@ import java.io.*;
 
 import java.net.*;
 import src.organisation.*;
-import src.games.*;
+import src.Games.*;
 
 public class ClientHandler extends Thread {
 

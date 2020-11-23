@@ -1,6 +1,5 @@
 package src.Games;
 
-
 /**
  * @author Begüm Tosun
  */

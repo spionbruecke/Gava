@@ -1,6 +1,6 @@
 package src.organisation;
 
-import src.games.*;
+import src.Games.*;
 import src.monk.SchachRules;
 
 public class GameRoom{
