@@ -8,17 +8,18 @@ public interface Rules {
     /**
      * Checks whether the player has already PlayingPiece
      * on this field.
-     * @param x coordinate of field
-     * @param y coordinate of field
-     * @return 1 if field is occupied else 0
+     * @param board GameBoard
+     * @param move String
+     * @return true if field is occupied else false
      */
-    boolean isFieldOccupied(int x, int y);
+    boolean isFieldOccupiedByOwnPlayingP(GameBoard board, String move);
 
     /**
      * Checks whether the move is allowed according to the game rules.
-     * @param oldState current state of PlayingPiece
-     * @param newState state where the Player wants to move the PlayingPiece
-     * @return 1 if move is allowed else 0
+     * @param playingPiece PlayingPiece
+     * @param move String
+     * @return true if move is allowed else false
      */
-    boolean isMoveAllowed(PlayingPiece[][] oldState, PlayingPiece[][] newState);
+    boolean isMoveAllowed(PlayingPiece playingPiece, String move);
+    boolean isMoveAllowed(PlayingPiece[][] old, PlayingPiece[][] current);
 }
