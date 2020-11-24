@@ -66,7 +66,7 @@ public class GameRoom{
     
     public Boolean setInput(String move, Player player){
         PlayingPiece[][] newState = MoveConverter.convertStringToState(gameBoard, move);
-        if(rule.isMoveAllowed(gameBoard.getState(),newState)){
+        if(rule.isMoveAllowed(gameBoard, move)){
             this.gameBoard.setState(newState);
             turnOfPlayer = getTheOtherPlayer(player);
             turnOfPlayer.setNewStateAvaible(true);

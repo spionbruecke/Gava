@@ -6,7 +6,7 @@ package src.Games;
 public interface Rules {
 
     /**
-     * Checks whether the player has already PlayingPiece
+     * Checks whether the player has already a PlayingPiece
      * on this field.
      * @param board GameBoard
      * @param move String
@@ -16,10 +16,11 @@ public interface Rules {
 
     /**
      * Checks whether the move is allowed according to the game rules.
-     * @param playingPiece PlayingPiece
+     * @param old PlayingPiece[][]
      * @param move String
      * @return true if move is allowed else false
      */
-    boolean isMoveAllowed(PlayingPiece playingPiece, String move);
-    boolean isMoveAllowed(PlayingPiece[][] old, PlayingPiece[][] current);
+    boolean isMoveAllowed(GameBoard gameBoard, String move);
+
+    boolean isFieldOccupied(GameBoard board, String move);
 }

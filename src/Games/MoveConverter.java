@@ -10,11 +10,6 @@ package src.Games;
 public class MoveConverter {
 
     /**
-     * Default constructor
-     */
-    public MoveConverter(){}
-
-    /**
      * This method gets a String description of the move
      * and converts it onto the current game board state
      * which is a two dimensional PlayingPiece array.
@@ -24,14 +19,14 @@ public class MoveConverter {
      */
     public static PlayingPiece[][] convertStringToState(GameBoard gameBoard, String move){
         PlayingPiece[][] currentState = gameBoard.getState();
-        int newPosX = convertPosIntoArrayCoordinate(move.charAt(4));
-        int newPosY = convertPosIntoArrayCoordinate(move.charAt(3));
-        int oldPosX = convertPosIntoArrayCoordinate(move.charAt(1));
-        int oldPosY = convertPosIntoArrayCoordinate(move.charAt(0));
+        int newPosRow = convertPosIntoArrayCoordinate(move.charAt(4));
+        int newPosColumn = convertPosIntoArrayCoordinate(move.charAt(3));
+        int oldPosRow = convertPosIntoArrayCoordinate(move.charAt(1));
+        int oldPosColumn = convertPosIntoArrayCoordinate(move.charAt(0));
 
-        currentState[newPosX][newPosY] = currentState[oldPosX][oldPosY];
+        currentState[newPosRow][newPosColumn] = currentState[oldPosRow][oldPosColumn];
 
-        currentState[oldPosX][oldPosY] = null;
+        currentState[oldPosRow][oldPosColumn] = null;
 
         return currentState;
     }
@@ -41,7 +36,7 @@ public class MoveConverter {
      * @param c field-description
      * @return array coordinate
      */
-    private static int convertPosIntoArrayCoordinate(char c) {
+    public static int convertPosIntoArrayCoordinate(char c) {
         switch(c){
             case 'A':
             case '8':
@@ -73,4 +68,13 @@ public class MoveConverter {
         }
     }
 
+    public static Field getTargetField(String move){
+        return new Field(convertPosIntoArrayCoordinate(move.charAt(4)),
+                convertPosIntoArrayCoordinate(move.charAt(3)));
+    }
+
+    public static Field getStartField(String move){
+        return new Field(convertPosIntoArrayCoordinate(move.charAt(1)),
+                convertPosIntoArrayCoordinate(move.charAt(0)));
+    }
 }

@@ -7,11 +7,11 @@ public class Schach extends Game {
     }
 
     @Override
-    public void initialize(String gameName) {
-        // TODO Auto-generated method stub
+    public void initialize() {
 
     }
 
+/*
     @Override
     public void start() {
         // TODO Auto-generated method stub
@@ -29,4 +29,6 @@ public class Schach extends Game {
         // TODO Auto-generated method stub
 
     }
+ */
+
 }
