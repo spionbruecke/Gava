@@ -23,7 +23,7 @@ public class ChessRules implements Rules {
     }
 
     @Override
-    public boolean isMoveAllowed(GameBoard gameBoard, String move) {
+    public boolean isMoveAllowed(ChessBoard gameBoard, String move) {
         boolean permission;
 
         int row = MoveConverter.convertPosIntoArrayCoordinate(move.charAt(1));
@@ -35,23 +35,23 @@ public class ChessRules implements Rules {
                 break;
 
             case "knight":
-                //check moves for knight
+                permission = checkKnightMoves(move) && isKnightTargetFree(gameBoard, move);
                 break;
 
             case "bishop":
-                //check...
+                permission = checkBishopMoves(move) && isBishopPathFree(gameBoard, move);
                 break;
 
             case "queen":
-                //...
+                permission = checkQueenMoves(move) && isQueenPathFree(gameBoard, move);
                 break;
 
             case "king":
-                //...
+                permission = checkKingMoves(move) && isKingTargetFree(gameBoard, move);
                 break;
 
             case "pawn":
-                //...
+                //
                 break;
 
             default:
@@ -73,36 +73,300 @@ public class ChessRules implements Rules {
             return true;
         }
     }
+    
+    private boolean checkPawnMoves(ChessBoard gameBoard, String move){
+        Field target = MoveConverter.getTargetField(move);
+        Field start = MoveConverter.getStartField(move);
 
-    private boolean checkRookMoves(String move){
+        if( (target.getRow() == start.getRow()+2) && (gameBoard.getState()[start.getRow()][start.getColumn()].hasMoved()) ) {
+            return false;
+        }else if( !isFieldOccupiedByOwnPlayingP(gameBoard, move) &&
+                 (target.getRow() == start.getRow()+2) &&
+                 (!gameBoard.getState()[start.getRow()][start.getColumn()].hasMoved()) ){
+            return true;
+        }else if()
+    }
+
+    private boolean checkKingMoves(String move){
         ArrayList<Field> possibleLocations = new ArrayList<Field>();
 
-        int rowStart = MoveConverter.convertPosIntoArrayCoordinate(move.charAt(1));
-        int columnStart = MoveConverter.convertPosIntoArrayCoordinate(move.charAt(0));
+        Field target = MoveConverter.getTargetField(move);
+        Field start = MoveConverter.getStartField(move);
 
-        int rowTarget = MoveConverter.convertPosIntoArrayCoordinate(move.charAt(4));
-        int columnTarget = MoveConverter.convertPosIntoArrayCoordinate(move.charAt(3));
+        if( (start.getRow()-1 >= 0) && (start.getColumn()-1 >= 0) ){
+            possibleLocations.add(new Field(start.getRow()-1, start.getColumn()-1));
+        }
 
+        if(start.getRow()-1 >= 0){
+            possibleLocations.add(new Field(start.getRow()-1, start.getColumn()));
+        }
+
+        if( (start.getRow()-1 >= 0) && (start.getColumn()+1 <= 7) ){
+            possibleLocations.add(new Field(start.getRow()-1, start.getColumn()+1));
+        }
+
+        if(start.getColumn()+1 <= 7){
+            possibleLocations.add(new Field(start.getRow(), start.getColumn()+1));
+        }
+
+        if( (start.getRow()+1 <= 7) && (start.getColumn()+1 <= 7) ){
+            possibleLocations.add(new Field(start.getRow()+1, start.getColumn()+1));
+        }
+
+        if(start.getRow()+1 <= 7){
+            possibleLocations.add(new Field(start.getRow()+1, start.getColumn()));
+        }
+
+        if( (start.getRow()+1 <= 7) && (start.getColumn()-1 >= 0) ){
+            possibleLocations.add(new Field(start.getRow()+1, start.getColumn()-1));
+        }
+
+        if(start.getColumn()-1 >= 0){
+            possibleLocations.add(new Field(start.getRow(), start.getColumn()-1));
+        }
+
+        for (int i = 0; i < possibleLocations.size(); i++) {
+            if (possibleLocations.get(i) == target) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean isKingTargetFree(ChessBoard gameBoard, String move){
+        return !isFieldOccupiedByOwnPlayingP(gameBoard, move);
+    }
+
+    private boolean checkQueenMoves(String move){
+        return checkVerticalAndHorizontalMoves(move) || checkDiagonalMoves(move);
+    }
+
+    private boolean isQueenPathFree(ChessBoard gameBoard, String move){
+        return areVerticalOrHorizontalPathsFree(gameBoard, move) || areDiagonalPathsFree(gameBoard, move);
+    }
+
+    private boolean checkBishopMoves(String move){
+        return checkDiagonalMoves(move);
+    }
+
+    private boolean isBishopPathFree(ChessBoard gameBoard, String move){
+        return areDiagonalPathsFree(gameBoard, move);
+    }
+
+    private boolean checkKnightMoves(String move){
+        ArrayList<Field> possibleLocations = new ArrayList<Field>();
+
+        Field target = MoveConverter.getTargetField(move);
+        Field start = MoveConverter.getStartField(move);
+
+        //up-left
+        if( (start.getRow()-2 >= 0) && (start.getColumn()-1 >= 0) ){
+            possibleLocations.add(new Field(start.getRow()-2, start.getColumn()-1));
+        }
+
+        //up-right
+        if( (start.getRow()-2 >= 0) && (start.getColumn()+1 <= 7) ){
+            possibleLocations.add(new Field(start.getRow()-2, start.getColumn()+1));
+        }
+
+        //down-left
+        if( (start.getRow()+2 <= 7) && (start.getColumn()-1 >= 0) ){
+            possibleLocations.add(new Field(start.getRow()+2, start.getColumn()-1));
+        }
+
+        //down-right
+        if( (start.getRow()+2 <= 7) && (start.getColumn()+1 <= 7) ){
+            possibleLocations.add(new Field(start.getRow()+2, start.getColumn()+1));
+        }
+
+        //left-up
+        if( (start.getColumn()-2 >= 0) && (start.getRow()-1 >= 0) ){
+            possibleLocations.add(new Field(start.getRow()-1, start.getColumn()-2));
+        }
+
+        //left-down
+        if( (start.getColumn()-2 >= 0) && (start.getRow()-1 <= 7) ){
+            possibleLocations.add(new Field(start.getRow()-1, start.getColumn()-2));
+        }
+
+        //right-up
+        if( (start.getColumn()+2 <= 7) && (start.getRow()-1 <= 0) ){
+            possibleLocations.add(new Field(start.getRow()-1, start.getColumn()+2));
+        }
+
+        //right-down
+        if( (start.getColumn()+2 <= 7) && (start.getRow()+1 <= 7) ){
+            possibleLocations.add(new Field(start.getRow()+1, start.getColumn()+2));
+        }
+
+        //check whether the target is one of the possible locations and
+        for (int i = 0; i < possibleLocations.size(); i++) {
+            if(possibleLocations.get(i) == target){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean isKnightTargetFree(ChessBoard gameBoard, String move){
+        return !isFieldOccupiedByOwnPlayingP(gameBoard, move);
+    }
+
+    private boolean checkRookMoves(String move){
+        return checkVerticalAndHorizontalMoves(move);
+    }
+
+    private boolean isRookPathFree(ChessBoard gameBoard, String move){
+        return areVerticalOrHorizontalPathsFree(gameBoard, move);
+    }
+
+    private boolean checkDiagonalMoves(String move){
+        ArrayList<Field> possibleLocations = new ArrayList<Field>();
+
+        Field target = MoveConverter.getTargetField(move);
+        Field start = MoveConverter.getStartField(move);
+
+        //left-up diagonal
+        int row = start.getRow() - 1;
+        int column = start.getColumn() - 1;
+
+        while( (row >= 0) && (column >= 0) ){
+            possibleLocations.add(new Field(row, column));
+            row--;
+            column--;
+        }
+
+        //left-down diagonal
+        row = start.getRow() + 1;
+        column = start.getColumn() - 1;
+
+        while ( (row <= 7) && (column >= 0) ){
+            possibleLocations.add(new Field(row, column));
+            row++;
+            column--;
+        }
+
+        //right-up diagonal
+        row = start.getRow() - 1;
+        column = start.getColumn() + 1;
+
+        while ( (row >= 0) && (column <= 7) ){
+            possibleLocations.add(new Field(row, column));
+            row--;
+            column++;
+        }
+
+        //right-down diagonal
+        row = start.getRow() + 1;
+        column = start.getColumn() + 1;
+
+        while ( (row <= 7) && (column <= 7) ){
+            possibleLocations.add(new Field(row, column));
+            row++;
+            column++;
+        }
+
+        for (int i = 0; i < possibleLocations.size(); i++) {
+            if(possibleLocations.get(i) == target){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean areDiagonalPathsFree(ChessBoard gameBoard, String move){
+        Field target = MoveConverter.getTargetField(move);
+        Field start = MoveConverter.getStartField(move);
+
+        if(isFieldOccupiedByOwnPlayingP(gameBoard, move))
+            return false;
+
+
+        //if target is on the upper-left diagonal
+        int row = start.getRow() - 1;
+        int column = start.getColumn() - 1;
+
+        if( (target.getRow() < start.getRow()) && (target.getColumn() < start.getColumn()) ){
+
+            while( (row > target.getRow()) && (column > target.getColumn()) ){
+                if(gameBoard.getState()[row][column].getName() != null){
+                    return false;
+                }
+                row--;
+                column--;
+            }
+        } else if( (target.getRow() < start.getRow()) && (target.getColumn() > start.getColumn()) ){
+            //if target is on the upper-right diagonal
+
+            row = start.getRow() - 1;
+            column = start.getColumn() + 1;
+
+            while( (row > target.getRow()) && (column < target.getColumn()) ){
+                if(gameBoard.getState()[row][column].getName() != null){
+                    return false;
+                }
+                row--;
+                column++;
+            }
+        } else if( (target.getRow() > start.getRow()) && (target.getColumn() > start.getColumn()) ){
+            //if target is on the down-right diagonal
+
+            row = start.getRow() + 1;
+            column = start.getColumn() + 1;
+
+            while( (row < target.getRow()) && (column < target.getColumn()) ){
+                if(gameBoard.getState()[row][column].getName() != null){
+                    return false;
+                }
+                row++;
+                column++;
+            }
+        } else if( (target.getRow() > start.getRow()) && (target.getColumn() < start.getColumn()) ){
+            //if target is on down-left diagonal
+
+            row = start.getRow() + 1;
+            column = start.getColumn() - 1;
+
+            while ( (row < target.getRow()) && (column > target.getColumn()) ){
+                if(gameBoard.getState()[row][column].getName() != null){
+                    return false;
+                }
+                row++;
+                column--;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean checkVerticalAndHorizontalMoves(String move){
+        ArrayList<Field> possibleLocations = new ArrayList<Field>();
+
+        Field target = MoveConverter.getTargetField(move);
+        Field start = MoveConverter.getStartField(move);
 
         //determine every theoretically possible move and add the target field into a list
-        for (int i = rowStart; i >= 0; i--) {
-            possibleLocations.add(new Field(i, columnStart));
+        for (int i = start.getRow(); i >= 0; i--) {
+            possibleLocations.add(new Field(i, start.getColumn()));
         }
 
-        for (int i = rowStart; i <= 7; i++) {
-            possibleLocations.add(new Field(i, columnStart));
+        for (int i = start.getRow(); i <= 7; i++) {
+            possibleLocations.add(new Field(i, start.getColumn()));
         }
 
-        for (int i = columnStart; i >= 0; i--) {
-            possibleLocations.add(new Field(rowStart, i));
+        for (int i = start.getColumn(); i >= 0; i--) {
+            possibleLocations.add(new Field(start.getRow(), i));
         }
 
-        for (int i = columnStart; i <= 7; i++) {
-            possibleLocations.add(new Field(rowStart, i));
+        for (int i = start.getColumn(); i <= 7; i++) {
+            possibleLocations.add(new Field(start.getRow(), i));
         }
 
         //delete startPos from List
-        Field startPos = new Field(rowStart, columnStart);
+        Field startPos = new Field(start.getRow(), start.getColumn());
 
         for (int i = 0; i < possibleLocations.size(); i++){
             if(possibleLocations.get(i) == startPos) {
@@ -111,10 +375,8 @@ public class ChessRules implements Rules {
         }
 
         //check whether the targetPos is one of the possible locations
-        Field targetPos = new Field(rowTarget, columnTarget);
-
         for (int i = 0; i < possibleLocations.size(); i++) {
-            if(possibleLocations.get(i) == targetPos){
+            if(possibleLocations.get(i) == target){
                 return true;
             }
         }
@@ -122,9 +384,12 @@ public class ChessRules implements Rules {
         return false;
     }
 
-    private boolean isRookPathFree(GameBoard gameBoard, String move){
+    private boolean areVerticalOrHorizontalPathsFree(ChessBoard gameBoard, String move){
         Field target = MoveConverter.getTargetField(move);
         Field start = MoveConverter.getStartField(move);
+
+        if(isFieldOccupiedByOwnPlayingP(gameBoard, move))
+            return false;
 
         if(start.getRow()==target.getRow()){
 
@@ -163,7 +428,6 @@ public class ChessRules implements Rules {
             }
 
         }
-
         return true;
     }
 

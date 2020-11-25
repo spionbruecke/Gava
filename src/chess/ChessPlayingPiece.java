@@ -9,8 +9,7 @@ public class ChessPlayingPiece extends PlayingPiece {
 
     @Override
     public void move(GameBoard board, String move) {
-        MoveConverter m = new MoveConverter();
-        board.setState(m.convertStringToState(board, move));
+        board.setState(MoveConverter.convertStringToState(board, move));
         hasMoved = true;
     }
 

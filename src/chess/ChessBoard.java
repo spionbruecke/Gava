@@ -11,8 +11,8 @@ public class ChessBoard extends GameBoard {
     }
 
     @Override
-    protected PlayingPiece[][] setUpPlayingPieces(){
-        PlayingPiece[][] initialState = new PlayingPiece[8][8];
+    protected ChessPlayingPiece[][] setUpPlayingPieces(){
+        ChessPlayingPiece[][] initialState = new ChessPlayingPiece[8][8];
 
         initialState[0][0].setName("rook");
         initialState[0][0].setColour("black");
