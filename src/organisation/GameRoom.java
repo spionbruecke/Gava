@@ -1,7 +1,7 @@
 package src.organisation;
 
 import src.Games.*;
-import src.monk.SchachRules;
+import src.chess.*;
 
 public class GameRoom{
 
@@ -20,8 +20,8 @@ public class GameRoom{
             turnOfPlayer = player1;
         //else
            // turnOfPlayer = player2;
-        if(game instanceof Schach)
-            rule = new SchachRules();
+        if(game instanceof ChessGame)
+            rule = new ChessRules();
     }
 
     //****  Getter ****
