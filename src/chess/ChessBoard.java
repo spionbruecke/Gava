@@ -14,6 +14,12 @@ public class ChessBoard extends GameBoard {
     protected ChessPlayingPiece[][] setUpPlayingPieces(){
         ChessPlayingPiece[][] initialState = new ChessPlayingPiece[8][8];
 
+        for(int i = 0 ; i < 8; i ++) {
+            for (int j = 0; j < 8; j ++){
+                initialState[i][j] = new ChessPlayingPiece();
+            }
+        }
+
         initialState[0][0].setName("rook");
         initialState[0][0].setColour("black");
 
