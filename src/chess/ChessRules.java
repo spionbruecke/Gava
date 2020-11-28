@@ -34,7 +34,8 @@ public class ChessRules implements Rules {
         }
     }
 
-    public boolean isMoveAllowed(ChessBoard gameBoard, String move) {
+    @Override
+    public boolean isMoveAllowed(GameBoard gameBoard, String move) {
         boolean permission;
 
         int row = MoveConverter.convertPosIntoArrayCoordinate(move.charAt(1));
@@ -73,7 +74,7 @@ public class ChessRules implements Rules {
         return permission;
     }
     
-    private boolean checkPawnMoves(ChessBoard gameBoard, String move){
+    private boolean checkPawnMoves(GameBoard gameBoard, String move){
         Field target = MoveConverter.getTargetField(move);
         Field start = MoveConverter.getStartField(move);
 
@@ -93,7 +94,7 @@ public class ChessRules implements Rules {
         }
     }
 
-    private Field getPawnPathFor2Steps(ChessBoard board, Field start){
+    private Field getPawnPathFor2Steps(GameBoard board, Field start){
         if(start.getRow() == 1){
             return new Field(start.getRow()+1, start.getColumn());
         }else{
@@ -148,7 +149,7 @@ public class ChessRules implements Rules {
         return false;
     }
 
-    private boolean isKingTargetFree(ChessBoard gameBoard, String move){
+    private boolean isKingTargetFree(GameBoard gameBoard, String move){
         return !isFieldOccupiedByOwnPlayingP(gameBoard, move);
     }
 
@@ -156,7 +157,7 @@ public class ChessRules implements Rules {
         return checkVerticalAndHorizontalMoves(move) || checkDiagonalMoves(move);
     }
 
-    private boolean isQueenPathFree(ChessBoard gameBoard, String move){
+    private boolean isQueenPathFree(GameBoard gameBoard, String move){
         return areVerticalOrHorizontalPathsFree(gameBoard, move) || areDiagonalPathsFree(gameBoard, move);
     }
 
@@ -164,7 +165,7 @@ public class ChessRules implements Rules {
         return checkDiagonalMoves(move);
     }
 
-    private boolean isBishopPathFree(ChessBoard gameBoard, String move){
+    private boolean isBishopPathFree(GameBoard gameBoard, String move){
         return areDiagonalPathsFree(gameBoard, move);
     }
 
@@ -224,7 +225,7 @@ public class ChessRules implements Rules {
         return false;
     }
 
-    private boolean isKnightTargetFree(ChessBoard gameBoard, String move){
+    private boolean isKnightTargetFree(GameBoard gameBoard, String move){
         return !isFieldOccupiedByOwnPlayingP(gameBoard, move);
     }
 
@@ -232,7 +233,7 @@ public class ChessRules implements Rules {
         return checkVerticalAndHorizontalMoves(move);
     }
 
-    private boolean isRookPathFree(ChessBoard gameBoard, String move){
+    private boolean isRookPathFree(GameBoard gameBoard, String move){
         return areVerticalOrHorizontalPathsFree(gameBoard, move);
     }
 
@@ -291,7 +292,7 @@ public class ChessRules implements Rules {
         return false;
     }
 
-    private boolean areDiagonalPathsFree(ChessBoard gameBoard, String move){
+    private boolean areDiagonalPathsFree(GameBoard gameBoard, String move){
         Field target = MoveConverter.getTargetField(move);
         Field start = MoveConverter.getStartField(move);
 
@@ -398,7 +399,7 @@ public class ChessRules implements Rules {
         return false;
     }
 
-    private boolean areVerticalOrHorizontalPathsFree(ChessBoard gameBoard, String move){
+    private boolean areVerticalOrHorizontalPathsFree(GameBoard gameBoard, String move){
         Field target = MoveConverter.getTargetField(move);
         Field start = MoveConverter.getStartField(move);
 

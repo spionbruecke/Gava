@@ -5,6 +5,7 @@ package src.Games;
  */
 public interface Rules {
 
+    boolean isMoveAllowed(GameBoard gameBoard, String move);
     boolean isFieldOccupied(GameBoard board, Field f);
     boolean isFieldOccupiedByOwnPlayingP(GameBoard board, String move);
 }
