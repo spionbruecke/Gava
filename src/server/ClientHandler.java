@@ -5,6 +5,7 @@ import java.io.*;
 import java.net.*;
 import src.organisation.*;
 import src.Games.*;
+import src.chess.ChessGame;
 
 public class ClientHandler extends Thread {
 
@@ -25,7 +26,7 @@ public class ClientHandler extends Thread {
     @Override
     public void run() {
         Player player;
-        Schach schach = new Schach("Schach"); //these one game we want to implement later
+        ChessGame schach = new ChessGame(); //these one game we want to implement later
         GameRoom gameRoom;
         String input;
 
