@@ -33,4 +33,6 @@ public abstract class PlayingPiece {
     }
 
     public abstract void move(GameBoard board, String move);
+
+    public abstract boolean hasMoved();
 }

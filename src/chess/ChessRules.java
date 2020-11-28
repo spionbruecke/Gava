@@ -7,6 +7,18 @@ import java.util.ArrayList;
 public class ChessRules implements Rules {
 
     @Override
+    public boolean isFieldOccupied(GameBoard board, Field f) {
+        int row = f.getRow();
+        int column = f.getColumn();
+
+        if(board.getState()[row][column]==null) {
+            return false;
+        }else {
+            return true;
+        }
+    }
+
+    @Override
     public boolean isFieldOccupiedByOwnPlayingP(GameBoard board, String move) {
         int row = MoveConverter.convertPosIntoArrayCoordinate(move.charAt(4));
         int column = MoveConverter.convertPosIntoArrayCoordinate(move.charAt(3));
@@ -22,7 +34,6 @@ public class ChessRules implements Rules {
         }
     }
 
-    @Override
     public boolean isMoveAllowed(ChessBoard gameBoard, String move) {
         boolean permission;
 
@@ -51,7 +62,7 @@ public class ChessRules implements Rules {
                 break;
 
             case "pawn":
-                //
+                permission = checkPawnMoves(gameBoard, move);
                 break;
 
             default:
@@ -61,30 +72,33 @@ public class ChessRules implements Rules {
 
         return permission;
     }
-
-    @Override
-    public boolean isFieldOccupied(GameBoard board, String move) {
-        int row = MoveConverter.convertPosIntoArrayCoordinate(move.charAt(4));
-        int column = MoveConverter.convertPosIntoArrayCoordinate(move.charAt(3));
-
-        if(board.getState()[row][column]==null) {
-            return false;
-        }else {
-            return true;
-        }
-    }
     
     private boolean checkPawnMoves(ChessBoard gameBoard, String move){
         Field target = MoveConverter.getTargetField(move);
         Field start = MoveConverter.getStartField(move);
 
-        if( (target.getRow() == start.getRow()+2) && (gameBoard.getState()[start.getRow()][start.getColumn()].hasMoved()) ) {
+
+        if(target.getRow() == start.getRow()+2){
+            if(!gameBoard.getState()[start.getRow()][start.getColumn()].hasMoved() &&
+                    !isFieldOccupied(gameBoard, getPawnPathFor2Steps(gameBoard, start)) &&
+                    !isFieldOccupiedByOwnPlayingP(gameBoard, move)){
+                return true;
+            }else{
+                return false;
+            }
+        }else if(target.getRow() == start.getRow()+1){
+            return !isFieldOccupiedByOwnPlayingP(gameBoard, move);
+        }else{
             return false;
-        }else if( !isFieldOccupiedByOwnPlayingP(gameBoard, move) &&
-                 (target.getRow() == start.getRow()+2) &&
-                 (!gameBoard.getState()[start.getRow()][start.getColumn()].hasMoved()) ){
-            return true;
-        }else if()
+        }
+    }
+
+    private Field getPawnPathFor2Steps(ChessBoard board, Field start){
+        if(start.getRow() == 1){
+            return new Field(start.getRow()+1, start.getColumn());
+        }else{
+            return new Field(start.getRow()-1, start.getColumn());
+        }
     }
 
     private boolean checkKingMoves(String move){
