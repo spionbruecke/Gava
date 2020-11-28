@@ -2,20 +2,28 @@ package src.organisation;
 
 import java.util.*;
 import src.Games.*;
-//import game_structur.Games;
-//import game_structur.GameBoard;
 
-// This Class starts automatically if the server starts
+/**
+ * @author Alexander Posch
+ * @version 0.2
+ * 
+ * Organize every GameRoom.
+ * Add Players to the Room with the right Game-Mode or opens a new if needed
+ * 
+ */
+
 public class GameController {
 
-    private static List<GameRoom> currentGames = new ArrayList<>();
+    private static List<GameRoom> currentGames = new ArrayList<>(); //Every Room with minimum one Player
 
 
-    public static GameRoom openNewRoom(Game game) {
+    //Opens a new Room, add it to the List and return the new Room
+    private static GameRoom openNewRoom(Game game) {
         currentGames.add(new GameRoom(game));
         return currentGames.get(currentGames.size() - 1);
     }
 
+    //Add the Player player to Room depending on the GameMode the Player choosed
     public GameRoom addPlayer(Player player) {
         GameRoom currentGame;
 
@@ -42,18 +50,5 @@ public class GameController {
             currentGames.add(currentGame);
             return currentGame;
         }
-    }
-    
-    /*
-    private Boolean getInput(Player player,GameRoom gameRoom, String input){
-        return false;
-    }
-
-
-    private Boolean notify (Player player){
-        return false;
-    }
-
-    */
-    
+    }   
 }

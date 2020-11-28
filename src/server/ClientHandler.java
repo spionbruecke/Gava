@@ -1,10 +1,19 @@
 package src.server;
 
 import java.io.*;
-
 import java.net.*;
 import src.organisation.*;
 import src.chess.ChessGame;
+
+
+/**
+ * @author Alexander Posch
+ * @version 0.2
+ * 
+ * For each connection there is own ClientHandler,who sends and recieve informations
+ * TODO(Alex): Refactor the whole Class to get a nice structure 
+ */
+
 
 public class ClientHandler extends Thread {
 
@@ -66,7 +75,7 @@ public class ClientHandler extends Thread {
                         if(input.equals("Exit"))
                             break;
                         
-                        if(input.length() == 5) { //every move of a Playing Piece is describt as start field and end field (example: "A2 A3") <- its always 5 chars long
+                        if(input.length() == 5) {
                             gameRoom.setInput(input, player);
                         }
 

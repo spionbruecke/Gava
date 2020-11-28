@@ -3,6 +3,16 @@ package src.organisation;
 import src.Games.*;
 import src.chess.*;
 
+/**
+ * @author Alexander Posch
+ * @version 0.2
+ * 
+ * The GameRoom organize and controll the Game.
+ * It checks for Rules and decides whos turn it is
+ * 
+ */
+
+
 public class GameRoom{
 
     //private GameBoard currentGameBoard;
@@ -16,54 +26,25 @@ public class GameRoom{
 
     public GameRoom(Game game){
         currentGame = game;
-        //if ((int) ( Math.random() * 2 + 1) == 1)
+        //Decides Randomly who is allowed to start
+        if ((int) ( Math.random() * 2 + 1) == 1){
             turnOfPlayer = player1;
-        //else
-           // turnOfPlayer = player2;
+            player1.setColour("White");
+            player2.setColour("Black");
+        } else {
+            turnOfPlayer = player2;
+            player1.setColour("Black");
+            player2.setColour("White");
+        }
+
         if(game instanceof ChessGame)
             rule = new ChessRules();
     }
-
-    //****  Getter ****
-    protected int getNumberOfPlayer(){
-        return numberOfPlayer;
-    }
-
-    public Game getGame(){
-        return currentGame;
-    }
-
-    protected Player getPlayer1(){
-        return player1;
-    }
-
-    protected Player getPlayer2(){
-        return player2;
-    }
-
-    public GameBoard getGameBoard(){
-        return gameBoard;
-    }
-
-    public boolean getTurn(Player player){
-        if(player == turnOfPlayer)
-            return true;
-        else    
-            return false;
-    }
-
-    //for test purpose (and mayby later for the gui?)
-    public Player getTheOtherPlayer( Player player){
-        if (player1 == player && player2 != null)
-            return player2;
-        else if( player2 == player && player1 != null)
-            return player1;
-        else
-            return null;
-    }
+    //****  Functions ****
 
     //protected void getStart(){}
     
+    // Get the new Move. Checks if it is allowed and send the new Board to the other Player.
     public Boolean setInput(String move, Player player){
         PlayingPiece[][] newState = MoveConverter.convertStringToState(gameBoard, move);
         if(rule.isMoveAllowed(gameBoard, move)){
@@ -75,8 +56,6 @@ public class GameRoom{
         } else
             return false;
     }
-
-    //****  Functions ****
 
     //check which position is free and add the player to this position
      protected boolean addPlayer(Player player){
@@ -92,12 +71,42 @@ public class GameRoom{
         }
         return true;
     }
+    
+    //****  Getter ****
+    
+    public Player getTheOtherPlayer( Player player){
+        if (player1 == player && player2 != null)
+            return player2;
+        else if( player2 == player && player1 != null)
+            return player1;
+        else
+            return null;
+    }
+    
+    public boolean getTurn(Player player){
+        if(player == turnOfPlayer)
+            return true;
+        else    
+            return false;
+    }
+
+    public int getNumberOfPlayer()      {return numberOfPlayer;}
+
+    public Game getGame()               {return currentGame;}
+
+    public Player getPlayer1()          {return player1;}
+
+    public Player getPlayer2()          {return player2;}
+
+    public GameBoard getGameBoard()     {return gameBoard;}
+
 
     public String toString(){
+
         StringBuilder output = new StringBuilder();
 
-        output.append("Game: ").append(currentGame).append("\n");
-        output.append("Player 1: ").append(player1).append("\n");
+        output.append("Game: ").append(currentGame).append(" |->");
+        output.append("Player 1: ").append(player1).append(" | ");
         output.append("Player 2: ").append(player2).append("\n");
         return output.toString();
     }

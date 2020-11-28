@@ -4,6 +4,12 @@ import java.io.*;
 import src.organisation.*;
 import java.net.*;
 
+/**
+ * @author Alexander Posch
+ * @version 1.0
+ * 
+ * Main Function: Should always run in the Background of the Server, so every Client can connect every time
+ */
 
 public class Server {
     
@@ -11,6 +17,7 @@ public class Server {
     public static void main(String[] args) {
         Socket newConnection = null;
         GameController controller = new GameController();
+        //TODO(Alex): Think about the Portnumber. There is mayby a better one 
         try (ServerSocket newSocket = new ServerSocket(1515);){      
 
             while(true){  //it has to run until the server(or the programm) shutdown

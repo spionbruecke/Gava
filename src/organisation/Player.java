@@ -4,16 +4,26 @@ import java.util.*;
 import src.Games.*;
 
 
+/**
+ * @author Alexander Posch
+ * @version 0.2
+ * 
+ * Every Client get his own Player class with every nessacery information
+ */
+
+
 public class Player {
 
     private String playerID;
     private StringBuilder name;
-    private Game chosedGame;
-    //private int points;
+    private Game chosedGame;  
     private GameRoom gameRoom;
     private boolean newStateAvaible;
     private String latestMove;
+    private String colour;
     //private ArrayList<PlayingPiece> palyingPieces;
+    //private int points;
+
 
     public Player(){
         //A random name will be generated until the Player log in
@@ -25,52 +35,6 @@ public class Player {
         playerID = UUID.randomUUID().toString();
     }
 
-    //**** Setter und Getter ****
-
-    public Boolean setName(String name){
-            this.name.append(name);
-            return true;
-    }
-
-    public String getName(){
-        return name.toString();
-    }
-
-    public void setGameRoom(GameRoom gameRoom){
-        this.gameRoom = gameRoom;
-    }
-    
-    public GameRoom getGameRoom(){
-        return gameRoom;
-    }
-    
-    public void setGame(Game game){
-        this.chosedGame = game;
-    }
-
-    public Game getGame(){
-        return chosedGame;
-    }
-
-    public String getPlayerID(){
-        return playerID;
-    }
-
-    public void setNewStateAvaible(boolean newStateAvaible){
-        this.newStateAvaible = newStateAvaible;
-    }
-
-    public boolean getNewStateAvaible(){
-        return newStateAvaible;
-    }
-
-    public void setLatestMove(String turn){
-        latestMove = turn;
-    }
-
-    public String getLatestMove(){
-        return latestMove;
-    }
     //**** Functions ****
          
     /* Benötigt Zugang zur Datenbank
@@ -79,6 +43,36 @@ public class Player {
     }
 
     */
+
+    
+    //**** Getter ****
+    public String getName()                                 {return name.toString();}
+
+    public GameRoom getGameRoom()                           {return gameRoom;}
+
+    public Game getGame()                                   {return chosedGame;}
+
+    public String getPlayerID()                             {return playerID;}
+
+    public boolean getNewStateAvaible()                     { return newStateAvaible;}
+
+    public String getLatestMove()                           { return latestMove; }
+
+    public String getColour()                               { return colour; }
+
+    /***********Setter********/
+
+    public void setName(String name)                        {this.name.append(name);}
+    
+    public void setGameRoom(GameRoom gameRoom)              {this.gameRoom = gameRoom;}
+    
+    public void setNewStateAvaible(boolean newStateAvaible) {this.newStateAvaible = newStateAvaible;}
+
+    public void setGame(Game game)                          {this.chosedGame = game;}
+
+    public void setLatestMove(String turn)                  {this.latestMove = turn; }
+
+    public void setColour(String colour)                    {this.colour = colour;}
 
     public String toString(){
         return "ID: " + playerID + " | Name: " + name;
