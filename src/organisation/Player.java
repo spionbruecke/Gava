@@ -82,6 +82,7 @@ public class Player {
                 //this.chosedGame = new MillGame(); <- this is for later
                 break;
             default:
+                System.out.println(input);
                 throw new UnsupportedGameMode();
         }
     }

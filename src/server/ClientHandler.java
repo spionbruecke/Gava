@@ -53,6 +53,8 @@ public class ClientHandler extends Thread {
                             case GAMEMODE:
                                 player.setGame(information);
                                 System.out.println("The Player choosed the Gamemode: " + information);
+                                gameRoom = controller.addPlayer(player);
+                                System.out.println("Player " + player.getName() + " is in a Room with " + gameRoom.getTheOtherPlayer(player) + " with the mode " + gameRoom.getGame()) ;
                                 break;
                             case GAMEBOARD:
                             
