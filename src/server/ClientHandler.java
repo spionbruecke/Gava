@@ -34,14 +34,13 @@ public class ClientHandler extends Thread {
     @Override
     public void run() {
         Player player;
-        ChessGame schach = new ChessGame(); //these one game we want to implement later
         GameRoom gameRoom;
         String input;
         String information;
 
             try {
                 if(newConnection != null){
-                    System.out.println("Client " + this.newConnection + " connected");
+                    LogWriter.writeToLog("Client " + this.newConnection + " connected");
                     outputStream.writeUTF("< Connectionstatus = Connected >");
                     player = new Player();
                     
@@ -52,9 +51,9 @@ public class ClientHandler extends Thread {
                         switch(StringConverter.stringToInformation(input)){
                             case GAMEMODE:
                                 player.setGame(information);
-                                System.out.println("The Player choosed the Gamemode: " + information);
+                                LogWriter.writeToLog("The Player " +  player.getName() + "choosed the Gamemode: " + information);
                                 gameRoom = controller.addPlayer(player);
-                                System.out.println("Player " + player.getName() + " is in a Room with " + gameRoom.getTheOtherPlayer(player) + " with the mode " + gameRoom.getGame()) ;
+                                LogWriter.writeToLog("Player " + player.getName() + " is in a Room with " + gameRoom.getTheOtherPlayer(player) + " with the mode " + gameRoom.getGame()) ;
                                 break;
                             case GAMEBOARD:
                             
