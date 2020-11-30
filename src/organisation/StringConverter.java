@@ -23,10 +23,22 @@ public class StringConverter{
         }
     }
 
-    public int StringToInformation(String input){
+    public static InformationsTypes stringToInformation(String input)throws WrongInformationFormatException{
 
-
-        return 0;
+        switch(getKeyword(input)){
+            case "Gamemode":
+                return InformationsTypes.GAMEMODE;
+            case "Boardgame":
+                return InformationsTypes.GAMEBOARD;
+            case "Login":
+                return InformationsTypes.LOGIN;
+            case "Connectionstatus" :
+                return InformationsTypes.CONNECTIONSTATUS;
+            case "Message" :
+                return InformationsTypes.MESSAGE;
+            default:
+                throw new WrongInformationFormatException();
+        }
     } 
     
     public static String getKeyword(String input)throws WrongInformationFormatException{
@@ -38,7 +50,6 @@ public class StringConverter{
         currentChar = input.charAt(0);
 
         if(currentChar == '<'){
-            
             currentChar = input.charAt(1);
 
             while(currentChar != '=' && i < input.length()){
@@ -47,7 +58,6 @@ public class StringConverter{
                 i ++;
                 currentChar = input.charAt(i);
             }
-            
             return keywort.toString();
         } else {
             throw new WrongInformationFormatException();

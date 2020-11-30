@@ -2,6 +2,7 @@ package src.organisation;
 
 import java.util.*;
 import src.Games.*;
+import src.chess.*;
 
 
 /**
@@ -68,11 +69,22 @@ public class Player {
     
     public void setNewStateAvaible(boolean newStateAvaible) {this.newStateAvaible = newStateAvaible;}
 
-    public void setGame(Game game)                          {this.chosedGame = game;}
-
     public void setLatestMove(String turn)                  {this.latestMove = turn; }
 
     public void setColour(String colour)                    {this.colour = colour;}
+
+    public void setGame(String input) throws UnsupportedGameMode {
+        switch(input){
+            case "Chess":
+                this.chosedGame = new ChessGame();
+                break;
+            case "Mill":
+                //this.chosedGame = new MillGame(); <- this is for later
+                break;
+            default:
+                throw new UnsupportedGameMode();
+        }
+    }
 
     public String toString(){
         return "ID: " + playerID + " | Name: " + name;

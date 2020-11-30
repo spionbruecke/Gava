@@ -3,7 +3,7 @@ package src.server;
 import java.io.*;
 import java.net.*;
 import src.organisation.*;
-import src.chess.ChessGame;
+import src.chess.*;
 
 
 /**
@@ -37,51 +37,39 @@ public class ClientHandler extends Thread {
         ChessGame schach = new ChessGame(); //these one game we want to implement later
         GameRoom gameRoom;
         String input;
+        String information;
 
             try {
                 if(newConnection != null){
                     System.out.println("Client " + this.newConnection + " connected");
-                    outputStream.writeUTF("You're now connected"); //for test purpose
+                    outputStream.writeUTF("< Connectionstatus = Connected >");
                     player = new Player();
                     
-                    outputStream.writeUTF("You're Player: " + player.getName() + " with ID: " + player.getPlayerID()); //for test purpose
-
-                    outputStream.writeUTF("Please choose a Game"); //for test purpose
-                    outputStream.writeUTF("1. Schach"); //for test purpose
-
-                    
-
-                    input = inputStream.readUTF();
-
-                    switch (input){
-                        case "1":
-                            player.setGame(schach);
-                            break;
-                        default:
-                            break;
-                    }
-
-                    gameRoom = controller.addPlayer(player);
-
-                    if(gameRoom.getTheOtherPlayer(player) != null)
-                        outputStream.writeUTF("You're connectet with Player: " + gameRoom.getTheOtherPlayer(player).getName() +" in the Game: " + gameRoom.getGame().getName()); //for test purpose 
-                    else   
-                        outputStream.writeUTF("You're connectet with no one in the Game: " + gameRoom.getGame().getName()); //for test purpose 
-                    
-
-                    //Game
+                    informationCheck: //TODO: (Alex) find a better Solution
                     while(true){
                         input = inputStream.readUTF();
-                        if(input.equals("Exit"))
-                            break;
-                        
-                        if(input.length() == 5) {
-                            //gameRoom.setInput(input, player);
-                        }
+                        information = getInformation(input);
+                        switch(StringConverter.stringToInformation(input)){
+                            case GAMEMODE:
+                                player.setGame(information);
+                                System.out.println("The Player choosed the Gamemode: " + information);
+                                break;
+                            case GAMEBOARD:
+                            
+                                break;
+                            case LOGIN:
 
-                        if(player.getNewStateAvaible()){
-                            outputStream.writeUTF(player.getLatestMove());
-                            player.setNewStateAvaible(false);
+                                break;
+                            case CONNECTIONSTATUS:
+                                if(information.equals("Exit"))
+                                    break informationCheck;
+                                break;
+                            case MESSAGE:
+
+                                break;
+                            default:
+
+                                break;
                         }
                     }
                     
@@ -94,5 +82,24 @@ public class ClientHandler extends Thread {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+    }
+
+    private String getInformation(String input){
+        StringBuilder information = new StringBuilder();
+        int charNumber = 0;
+
+        for(int j = 0 ; j < input.length(); j ++){
+            if(input.charAt(j) == '='){
+                charNumber = j + 1;
+                break;
+            }
+        }
+
+        for(int i = charNumber; i < input.length(); i ++){
+            if(input.charAt(i) == '>')
+                break;
+            information.append(input.charAt(i));
+        }
+        return information.toString();
     }
 }

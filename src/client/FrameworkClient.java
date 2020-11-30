@@ -239,6 +239,12 @@ public abstract class FrameworkClient extends JFrame {
 		playChessButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				currentGame = "Chess";
+				try {
+					dos.writeUTF("<Gamemode = Chess >");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				// TODO start game
 			}
 		});
