@@ -10,7 +10,7 @@ public class LogWriter {
 
 
     public static void writeToLog(String input) {
-        try (FileWriter writeLog = new FileWriter("filename.txt");) {
+        try (BufferedWriter writeLog = new BufferedWriter( new FileWriter("Log.txt",true));) {
             writeLog.write("[ " + getTime() + " ] " + input + "\n");
             writeLog.close();
         } catch (IOException e) {
@@ -21,7 +21,7 @@ public class LogWriter {
     }
 
     public static String getTime(){
-        DateTimeFormatter dateformat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
+        DateTimeFormatter dateformat = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");  
         LocalDateTime now = LocalDateTime.now();  
         return dateformat.format(now);  
     }

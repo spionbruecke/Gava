@@ -4,7 +4,8 @@ import java.io.*;
 import java.net.*;
 import src.organisation.*;
 import src.chess.*;
-
+import java.time.*;
+import java.time.format.*;
 
 /**
  * @author Alexander Posch
@@ -21,9 +22,9 @@ public class ClientHandler extends Thread {
     private DataInputStream inputStream;
     private DataOutputStream outputStream;
     private GameController controller;
-    
 
-    protected ClientHandler(Socket newConnection, DataInputStream inputStream, DataOutputStream outputStream, GameController controller) {
+    protected ClientHandler(Socket newConnection, DataInputStream inputStream, DataOutputStream outputStream,
+            GameController controller) {
         this.newConnection = newConnection;
         this.inputStream = inputStream;
         this.outputStream = outputStream;
@@ -37,15 +38,16 @@ public class ClientHandler extends Thread {
         GameRoom gameRoom;
         String input;
         String information;
+        boolean connected;
 
+        connected = true;
             try {
                 if(newConnection != null){
                     LogWriter.writeToLog("Client " + this.newConnection + " connected");
-                    outputStream.writeUTF("< Connectionstatus = Connected >");
+                    outputStream.writeUTF("<Connectionstatus=Connected>");
                     player = new Player();
                     
-                    informationCheck: //TODO: (Alex) find a better Solution
-                    while(true){
+                    while(connected){
                         input = inputStream.readUTF();
                         information = getInformation(input);
                         switch(StringConverter.stringToInformation(input)){
@@ -63,7 +65,7 @@ public class ClientHandler extends Thread {
                                 break;
                             case CONNECTIONSTATUS:
                                 if(information.equals("Exit"))
-                                    break informationCheck;
+                                    connected = false;
                                 break;
                             case MESSAGE:
 
