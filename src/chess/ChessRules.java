@@ -5,6 +5,7 @@ import src.Games.*;
 import java.util.ArrayList;
 
 public class ChessRules implements Rules {
+    private ChessMoveKonverter konverter = new ChessMoveKonverter();
 
     @Override
     public boolean isFieldOccupied(GameBoard board, Field f) {
@@ -20,8 +21,8 @@ public class ChessRules implements Rules {
 
     @Override
     public boolean isFieldOccupiedByOwnPlayingP(GameBoard board, String move) {
-        int row = MoveConverter.convertPosIntoArrayCoordinate(move.charAt(4));
-        int column = MoveConverter.convertPosIntoArrayCoordinate(move.charAt(3));
+        int row = konverter.convertPosIntoArrayCoordinate(move.charAt(4));
+        int column = konverter.convertPosIntoArrayCoordinate(move.charAt(3));
 
         String ownColour = board.getState()[(int)(move.charAt(1))][(int)(move.charAt(0))].getColour();
 
@@ -38,8 +39,8 @@ public class ChessRules implements Rules {
     public boolean isMoveAllowed(GameBoard gameBoard, String move) {
         boolean permission;
 
-        int row = MoveConverter.convertPosIntoArrayCoordinate(move.charAt(1));
-        int column = MoveConverter.convertPosIntoArrayCoordinate(move.charAt(0));
+        int row = konverter.convertPosIntoArrayCoordinate(move.charAt(1));
+        int column = konverter.convertPosIntoArrayCoordinate(move.charAt(0));
 
         switch(gameBoard.getState()[row][column].getName()){
             case "rook":
@@ -75,8 +76,8 @@ public class ChessRules implements Rules {
     }
     
     private boolean checkPawnMoves(GameBoard gameBoard, String move){
-        Field target = MoveConverter.getTargetField(move);
-        Field start = MoveConverter.getStartField(move);
+        Field target = konverter.getTargetField(move);
+        Field start = konverter.getStartField(move);
 
 
         if(target.getRow() == start.getRow()+2){
@@ -105,8 +106,8 @@ public class ChessRules implements Rules {
     private boolean checkKingMoves(String move){
         ArrayList<Field> possibleLocations = new ArrayList<Field>();
 
-        Field target = MoveConverter.getTargetField(move);
-        Field start = MoveConverter.getStartField(move);
+        Field target = konverter.getTargetField(move);
+        Field start = konverter.getStartField(move);
 
         if( (start.getRow()-1 >= 0) && (start.getColumn()-1 >= 0) ){
             possibleLocations.add(new Field(start.getRow()-1, start.getColumn()-1));
@@ -172,8 +173,8 @@ public class ChessRules implements Rules {
     private boolean checkKnightMoves(String move){
         ArrayList<Field> possibleLocations = new ArrayList<Field>();
 
-        Field target = MoveConverter.getTargetField(move);
-        Field start = MoveConverter.getStartField(move);
+        Field target = konverter.getTargetField(move);
+        Field start = konverter.getStartField(move);
 
         //up-left
         if( (start.getRow()-2 >= 0) && (start.getColumn()-1 >= 0) ){
@@ -240,8 +241,8 @@ public class ChessRules implements Rules {
     private boolean checkDiagonalMoves(String move){
         ArrayList<Field> possibleLocations = new ArrayList<Field>();
 
-        Field target = MoveConverter.getTargetField(move);
-        Field start = MoveConverter.getStartField(move);
+        Field target = konverter.getTargetField(move);
+        Field start = konverter.getStartField(move);
 
         //left-up diagonal
         int row = start.getRow() - 1;
@@ -293,8 +294,8 @@ public class ChessRules implements Rules {
     }
 
     private boolean areDiagonalPathsFree(GameBoard gameBoard, String move){
-        Field target = MoveConverter.getTargetField(move);
-        Field start = MoveConverter.getStartField(move);
+        Field target = konverter.getTargetField(move);
+        Field start = konverter.getStartField(move);
 
         if(isFieldOccupiedByOwnPlayingP(gameBoard, move))
             return false;
@@ -360,8 +361,8 @@ public class ChessRules implements Rules {
     private boolean checkVerticalAndHorizontalMoves(String move){
         ArrayList<Field> possibleLocations = new ArrayList<Field>();
 
-        Field target = MoveConverter.getTargetField(move);
-        Field start = MoveConverter.getStartField(move);
+        Field target = konverter.getTargetField(move);
+        Field start = konverter.getStartField(move);
 
         //determine every theoretically possible move and add the target field into a list
         for (int i = start.getRow(); i >= 0; i--) {
@@ -400,8 +401,8 @@ public class ChessRules implements Rules {
     }
 
     private boolean areVerticalOrHorizontalPathsFree(GameBoard gameBoard, String move){
-        Field target = MoveConverter.getTargetField(move);
-        Field start = MoveConverter.getStartField(move);
+        Field target = konverter.getTargetField(move);
+        Field start = konverter.getStartField(move);
 
         if(isFieldOccupiedByOwnPlayingP(gameBoard, move))
             return false;

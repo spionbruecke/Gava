@@ -1,7 +1,6 @@
 package src.chess;
 
-import src.Games.GameBoard;
-import src.Games.PlayingPiece;
+import src.Games.*;
 
 public class ChessBoard extends GameBoard {
 

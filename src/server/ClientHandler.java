@@ -76,7 +76,7 @@ public class ClientHandler extends Thread {
                             break;
                         
                         if(input.length() == 5) {
-                            gameRoom.setInput(input, player);
+                            //gameRoom.setInput(input, player);
                         }
 
                         if(player.getNewStateAvaible()){

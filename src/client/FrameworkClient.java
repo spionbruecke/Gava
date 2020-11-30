@@ -19,7 +19,7 @@ import javax.swing.JSeparator;
 
 public abstract class FrameworkClient extends JFrame {
 	
-	private Socket connection = null;
+	private Socket connection= null;
 	protected DataInputStream dis = null;
 	protected DataOutputStream dos = null;
 	protected Boolean isStillPlaying = true;
