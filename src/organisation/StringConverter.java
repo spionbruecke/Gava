@@ -1,6 +1,6 @@
 package src.organisation;
 
-import java.util.function.IntPredicate;
+import src.Games.PlayingPiece;
 
 /**
  * 
@@ -13,15 +13,8 @@ import java.util.function.IntPredicate;
  */
 public class StringConverter{
 
-    public static void main(String[] args) {
-        String test = "< Gamemode = Dingsbumms >";
 
-        try{
-            System.out.println(getKeyword(test));
-        } catch (WrongInformationFormatException e){
-            System.out.println("Fuck");
-        }
-    }
+    private StringConverter(){}
 
     public static InformationsTypes stringToInformation(String input)throws WrongInformationFormatException{
 
@@ -62,5 +55,35 @@ public class StringConverter{
         } else {
             throw new WrongInformationFormatException();
         }
+    }
+
+    public static String getInformation(String input){
+        StringBuilder information = new StringBuilder();
+        int charNumber = 0;
+        int counter = 0;
+
+        for(int j = 0 ; j < input.length(); j ++){
+            if(input.charAt(j) == '='){
+                charNumber = j + 1;
+                break;
+            }
+        }
+
+        for(int i = charNumber; i < input.length(); i ++){
+            if (input.charAt(i) == '<')
+                counter ++;
+            if(input.charAt(i) == '>'){
+                if (counter != 0) 
+                    counter --;
+                else
+                    break;
+            }
+            information.append(input.charAt(i));
+        }
+        return information.toString();
+    }
+
+    public static String getNewMove(){
+        return null;
     }
 }

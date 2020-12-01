@@ -3,16 +3,12 @@ package src.server;
 import java.io.*;
 import java.net.*;
 import src.organisation.*;
-import src.chess.*;
-import java.time.*;
-import java.time.format.*;
 
 /**
  * @author Alexander Posch
  * @version 0.2
  * 
  * For each connection there is own ClientHandler,who sends and recieve informations
- * TODO(Alex): Refactor the whole Class to get a nice structure 
  */
 
 
@@ -46,10 +42,11 @@ public class ClientHandler extends Thread {
                     LogWriter.writeToLog("Client " + this.newConnection + " connected");
                     outputStream.writeUTF("<Connectionstatus=Connected>");
                     player = new Player();
+                    player.setClientHandler(this);
                     
                     while(connected){
                         input = inputStream.readUTF();
-                        information = getInformation(input);
+                        information = StringConverter.getInformation(input);
                         switch(StringConverter.stringToInformation(input)){
                             case GAMEMODE:
                                 player.setGame(information);
@@ -85,24 +82,5 @@ public class ClientHandler extends Thread {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-    }
-
-    private String getInformation(String input){
-        StringBuilder information = new StringBuilder();
-        int charNumber = 0;
-
-        for(int j = 0 ; j < input.length(); j ++){
-            if(input.charAt(j) == '='){
-                charNumber = j + 1;
-                break;
-            }
         }
-
-        for(int i = charNumber; i < input.length(); i ++){
-            if(input.charAt(i) == '>')
-                break;
-            information.append(input.charAt(i));
-        }
-        return information.toString();
-    }
 }

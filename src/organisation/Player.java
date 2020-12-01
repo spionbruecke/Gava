@@ -3,6 +3,7 @@ package src.organisation;
 import java.util.*;
 import src.Games.*;
 import src.chess.*;
+import src.server.ClientHandler;
 
 
 /**
@@ -22,6 +23,7 @@ public class Player {
     private boolean newStateAvaible;
     private String latestMove;
     private String colour;
+    private ClientHandler clienthandler;
     //private ArrayList<PlayingPiece> palyingPieces;
     //private int points;
 
@@ -61,6 +63,8 @@ public class Player {
 
     public String getColour()                               { return colour; }
 
+    public ClientHandler getClientHandler()                 {return clienthandler; }
+
     /***********Setter********/
 
     public void setName(String name)                        {this.name.append(name);}
@@ -72,6 +76,8 @@ public class Player {
     public void setLatestMove(String turn)                  {this.latestMove = turn; }
 
     public void setColour(String colour)                    {this.colour = colour;}
+
+    public void setClientHandler(ClientHandler client)      {this.clienthandler = client;}
 
     public void setGame(String input) throws UnsupportedGameMode {
         switch(input){

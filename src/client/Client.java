@@ -1,11 +1,7 @@
-
 package src.client;
 
-
 public class Client extends FrameworkClient{
-	
 
-	
 	public Client(String host, int port) {
 		connect(host, port);
 	}
