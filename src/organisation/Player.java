@@ -17,7 +17,7 @@ import src.server.ClientHandler;
 public class Player {
 
     private String playerID;
-    private StringBuilder name;
+    private String playerName;
     private Game chosedGame;  
     private GameRoom gameRoom;
     private boolean newStateAvaible;
@@ -31,9 +31,9 @@ public class Player {
     public Player(){
         //A random name will be generated until the Player log in
         Random r = new Random();
-        name = new StringBuilder();
+        StringBuilder name = new StringBuilder();
         name.append("anonymus").append(r.nextInt(10000));
-
+        playerName = name.toString();
         // Each Player get a unique ID
         playerID = UUID.randomUUID().toString();
     }
@@ -49,7 +49,7 @@ public class Player {
 
     
     //**** Getter ****
-    public String getName()                                 {return name.toString();}
+    public String getName()                                 {return playerName;}
 
     public GameRoom getGameRoom()                           {return gameRoom;}
 
@@ -67,7 +67,7 @@ public class Player {
 
     /***********Setter********/
 
-    public void setName(String name)                        {this.name.append(name);}
+    public void setName(String name)                        {this.playerName = name;}
     
     public void setGameRoom(GameRoom gameRoom)              {this.gameRoom = gameRoom;}
     
@@ -94,6 +94,6 @@ public class Player {
     }
 
     public String toString(){
-        return "ID: " + playerID + " | Name: " + name;
+        return "ID: " + playerID + " | Name: " + playerName;
     }
 }
