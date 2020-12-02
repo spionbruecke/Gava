@@ -5,7 +5,11 @@ package src.Games;
  */
 public interface Rules {
 
-    boolean isMoveAllowed(GameBoard gameBoard, String move);
-    boolean isFieldOccupied(GameBoard board, Field f);
-    boolean isFieldOccupiedByOwnPlayingP(GameBoard board, String move);
+    //boolean isMoveAllowed(GameBoard gameBoard, PlayingPiece[][] stateToCheck);
+
+    static boolean isFieldOccupied(GameBoard board, int row, int column){
+        return board.getState()[row][column] != null;
+    }
+    
+    //boolean isFieldOccupiedByOwnPlayingP(GameBoard board, String move);
 }

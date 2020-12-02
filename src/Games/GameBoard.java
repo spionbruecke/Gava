@@ -17,12 +17,13 @@ public abstract class GameBoard {
     protected long gameBoardID;
 
     /**
-     *
+     * A Cache object which saves the previous state of a GameBoard for undoing the last move.
+     * Initial value is null
      */
-    private Cache prevState;
+    private Cache prevState = null;
 
     /**
-     * Sets state to the current state and saves the current
+     * Sets the new state to the current state and saves the current
      * state in prevState.
      * @param state PlayingPiece[][]
      */
@@ -32,8 +33,8 @@ public abstract class GameBoard {
     }
 
     /**
-     * Returns a multidimensional PlayingPiece Array.
-     * @return state
+     * Returns the current state.
+     * @return PlayingPiece[][]
      */
     public PlayingPiece[][] getState(){
         return state;
@@ -48,8 +49,8 @@ public abstract class GameBoard {
     }
 
     /**
-     * Returns a long value.
-     * @return gameBoardID
+     * Returns the gameBoardID.
+     * @return long
      */
     public long getGameBoardID(){
         return gameBoardID;
@@ -70,7 +71,7 @@ public abstract class GameBoard {
      * it will be overwritten otherwise the method will create a new list element and add
      * it to the list.
      */
-    public void saveStateToMemento() {
+    private void saveStateToMemento() {
         prevState = new Cache(this);
     }
 

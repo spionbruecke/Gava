@@ -32,6 +32,11 @@ public abstract class PlayingPiece {
         this.colour = colour;
     }
 
+    public void outOfGame(){
+        colour = null;
+        name = null;
+    }
+
     public abstract void move(GameBoard board, String move);
 
     public abstract boolean hasMoved();

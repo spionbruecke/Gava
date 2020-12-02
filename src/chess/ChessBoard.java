@@ -1,15 +1,26 @@
 package src.chess;
 
 import src.Games.GameBoard;
-import src.Games.PlayingPiece;
 
+/**
+ * @author Begüm Tosun
+ *
+ * ChessBoard extends the class Gameboard from src.Games and is sed for constructing an intial chess board.
+ */
 public class ChessBoard extends GameBoard {
 
+    /**
+     * The constructor creates a chess board with an ID and its initial state.
+     */
     public ChessBoard(){
         super.setGameBoardID(System.currentTimeMillis());
         super.setState(setUpPlayingPieces());
     }
 
+    /**
+     * The method setUpPlayingPieces() returns a chess board with an initial setup.
+     * @return ChessPlayingPiece[][]
+     */
     @Override
     protected ChessPlayingPiece[][] setUpPlayingPieces(){
         ChessPlayingPiece[][] initialState = new ChessPlayingPiece[8][8];

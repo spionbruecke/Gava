@@ -4,22 +4,21 @@ import src.Games.*;
 
 import java.util.ArrayList;
 
+/**
+ * @author Begüm Tosun
+ *
+ * ChessRules implements Rules from src.Games and checks if the given move is valid.
+ */
+
 public class ChessRules implements Rules {
 
-    @Override
-    public boolean isFieldOccupied(GameBoard board, Field f) {
-        int row = f.getRow();
-        int column = f.getColumn();
-
-        if(board.getState()[row][column]==null) {
-            return false;
-        }else {
-            return true;
-        }
-    }
-
-    @Override
-    public boolean isFieldOccupiedByOwnPlayingP(GameBoard board, String move) {
+    /**
+     * Checks if the target square/field of the given move is occupied by ones own playing piece.
+     * @param board GameBoard
+     * @param move String
+     * @return boolean
+     */
+    public static boolean isFieldOccupiedByOwnPlayingP(GameBoard board, String move) {
         int row = MoveConverter.convertPosIntoArrayCoordinate(move.charAt(4));
         int column = MoveConverter.convertPosIntoArrayCoordinate(move.charAt(3));
 
@@ -34,75 +33,122 @@ public class ChessRules implements Rules {
         }
     }
 
-    @Override
-    public boolean isMoveAllowed(GameBoard gameBoard, String move) {
-        boolean permission;
+    /**
+     * Checks whether the given move is valid.
+     * @param gameBoard GameBoard
+     * @param stateToCheck ChessPlayingPiece[][]
+     * @return boolean
+     */
+    public static boolean isMoveAllowed(GameBoard gameBoard, ChessPlayingPiece[][] stateToCheck) {
+        if(isMoveCastling(gameBoard, stateToCheck))
+            return true;
 
+        String move = MoveConverter.stateToString(gameBoard.getState(), stateToCheck);
+
+        return checkEachPossibleMove(gameBoard, stateToCheck, move);
+    }
+
+    private static boolean checkEachPossibleMove(GameBoard gameBoard, ChessPlayingPiece[][] stateToCheck, String move){
         int row = MoveConverter.convertPosIntoArrayCoordinate(move.charAt(1));
         int column = MoveConverter.convertPosIntoArrayCoordinate(move.charAt(0));
 
         switch(gameBoard.getState()[row][column].getName()){
             case "rook":
-                permission = checkRookMoves(move) && isRookPathFree(gameBoard, move);
-                break;
+                return checkRookMoves(move) && isRookPathFree(gameBoard, move);
 
             case "knight":
-                permission = checkKnightMoves(move) && isKnightTargetFree(gameBoard, move);
-                break;
+                return checkKnightMoves(move) && isKnightTargetFree(gameBoard, move);
 
             case "bishop":
-                permission = checkBishopMoves(move) && isBishopPathFree(gameBoard, move);
-                break;
+                return checkBishopMoves(move) && isBishopPathFree(gameBoard, move);
 
             case "queen":
-                permission = checkQueenMoves(move) && isQueenPathFree(gameBoard, move);
-                break;
+                return checkQueenMoves(move) && isQueenPathFree(gameBoard, move);
 
             case "king":
-                permission = checkKingMoves(move) && isKingTargetFree(gameBoard, move);
-                break;
+                return checkKingMoves(move) && isKingTargetFree(gameBoard, move);
 
             case "pawn":
-                permission = checkPawnMoves(gameBoard, move);
-                break;
+                return checkPawnMoves(gameBoard, stateToCheck);
 
             default:
-                permission = false;
-                break;
-        }
-
-        return permission;
-    }
-    
-    private boolean checkPawnMoves(GameBoard gameBoard, String move){
-        Field target = MoveConverter.getTargetField(move);
-        Field start = MoveConverter.getStartField(move);
-
-
-        if(target.getRow() == start.getRow()+2){
-            if(!gameBoard.getState()[start.getRow()][start.getColumn()].hasMoved() &&
-                    !isFieldOccupied(gameBoard, getPawnPathFor2Steps(gameBoard, start)) &&
-                    !isFieldOccupiedByOwnPlayingP(gameBoard, move)){
-                return true;
-            }else{
                 return false;
-            }
-        }else if(target.getRow() == start.getRow()+1){
-            return !isFieldOccupiedByOwnPlayingP(gameBoard, move);
-        }else{
-            return false;
         }
     }
 
-    private Field getPawnPathFor2Steps(GameBoard board, Field start){
-        if(start.getRow() == 1){
-            return new Field(start.getRow()+1, start.getColumn());
-        }else{
-            return new Field(start.getRow()-1, start.getColumn());
+    private static boolean checkPawnMoves(GameBoard gameBoard, ChessPlayingPiece[][] stateToCheck){
+        Field target = MoveConverter.getTargetField(MoveConverter.stateToString(gameBoard.getState(), stateToCheck));
+        Field start = MoveConverter.getStartField(MoveConverter.stateToString(gameBoard.getState(), stateToCheck));
+
+        // move two squares forward
+        if(target.getRow() == start.getRow()+2
+                && !gameBoard.getState()[start.getRow()][start.getColumn()].hasMoved()
+                && gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("black")
+                && isPawnPathFree(gameBoard, start)
+                && isFieldOccupiedByOwnPlayingP(gameBoard, MoveConverter.stateToString(gameBoard.getState(), stateToCheck))){
+            return true;
+        }else if(target.getRow() == start.getRow()-2
+                && !gameBoard.getState()[start.getRow()][start.getColumn()].hasMoved()
+                && gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("white")
+                && isPawnPathFree(gameBoard, start)
+                && isFieldOccupiedByOwnPlayingP(gameBoard, MoveConverter.stateToString(gameBoard.getState(), stateToCheck))){
+            return true;
         }
+
+        // move one square forward
+        if(target.getRow() == start.getRow()+1
+                && gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("black")
+                && isFieldOccupiedByOwnPlayingP(gameBoard, MoveConverter.stateToString(gameBoard.getState(), stateToCheck))){
+            return true;
+        }else if(target.getRow() == start.getRow()-1
+                && gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("white")
+                && isFieldOccupiedByOwnPlayingP(gameBoard, MoveConverter.stateToString(gameBoard.getState(), stateToCheck))){
+            return true;
+        }
+
+        //en passant
+        if(target.getRow() == start.getRow()+1
+                && (target.getColumn() == start.getColumn()+1 || target.getColumn() == start.getColumn()-1)
+                && gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("black")
+                && isEnPassantAllowed(gameBoard, start, target)){
+            return true;
+        }else if(target.getRow() == start.getRow()-1
+                && (target.getColumn() == start.getColumn()+1 || target.getColumn() == start.getColumn()-1)
+                && gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("white")
+                && isEnPassantAllowed(gameBoard, start, target)){
+            return true;
+        }
+
+        //promotion
+        if(gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("white")
+                && target.getRow() == 0){
+            stateToCheck[target.getRow()][target.getColumn()].promotion("TODO");
+            return true;
+        }else if(gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("black")
+                && target.getRow() == 7){
+            stateToCheck[target.getRow()][target.getColumn()].promotion("TODO");
+            return true;
+        }
+
+        return false;
     }
 
-    private boolean checkKingMoves(String move){
+    private static boolean isPawnPathFree(GameBoard board, Field start){
+        if(board.getState()[start.getRow()][start.getColumn()].getColour().equals("black"))
+            return Rules.isFieldOccupied(board, start.getRow()+1, start.getColumn());
+        else
+            return Rules.isFieldOccupied(board, start.getRow()-1, start.getColumn());
+    }
+
+    private static boolean isEnPassantAllowed(GameBoard board, Field start, Field target){
+        if(board.getStateFromMemento().getState()[start.getRow()][target.getColumn()].getName() == null
+            && board.getState()[start.getRow()][target.getColumn()] != null)
+            return true;
+
+        return false;
+    }
+
+    private static boolean checkKingMoves(String move){
         ArrayList<Field> possibleLocations = new ArrayList<Field>();
 
         Field target = MoveConverter.getTargetField(move);
@@ -140,8 +186,8 @@ public class ChessRules implements Rules {
             possibleLocations.add(new Field(start.getRow(), start.getColumn()-1));
         }
 
-        for (int i = 0; i < possibleLocations.size(); i++) {
-            if (possibleLocations.get(i) == target) {
+        for (Field possibleLocation : possibleLocations) {
+            if (possibleLocation == target) {
                 return true;
             }
         }
@@ -149,27 +195,28 @@ public class ChessRules implements Rules {
         return false;
     }
 
-    private boolean isKingTargetFree(GameBoard gameBoard, String move){
+    private static boolean isKingTargetFree(GameBoard gameBoard, String move){
         return !isFieldOccupiedByOwnPlayingP(gameBoard, move);
     }
 
-    private boolean checkQueenMoves(String move){
+
+    private static boolean checkQueenMoves(String move){
         return checkVerticalAndHorizontalMoves(move) || checkDiagonalMoves(move);
     }
 
-    private boolean isQueenPathFree(GameBoard gameBoard, String move){
+    private static boolean isQueenPathFree(GameBoard gameBoard, String move){
         return areVerticalOrHorizontalPathsFree(gameBoard, move) || areDiagonalPathsFree(gameBoard, move);
     }
 
-    private boolean checkBishopMoves(String move){
+    private static boolean checkBishopMoves(String move){
         return checkDiagonalMoves(move);
     }
 
-    private boolean isBishopPathFree(GameBoard gameBoard, String move){
+    private static boolean isBishopPathFree(GameBoard gameBoard, String move){
         return areDiagonalPathsFree(gameBoard, move);
     }
 
-    private boolean checkKnightMoves(String move){
+    private static boolean checkKnightMoves(String move){
         ArrayList<Field> possibleLocations = new ArrayList<Field>();
 
         Field target = MoveConverter.getTargetField(move);
@@ -225,19 +272,123 @@ public class ChessRules implements Rules {
         return false;
     }
 
-    private boolean isKnightTargetFree(GameBoard gameBoard, String move){
+    private static boolean isKnightTargetFree(GameBoard gameBoard, String move){
         return !isFieldOccupiedByOwnPlayingP(gameBoard, move);
     }
 
-    private boolean checkRookMoves(String move){
+    private static boolean checkRookMoves(String move){
         return checkVerticalAndHorizontalMoves(move);
     }
 
-    private boolean isRookPathFree(GameBoard gameBoard, String move){
+    private static boolean isRookPathFree(GameBoard gameBoard, String move){
         return areVerticalOrHorizontalPathsFree(gameBoard, move);
     }
 
-    private boolean checkDiagonalMoves(String move){
+    private static boolean isMoveCastling(GameBoard gameBoard, ChessPlayingPiece[][] stateToCheck){
+        int counter = 0;
+        ArrayList<Field> check = new ArrayList<Field>();
+
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if(gameBoard.getState()[i][j] != stateToCheck[i][j] && gameBoard.getState()[i][j].getName() != null) {
+                    counter++;
+                    check.add(new Field(i, j));
+                }
+            }
+        }
+
+        Field rook;
+        Field king;
+
+        // if two playing piece have changed location
+        if(counter == 2 && arePieceRookAndKingFromSameColour(check, gameBoard.getState())){
+
+            if(gameBoard.getState()[check.get(0).getRow()][check.get(0).getColumn()].getName().equals("rook")){
+                rook = new Field(check.get(0).getRow(), check.get(0).getColumn());
+                king = new Field(check.get(1).getRow(), check.get(1).getColumn());
+            }else {
+                rook = new Field(check.get(1).getRow(), check.get(1).getColumn());
+                king = new Field(check.get(0).getRow(), check.get(0).getColumn());
+            }
+
+            if(gameBoard.getState()[rook.getRow()][rook.getColumn()].hasMoved()
+                    || gameBoard.getState()[king.getRow()][king.getColumn()].hasMoved()){
+                return false;
+            }else {
+                return isCastlingPathFree(gameBoard, rook, stateToCheck);
+            }
+        }
+
+        return false;
+    }
+
+    private static boolean arePieceRookAndKingFromSameColour(ArrayList<Field> f, PlayingPiece[][] board){
+        for(Field field: f){
+            if( (board[f.get(0).getRow()][f.get(0).getColumn()].getName().equals("rook")
+                    && board[f.get(1).getRow()][f.get(1).getColumn()].getName().equals("king"))
+                || (board[f.get(0).getRow()][f.get(0).getColumn()].getName().equals("king")
+                    && board[f.get(1).getRow()][f.get(1).getColumn()].getName().equals("rook")) ){
+
+                return board[f.get(1).getRow()][f.get(1).getColumn()].getColour()
+                        .equals(board[f.get(1).getRow()][f.get(1).getColumn()].getColour());
+            }
+        }
+
+        return false;
+    }
+
+    private static boolean isCastlingPathFree(GameBoard board, Field rook, ChessPlayingPiece[][] stateToCheck){
+        if(rook.getRow()==0 && rook.getColumn()==0){
+            for (int i = 1; i < 4; i++) {
+                if(Rules.isFieldOccupied(board, 0, i) || isFieldAttacked(board, 0, i, stateToCheck)){
+                    return false;
+                }
+            }
+        }else if(rook.getRow()==0 && rook.getColumn()==7){
+            for (int i = 5; i < 7; i++) {
+                if(Rules.isFieldOccupied(board, 0, i) || isFieldAttacked(board, 0, i, stateToCheck)){
+                    return false;
+                }
+            }
+        }else if(rook.getRow()==7 && rook.getColumn()==0){
+            for (int i = 1; i < 4; i++) {
+                if(Rules.isFieldOccupied(board, 7, i) || isFieldAttacked(board, 7, i, stateToCheck)){
+                    return false;
+                }
+            }
+        }else{
+            for (int i = 5; i < 7; i++) {
+                if(Rules.isFieldOccupied(board, 7, i) || isFieldAttacked(board, 7, i, stateToCheck)){
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    private static boolean isFieldAttacked(GameBoard board, int row, int column, ChessPlayingPiece[][] stateToCheck){
+        String move = "";
+        StringBuilder stringB = new StringBuilder();
+
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                stringB.append(MoveConverter.convertArrayCoordinateIntoPosColumn(j));
+                stringB.append(MoveConverter.convertArrayCoordinateIntoPosRow(i));
+                stringB.append(" ");
+                stringB.append(MoveConverter.convertArrayCoordinateIntoPosColumn(column));
+                stringB.append(MoveConverter.convertArrayCoordinateIntoPosRow(row));
+
+                move = stringB.toString();
+
+                if(checkEachPossibleMove(board, stateToCheck, move))
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean checkDiagonalMoves(String move){
         ArrayList<Field> possibleLocations = new ArrayList<Field>();
 
         Field target = MoveConverter.getTargetField(move);
@@ -292,7 +443,7 @@ public class ChessRules implements Rules {
         return false;
     }
 
-    private boolean areDiagonalPathsFree(GameBoard gameBoard, String move){
+    private static boolean areDiagonalPathsFree(GameBoard gameBoard, String move){
         Field target = MoveConverter.getTargetField(move);
         Field start = MoveConverter.getStartField(move);
 
@@ -307,7 +458,7 @@ public class ChessRules implements Rules {
         if( (target.getRow() < start.getRow()) && (target.getColumn() < start.getColumn()) ){
 
             while( (row > target.getRow()) && (column > target.getColumn()) ){
-                if(gameBoard.getState()[row][column].getName() != null){
+                if(Rules.isFieldOccupied(gameBoard, row, column)){
                     return false;
                 }
                 row--;
@@ -320,7 +471,7 @@ public class ChessRules implements Rules {
             column = start.getColumn() + 1;
 
             while( (row > target.getRow()) && (column < target.getColumn()) ){
-                if(gameBoard.getState()[row][column].getName() != null){
+                if(Rules.isFieldOccupied(gameBoard, row, column)){
                     return false;
                 }
                 row--;
@@ -333,7 +484,7 @@ public class ChessRules implements Rules {
             column = start.getColumn() + 1;
 
             while( (row < target.getRow()) && (column < target.getColumn()) ){
-                if(gameBoard.getState()[row][column].getName() != null){
+                if(Rules.isFieldOccupied(gameBoard, row, column)){
                     return false;
                 }
                 row++;
@@ -346,7 +497,7 @@ public class ChessRules implements Rules {
             column = start.getColumn() - 1;
 
             while ( (row < target.getRow()) && (column > target.getColumn()) ){
-                if(gameBoard.getState()[row][column].getName() != null){
+                if(Rules.isFieldOccupied(gameBoard, row, column)){
                     return false;
                 }
                 row++;
@@ -357,7 +508,7 @@ public class ChessRules implements Rules {
         return true;
     }
 
-    private boolean checkVerticalAndHorizontalMoves(String move){
+    private static boolean checkVerticalAndHorizontalMoves(String move){
         ArrayList<Field> possibleLocations = new ArrayList<Field>();
 
         Field target = MoveConverter.getTargetField(move);
@@ -399,7 +550,7 @@ public class ChessRules implements Rules {
         return false;
     }
 
-    private boolean areVerticalOrHorizontalPathsFree(GameBoard gameBoard, String move){
+    private static boolean areVerticalOrHorizontalPathsFree(GameBoard gameBoard, String move){
         Field target = MoveConverter.getTargetField(move);
         Field start = MoveConverter.getStartField(move);
 
@@ -411,14 +562,14 @@ public class ChessRules implements Rules {
             if(start.getColumn() < target.getColumn()){
                 //rook moved to the left side
                 for(int i = start.getColumn(); i < target.getColumn(); i++){
-                    if(gameBoard.getState()[start.getRow()][i].getName() != null){
+                    if(Rules.isFieldOccupied(gameBoard, start.getRow(), i)){
                         return false;
                     }
                 }
             } else{
                 //rook moved to right side
                 for(int i = start.getColumn(); i > target.getColumn(); i--) {
-                    if (gameBoard.getState()[start.getRow()][i].getName() != null) {
+                    if (Rules.isFieldOccupied(gameBoard, start.getRow(), i)) {
                         return false;
                     }
                 }
@@ -429,14 +580,14 @@ public class ChessRules implements Rules {
             if(start.getRow()>target.getRow()){
                 // rook moved upwards
                 for (int i = start.getRow(); i > target.getRow() ; i--) {
-                    if(gameBoard.getState()[i][start.getColumn()].getName() != null){
+                    if(Rules.isFieldOccupied(gameBoard, i, start.getColumn())){
                         return false;
                     }
                 }
             }else{
                 //rook moved downwards
                 for (int i = start.getRow(); i < target.getRow() ; i++) {
-                    if(gameBoard.getState()[i][start.getColumn()].getName() != null){
+                    if(Rules.isFieldOccupied(gameBoard, i, start.getColumn())){
                         return false;
                     }
                 }

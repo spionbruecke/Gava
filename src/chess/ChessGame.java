@@ -2,6 +2,11 @@ package src.chess;
 
 import src.Games.Game;
 
+/**
+ * @author Begüm Tosun
+ *
+ * ChessGame extends the class Game from src.Games and is used for creating a new chess game.
+ */
 public class ChessGame extends Game {
 
     ChessBoard board;
