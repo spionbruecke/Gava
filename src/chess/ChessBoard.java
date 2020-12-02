@@ -13,10 +13,16 @@ public class ChessBoard extends GameBoard {
     static final String KING = "king";
     static final String PAWN = "pawn";
     private ChessPlayingPiece[] playingpieces = new ChessPlayingPiece[32];
+    private String currentGameBoard;
 
     public static void main(String[] args) {
         ChessBoard chess = new ChessBoard();
         System.out.println(chess.convertBoardtoString());
+        String newBoard = "<rook,black=A4><knight,black=B8><bishop,black=C8><queen,black=D8><king,black=E8><bishop,black=F8><knight,black=G8><rook,black=H8><pawn,black=A7><pawn,black=B7><pawn,black=C7><pawn,black=D7><pawn,black=E7><pawn,black=F7><pawn,black=G7><pawn,black=H7><rook,white=A1><knight,white=B1><bishop,white=C1><queen,white=D1><king,white=E1><bishop,white=F1><knight,white=G1><rook,white=H1><pawn,white= 2><pawn,white=A2><pawn,white=B2><pawn,white=C2><pawn,white=D2><pawn,white=E2><pawn,white=F2><pawn,white=G2>";
+        String move = chess.getNewMove(newBoard);
+    
+        chess.setNewMove(move);
+        System.out.println((chess.currentGameBoard).equals(newBoard));
     }
 
 
@@ -103,7 +109,7 @@ public class ChessBoard extends GameBoard {
         }
 
         super.setState(setUpPlayingPieces());
-
+        currentGameBoard =  convertBoardtoString();
     }
 
     @Override
@@ -168,9 +174,37 @@ public class ChessBoard extends GameBoard {
 
     @Override
     public String getNewMove(String newBoard) {
-        // TODO Auto-generated method stub
-        return null;
+        StringBuilder newMove = new StringBuilder();
+        int tmp = 0;
+        for(int i = 0; i < newBoard.length(); i ++){
+            if (newBoard.charAt(i) == '=')
+                tmp = i;
+            if(newBoard.charAt(i) != currentGameBoard.charAt(i)){
+                newMove.append(currentGameBoard.charAt(tmp + 1)).append(currentGameBoard.charAt(tmp + 2)).append(" ");
+                newMove.append(newBoard.charAt(tmp + 1)).append(newBoard.charAt(tmp + 2));
+                return newMove.toString();
+            }
+        }
+        return "No Movement";
     }
+
+    @Override
+    public void setNewMove(String move) {
+        StringBuilder start = new StringBuilder();
+        start.append(move.charAt(0)).append(move.charAt(1));
+
+        StringBuilder end = new StringBuilder();
+        end.append(move.charAt(3)).append(move.charAt(4));
+
+        for(int i = 0; i < playingpieces.length; i++){
+            if(playingpieces[i].getPosition().equals(start.toString())){
+                playingpieces[i].setPosition(end.toString());
+                currentGameBoard =  convertBoardtoString();
+                break;
+            }
+        } 
+    }
+
 
     @Override
     public String convertBoardtoString() {
@@ -184,6 +218,7 @@ public class ChessBoard extends GameBoard {
 
         return output.toString();
     }
+
 
     private char getColumn(int row){
         switch (row){

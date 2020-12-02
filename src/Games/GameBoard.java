@@ -76,6 +76,8 @@ public abstract class GameBoard {
 
     public abstract String getNewMove(String newBoard);
 
+    public abstract void setNewMove(String move);
+
     public abstract String convertBoardtoString();
     
     protected abstract PlayingPiece[][] setUpPlayingPieces();
