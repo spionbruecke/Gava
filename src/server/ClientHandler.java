@@ -84,6 +84,7 @@ public class ClientHandler extends Thread {
                     inputStream.close();
                     outputStream.close();
                     newConnection = null;
+                    LogWriter.writeToLog("Player " + player.getName() + " disconnectet.");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
