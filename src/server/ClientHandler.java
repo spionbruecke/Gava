@@ -58,8 +58,14 @@ public class ClientHandler extends Thread {
                             
                                 break;
                             case LOGIN:
-
+                            	if (information.equals("tobi,123"))
+                            		outputStream.writeUTF("<Login=True>");
+                            	else
+                            		outputStream.writeUTF("<Login=False>");
                                 break;
+                            case CREATEACCOUNT:
+                            
+                            	break;
                             case CONNECTIONSTATUS:
                                 if(information.equals("Exit"))
                                     connected = false;
