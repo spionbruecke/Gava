@@ -1,7 +1,17 @@
+
 package src.client;
 
-public class Client extends FrameworkClient{
+import java.awt.*;
+import java.awt.event.ActionEvent;
 
+import javax.swing.*;
+
+public class Client extends FrameworkClient{
+	
+	private JPanel boardPanel = new JPanel();
+	private JButton[][] boardButtons = new JButton[8][8];
+
+	
 	public Client(String host, int port) {
 		connect(host, port);
 	}
@@ -10,18 +20,12 @@ public class Client extends FrameworkClient{
 
 	@Override
 	public void setupGameBoard() {
-		// TODO Auto-generated method stub
+
 		
 	}
 
 	@Override
 	public void updateBoard() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void selectGame() {
 		// TODO Auto-generated method stub
 		
 	}
@@ -40,6 +44,13 @@ public class Client extends FrameworkClient{
 
 	@Override
 	public void undoMove() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
 		
 	}
