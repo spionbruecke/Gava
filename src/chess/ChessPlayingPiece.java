@@ -1,8 +1,6 @@
 package src.chess;
 
-import src.Games.GameBoard;
-import src.Games.MoveConverter;
-import src.Games.PlayingPiece;
+import src.Games.*;
 
 /**
  * @author Begüm Tosun
@@ -11,6 +9,7 @@ import src.Games.PlayingPiece;
  */
 public class ChessPlayingPiece extends PlayingPiece {
     private boolean hasMoved = false;
+    private ChessMoveKonverter konverter = new ChessMoveKonverter();
 
     /**
      * The method move(GameBoard gameBoard, String move) executes the move and updates the current state of the game board.
@@ -19,7 +18,7 @@ public class ChessPlayingPiece extends PlayingPiece {
      */
     @Override
     public void move(GameBoard board, String move) {
-        board.setState(MoveConverter.convertStringToState(board, move));
+        board.setState(konverter.convertStringToState(board, move));
         hasMoved = true;
     }
 

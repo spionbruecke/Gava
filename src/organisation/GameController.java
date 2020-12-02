@@ -26,29 +26,31 @@ public class GameController {
     //Add the Player player to Room depending on the GameMode the Player choosed
     public GameRoom addPlayer(Player player) {
         GameRoom currentGame;
-
-        //Check if there is a room already. Is there no GameRoom yet, then create a new one
-        if(currentGames.isEmpty()){
-            currentGame = openNewRoom(player.getGame());
-            player.setGameRoom(currentGame);
-            currentGame.addPlayer(player);
-            currentGames.add(currentGame);
-            return currentGame;
-        } else {
-            //Go through the list of GameRooms and check if there is a Game with missing Players and the GameMode the Player want
-            for(int i = 0 ; i < currentGames.size(); i ++){
-                if(currentGames.get(i).getNumberOfPlayer() < 2 && currentGames.get(i).getGame().getName().equals(player.getGame().getName())){
-                    currentGames.get(i).addPlayer(player);
-                    player.setGameRoom(currentGames.get(i));
-                    return  currentGames.get(i);
+        if(player.getGameRoom() == null ){
+            //Check if there is a room already. Is there no GameRoom yet, then create a new one
+            if(currentGames.isEmpty()){
+                currentGame = openNewRoom(player.getGame());
+                player.setGameRoom(currentGame);
+                currentGame.addPlayer(player);
+                currentGames.add(currentGame);
+                return currentGame;
+            } else {
+                //Go through the list of GameRooms and check if there is a Game with missing Players and the GameMode the Player want
+                for(int i = 0 ; i < currentGames.size(); i ++){
+                    if(currentGames.get(i).getNumberOfPlayer() < 2 && currentGames.get(i).getGame().getName().equals(player.getGame().getName())) {
+                        currentGames.get(i).addPlayer(player);
+                        player.setGameRoom(currentGames.get(i));
+                        return  currentGames.get(i);
+                    }
                 }
+                //If the programm didn't find an room create a new one
+                currentGame = openNewRoom(player.getGame());
+                player.setGameRoom(currentGame);
+                currentGame.addPlayer(player);
+                currentGames.add(currentGame);
+                return currentGame;
             }
-            //If the programm didn't find an room create a new one
-            currentGame = openNewRoom(player.getGame());
-            player.setGameRoom(currentGame);
-            currentGame.addPlayer(player);
-            currentGames.add(currentGame);
-            return currentGame;
         }
+        return player.getGameRoom();
     }   
 }

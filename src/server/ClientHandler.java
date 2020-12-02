@@ -3,15 +3,12 @@ package src.server;
 import java.io.*;
 import java.net.*;
 import src.organisation.*;
-import src.chess.ChessGame;
-
 
 /**
  * @author Alexander Posch
  * @version 0.2
  * 
  * For each connection there is own ClientHandler,who sends and recieve informations
- * TODO(Alex): Refactor the whole Class to get a nice structure 
  */
 
 
@@ -21,9 +18,9 @@ public class ClientHandler extends Thread {
     private DataInputStream inputStream;
     private DataOutputStream outputStream;
     private GameController controller;
-    
 
-    protected ClientHandler(Socket newConnection, DataInputStream inputStream, DataOutputStream outputStream, GameController controller) {
+    protected ClientHandler(Socket newConnection, DataInputStream inputStream, DataOutputStream outputStream,
+            GameController controller) {
         this.newConnection = newConnection;
         this.inputStream = inputStream;
         this.outputStream = outputStream;
@@ -34,54 +31,53 @@ public class ClientHandler extends Thread {
     @Override
     public void run() {
         Player player;
-        ChessGame schach = new ChessGame(); //these one game we want to implement later
         GameRoom gameRoom;
         String input;
+        String information;
+        boolean connected;
 
+        connected = true;
             try {
                 if(newConnection != null){
-                    System.out.println("Client " + this.newConnection + " connected");
-                    outputStream.writeUTF("You're now connected"); //for test purpose
+                    LogWriter.writeToLog("Client " + this.newConnection + " connected");
+                    outputStream.writeUTF("<Connectionstatus=Connected>");
                     player = new Player();
+                    player.setClientHandler(this);
                     
-                    outputStream.writeUTF("You're Player: " + player.getName() + " with ID: " + player.getPlayerID()); //for test purpose
-
-                    outputStream.writeUTF("Please choose a Game"); //for test purpose
-                    outputStream.writeUTF("1. Schach"); //for test purpose
-
-                    
-
-                    input = inputStream.readUTF();
-
-                    switch (input){
-                        case "1":
-                            player.setGame(schach);
-                            break;
-                        default:
-                            break;
-                    }
-
-                    gameRoom = controller.addPlayer(player);
-
-                    if(gameRoom.getTheOtherPlayer(player) != null)
-                        outputStream.writeUTF("You're connectet with Player: " + gameRoom.getTheOtherPlayer(player).getName() +" in the Game: " + gameRoom.getGame().getName()); //for test purpose 
-                    else   
-                        outputStream.writeUTF("You're connectet with no one in the Game: " + gameRoom.getGame().getName()); //for test purpose 
-                    
-
-                    //Game
-                    while(true){
+                    while(connected){
                         input = inputStream.readUTF();
-                        if(input.equals("Exit"))
-                            break;
-                        
-                        if(input.length() == 5) {
-                            gameRoom.setInput(input, player);
-                        }
+                        information = StringConverter.getInformation(input);
+                        switch(StringConverter.stringToInformation(input)){
+                            case GAMEMODE:
+                                player.setGame(information);
+                                LogWriter.writeToLog("The Player " +  player.getName() + "choosed the Gamemode: " + information);
+                                gameRoom = controller.addPlayer(player);
+                                LogWriter.writeToLog("Player " + player.getName() + " is in a Room with " + gameRoom.getTheOtherPlayer(player) + " with the mode " + gameRoom.getGame()) ;
+                                break;
+                            case GAMEBOARD:
+                            
+                                break;
+                            case LOGIN:
+                            	if (information.equals("tobi,123")){
+                                    outputStream.writeUTF("<Login=True>");
+                                    player.setName("tobi");
+                                }
+                            	else
+                            		outputStream.writeUTF("<Login=False>");
+                                break;
+                            case CREATEACCOUNT:
+                            
+                            	break;
+                            case CONNECTIONSTATUS:
+                                if(information.equals("Exit"))
+                                    connected = false;
+                                break;
+                            case MESSAGE:
 
-                        if(player.getNewStateAvaible()){
-                            outputStream.writeUTF(player.getLatestMove());
-                            player.setNewStateAvaible(false);
+                                break;
+                            default:
+
+                                break;
                         }
                     }
                     
@@ -90,9 +86,10 @@ public class ClientHandler extends Thread {
                     inputStream.close();
                     outputStream.close();
                     newConnection = null;
+                    LogWriter.writeToLog("Player " + player.getName() + " disconnectet.");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-    }
+        }
 }

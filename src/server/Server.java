@@ -12,8 +12,7 @@ import java.net.*;
  */
 
 public class Server {
-    
-    //This class manage the incoming connections and give them a neh Thread
+     //This class manage the incoming connections and give them a neh Thread
     public static void main(String[] args) {
         Socket newConnection = null;
         GameController controller = new GameController();
@@ -24,7 +23,7 @@ public class Server {
                 newConnection = null;    
                 newConnection = newSocket.accept();
 
-                System.out.println("New Client connectet"); // Message for the Server -> Think about where to save and if we need to safe this.
+                LogWriter.writeToLog("New Client connectet"); // Message for the Server -> Think about where to save and if we need to safe this.
 
                 DataInputStream inputStream = new DataInputStream(newConnection.getInputStream());
                 DataOutputStream outputStream = new DataOutputStream(newConnection.getOutputStream());

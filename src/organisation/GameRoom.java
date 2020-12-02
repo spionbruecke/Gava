@@ -29,12 +29,8 @@ public class GameRoom{
         //Decides Randomly who is allowed to start
         if ((int) ( Math.random() * 2 + 1) == 1){
             turnOfPlayer = player1;
-            player1.setColour("White");
-            player2.setColour("Black");
         } else {
             turnOfPlayer = player2;
-            player1.setColour("Black");
-            player2.setColour("White");
         }
 
         if(game instanceof ChessGame)
@@ -45,8 +41,8 @@ public class GameRoom{
     //protected void getStart(){}
     
     // Get the new Move. Checks if it is allowed and send the new Board to the other Player.
-    public Boolean setInput(String move, Player player){
-        PlayingPiece[][] newState = MoveConverter.convertStringToState(gameBoard, move);
+    //public Boolean setInput(String move, Player player){
+        /*PlayingPiece[][] newState = MoveConverter.convertStringToState(gameBoard, move);
         if(rule.isMoveAllowed(gameBoard, move)){
             this.gameBoard.setState(newState);
             turnOfPlayer = getTheOtherPlayer(player);
@@ -55,7 +51,7 @@ public class GameRoom{
             return true;
         } else
             return false;
-    }
+    }*/
 
     //check which position is free and add the player to this position
      protected boolean addPlayer(Player player){

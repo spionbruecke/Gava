@@ -4,12 +4,13 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Scanner;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -17,18 +18,27 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JSeparator;
 
-public abstract class FrameworkClient extends JFrame {
+import src.organisation.StringConverter;
+
+
+/**
+ * @author Tobias Mitterreiter
+ * @version 1.0
+ * this abstract class handles the client side
+ */
+public abstract class FrameworkClient extends JFrame implements Runnable, ActionListener{
 	
-	private Socket connection = null;
+	private Socket connection= null;
 	protected DataInputStream dis = null;
 	protected DataOutputStream dos = null;
-	protected Boolean isStillPlaying = true;
 	
+	protected Boolean isPlaying = true;
 	private String playerName = null;
 	private String currentGame = null;
 	private boolean isLoggedIn = false;
 	
-	protected JFrame menueFrame = new JFrame();
+	// GUI elements
+	protected JFrame menuFrame = new JFrame();
 	protected JTextField usernameTextField;
 	protected JPasswordField passwordField;
 	protected JLabel currentUserLabel;
@@ -45,143 +55,161 @@ public abstract class FrameworkClient extends JFrame {
 	protected JSeparator separator_1;
 	protected JSeparator separator_2;
 	
-
+	
+    /**
+     * This method is called when user starts the application
+     * it connects to server
+     * @param host String
+     * @param port int
+     */
 	public void connect(String host, int port) {
 		
 		try {
 			connection = new Socket(host, port);
 			dis = new DataInputStream(connection.getInputStream()); // get data from sever
 			dos = new DataOutputStream(connection.getOutputStream()); // get data to server
-			run();
+			setupGUI();
+			String s = dis.readUTF();
+			System.out.println("s. " + s);
+			//run();
+			
 		} catch (IOException ieo) {
 			JOptionPane.showMessageDialog(null, "Server is not running", "Connection Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
 	
-	private String getUserInput() {
-		Scanner scn = new Scanner(System.in);
-		String text = scn.nextLine();
-		scn.close();
+	@Override
+	public void run() {
+		long t= System.currentTimeMillis();
+		long end = t+15000;
+
 		
-		return text;
+			
+		while(System.currentTimeMillis() < end) {
+			
+			menuFrame.setVisible(false);
+		}
+		
+		menuFrame.setVisible(true);
 	}
 	
-	private String getServerOutput() {
-		String text = "";
+	
+    /**
+     * This method is called when user clicks "login" button
+     * it checks if user name and password matches to an user in our database
+     * @return Boolean
+     * @param username String
+     * @param password String
+     */
+	public boolean login(String username, String password) {
+		String input;
+		String send;
+		String information = "";
+		boolean receiveData = false;
+		
+		send = "<Login=" + username + "," + password + ">";
 		
 		try {
-			text = dis.readUTF();
-		} catch (IOException e) {
-			isStillPlaying = false;
+			dos.writeUTF(send);
+		} catch (IOException e) {	
 		}
-		System.out.println(text);
-		return text;
-	}
-	
-	public void run() {
-		String incommingData;
-		String outcommingData;
 		
-		setupGUI();
-		
-			
-		while(isStillPlaying) {
-			
-			incommingData = getServerOutput();
-			
-			if (incommingData.equals("1. Schach")) {
-				outcommingData = getUserInput();
-				try {
-					dos.writeUTF(outcommingData);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}			
+		while (receiveData == false) {
+			try {
+				input = dis.readUTF();
+				information = getServerInput(input);
+				switch(StringConverter.stringToInformation(input)){
+					case LOGIN:
+						receiveData = true;
+						break;				
+					default:
+						break;			
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
 			}
+		}	
+		if (information.equals("True"))
+			return true;
+		else
+			return false;
+	}
+	
+	
+    /**
+     * This method is called when user clicks "create account" button
+     * it sends user name and password to sever ands adds new player to database
+     */
+	public void createAccount(String username, String password) {
+		String send;
+		send = "<NewAccount=" + username + "," + password + ">";
+
+		try {
+			dos.writeUTF(send);
+		} catch (Exception e) {
+			//TODO
 		}
 	}
+
 	
-	
-	public void sendDataToServer() {
-		
-	}
-	
-	public void getDataFromServer() {
-		
-	}
-	
-	public boolean login(String username, String password) {
-		// TODO
-		// check if username and password are correct
-		
-		return true;
-		
-	}
-	
-	public void createAccount(String username, String password) {
-		// TODO
-		// create new account	
-	}
-	
+    /**
+     * This method setup the menu GUI 
+     * it contains 5 ActionListener for "login", "create account", "play chess", "play mill", "restore game"
+     */
 	public void setupGUI() {	
-		/*
-		 * JTextField usernameTextField; JPasswordField passwordField; JLabel
-		 * currentUserLabel; JLabel usernameLabel; JLabel passwordLabel; JButton
-		 * loginButton; JButton createAccountButton; JLabel createAccountLabel; JLabel
-		 * selectGameLabel; JButton playChessButton; JButton playMillButton; JLabel
-		 * restoreGameLabel; JButton restoreGameButton;
-		 */
 		
-		menueFrame = new JFrame();
+		// Menu Frame
+		menuFrame = new JFrame();
 		
-		menueFrame.getContentPane().setEnabled(false);
-		menueFrame.setBounds(100, 100, 1000, 680);
-		menueFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		menueFrame.getContentPane().setLayout(null);	
+		// ContentPane
+		menuFrame.getContentPane().setEnabled(false);
+		menuFrame.setBounds(100, 100, 1000, 680);
+		menuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		menuFrame.getContentPane().setLayout(null);	
 		
-		
+		// Label username
 		usernameLabel = new JLabel("Username:");
 		usernameLabel.setFont(new Font("Dialog", Font.BOLD, 14));
 		usernameLabel.setBounds(58, 80, 117, 35);
-		menueFrame.getContentPane().add(usernameLabel);
+		menuFrame.getContentPane().add(usernameLabel);
 		
-		
+		// Label password
 		passwordLabel = new JLabel("Password:");
 		passwordLabel.setFont(new Font("Dialog", Font.BOLD, 14));
 		passwordLabel.setBounds(357, 77, 122, 41);
-		menueFrame.getContentPane().add(passwordLabel);
+		menuFrame.getContentPane().add(passwordLabel);
 		
-		
+		// Textfield for username
 		usernameTextField = new JTextField();
 		usernameTextField.setBounds(159, 88, 169, 19);
-		menueFrame.getContentPane().add(usernameTextField);
+		menuFrame.getContentPane().add(usernameTextField);
 		usernameTextField.setColumns(10);
 		
-		
+		// Passwordfield for password
 		passwordField = new JPasswordField();
 		passwordField.setBounds(447, 88, 169, 19);
-		menueFrame.getContentPane().add(passwordField);
+		menuFrame.getContentPane().add(passwordField);
 		
-		
+		// Label currently logged in as
 		currentUserLabel = new JLabel("You are currently logged in as an anonymous Player");
 		currentUserLabel.setFont(new Font("Dialog", Font.BOLD, 18));
 		currentUserLabel.setBounds(12, 12, 580, 33);
-		menueFrame.getContentPane().add(currentUserLabel);
+		menuFrame.getContentPane().add(currentUserLabel);
 		
-		
+		// Button login
 		loginButton = new JButton("Login");
-		loginButton.addActionListener(new ActionListener() {
-			
+		loginButton.addActionListener(new ActionListener() {			
 			public void actionPerformed(ActionEvent arg0) {
-				String loginName = usernameTextField.getText();
-				String userPassword = passwordField.getText();
+				String name = usernameTextField.getText();
+				String password = passwordField.getText();	
 				
-				Boolean validUser = login(loginName, userPassword);
-				
-				if(validUser) {
-					JOptionPane.showMessageDialog(menueFrame, "your login was successful");
-					currentUserLabel.setText("You are currently logged in as " + loginName);
+				if(login(name, password)) {
 					isLoggedIn = true;
+					playerName = name;
+					JOptionPane.showMessageDialog(menuFrame, "your login was successful");
+					currentUserLabel.setText("You are currently logged in as " + playerName);
+
 					updateSetupGUI();
 				} else {
 					JOptionPane.showMessageDialog(null, "Invalid username or password", "Login Error", JOptionPane.ERROR_MESSAGE);
@@ -189,17 +217,16 @@ public abstract class FrameworkClient extends JFrame {
 					usernameTextField.setText(null);
 				}
 			}
-		});	
-		
+		});		
 		loginButton.setBounds(277, 130, 117, 25);
-		menueFrame.getContentPane().add(loginButton);
+		menuFrame.getContentPane().add(loginButton);
 		
-		
+		// Sperator
 		separator_2 = new JSeparator();
 		separator_2.setBounds(12, 57, 604, 11);
-		menueFrame.getContentPane().add(separator_2);
+		menuFrame.getContentPane().add(separator_2);
 		
-		
+		// Button create account
 		createAccountButton = new JButton("Create Account");
 		createAccountButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -210,59 +237,71 @@ public abstract class FrameworkClient extends JFrame {
 				if (newPassword1.contentEquals(newPassword2)) {
 					createAccount(newUser, newPassword1);
 				} else {
-					JOptionPane.showMessageDialog(menueFrame, "Your passwords do not match");
+					JOptionPane.showMessageDialog(menuFrame, "Your passwords do not match");
 				}
 			}
 		});
 		createAccountButton.setBounds(406, 587, 186, 25);
-		menueFrame.getContentPane().add(createAccountButton);
+		menuFrame.getContentPane().add(createAccountButton);
 		
-		
+		// Seperator
 		separator_1 = new JSeparator();
 		separator_1.setBounds(12, 518, 965, 11);
-		menueFrame.getContentPane().add(separator_1);
+		menuFrame.getContentPane().add(separator_1);
 		
-		
+		// Label create account
 		createAccountLabel = new JLabel("if you dont have an account yet, feel free to create one, to save your current Game");
 		createAccountLabel.setFont(new Font("Dialog", Font.BOLD, 13));
 		createAccountLabel.setBounds(203, 549, 685, 15);
-		menueFrame.getContentPane().add(createAccountLabel);
+		menuFrame.getContentPane().add(createAccountLabel);
 		
-		
+		// Label for all games
 		selectGameLabel = new JLabel("You can play one of the following games");
 		selectGameLabel.setFont(new Font("Dialog", Font.BOLD, 14));
 		selectGameLabel.setBounds(12, 242, 348, 15);
-		menueFrame.getContentPane().add(selectGameLabel);
+		menuFrame.getContentPane().add(selectGameLabel);
 		
-		
+		// Button play chess
 		playChessButton = new JButton("Play Chess");
 		playChessButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				currentGame = "Chess";
-				// TODO start game
+				try {
+					dos.writeUTF("<Gamemode=Chess>");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				run();
 			}
 		});
 		playChessButton.setBounds(413, 232, 117, 41);
-		menueFrame.getContentPane().add(playChessButton);
+		menuFrame.getContentPane().add(playChessButton);
 		
-		
+		// Button play mill
 		playMillButton = new JButton("Play Mill");
 		playMillButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				currentGame = "Mill";
-				// TODO start game
+				try {
+					dos.writeUTF("<Gamemode=Mill>");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				run();
 			}
 		});
 		playMillButton.setBounds(646, 229, 117, 44);
-		menueFrame.getContentPane().add(playMillButton);
+		menuFrame.getContentPane().add(playMillButton);
 		
-		
+		// Label restore Game
 		restoreGameLabel = new JLabel("Or you can restore your latest game");
 		restoreGameLabel.setFont(new Font("Dialog", Font.BOLD, 14));
 		restoreGameLabel.setBounds(12, 350, 316, 15);
-		menueFrame.getContentPane().add(restoreGameLabel);
+		menuFrame.getContentPane().add(restoreGameLabel);
 		
-		
+		// Button restore Game
 		restoreGameButton = new JButton("Restore Game");
 		restoreGameButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -270,13 +309,30 @@ public abstract class FrameworkClient extends JFrame {
 			}
 		});
 		restoreGameButton.setBounds(413, 337, 155, 41);
-		menueFrame.getContentPane().add(restoreGameButton);
+		menuFrame.getContentPane().add(restoreGameButton);
+		
+		// Window Listener for Closing
+		menuFrame.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				try {
+					dos.writeUTF("<Connectionstatus=Exit>");
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				e.getWindow().dispose();
+			}
+		});
 	
 		updateSetupGUI();
-		menueFrame.setVisible(true);
+		menuFrame.setVisible(true);
 	}
 	
-	
+    /**
+     * This method updates the menuGUI 
+     * if a user logs in, some GUI elements are set to invisible
+     */
 	private void updateSetupGUI() {
 		if (isLoggedIn == false) {
 			restoreGameLabel.setVisible(false);
@@ -292,13 +348,30 @@ public abstract class FrameworkClient extends JFrame {
 			restoreGameButton.setVisible(true);
 		}
 	}
+	
+	private String getServerInput(String input) {
+        StringBuilder information = new StringBuilder();
+        int charNumber = 0;
+
+        for(int j = 0 ; j < input.length(); j ++){
+            if(input.charAt(j) == '='){
+                charNumber = j + 1;
+                break;
+            }
+        }
+
+        for(int i = charNumber; i < input.length(); i ++){
+            if(input.charAt(i) == '>')
+                break;
+            information.append(input.charAt(i));
+        }
+        return information.toString();
+	}
 
 
 	public abstract void setupGameBoard();
 	
 	public abstract void updateBoard();
-	
-	public abstract void selectGame();
 	
 	public abstract void restoreGame();
 	

@@ -1,15 +1,14 @@
 package src.chess;
 
 import src.Games.*;
-
 import java.util.ArrayList;
+
 
 /**
  * @author Begüm Tosun
  *
  * ChessRules implements Rules from src.Games and checks if the given move is valid.
  */
-
 public class ChessRules implements Rules {
 
     /**
@@ -26,11 +25,8 @@ public class ChessRules implements Rules {
 
         if(board.getState()[row][column]==null){
             return false;
-        }else if(board.getState()[row][column].getColour().equals(ownColour)){
-            return true;
-        }else{
-            return false;
-        }
+        }else
+            return board.getState()[row][column].getColour().equals(ownColour);
     }
 
     /**
@@ -141,11 +137,8 @@ public class ChessRules implements Rules {
     }
 
     private static boolean isEnPassantAllowed(GameBoard board, Field start, Field target){
-        if(board.getStateFromMemento().getState()[start.getRow()][target.getColumn()].getName() == null
-            && board.getState()[start.getRow()][target.getColumn()] != null)
-            return true;
-
-        return false;
+        return board.getStateFromMemento().getState()[start.getRow()][target.getColumn()].getName() == null
+                && board.getState()[start.getRow()][target.getColumn()] != null;
     }
 
     private static boolean checkKingMoves(String move){
@@ -263,8 +256,8 @@ public class ChessRules implements Rules {
         }
 
         //check whether the target is one of the possible locations and
-        for (int i = 0; i < possibleLocations.size(); i++) {
-            if(possibleLocations.get(i) == target){
+        for (Field possibleLocation : possibleLocations) {
+            if (possibleLocation == target) {
                 return true;
             }
         }
@@ -323,15 +316,15 @@ public class ChessRules implements Rules {
     }
 
     private static boolean arePieceRookAndKingFromSameColour(ArrayList<Field> f, PlayingPiece[][] board){
-        for(Field field: f){
-            if( (board[f.get(0).getRow()][f.get(0).getColumn()].getName().equals("rook")
-                    && board[f.get(1).getRow()][f.get(1).getColumn()].getName().equals("king"))
-                || (board[f.get(0).getRow()][f.get(0).getColumn()].getName().equals("king")
-                    && board[f.get(1).getRow()][f.get(1).getColumn()].getName().equals("rook")) ){
 
-                return board[f.get(1).getRow()][f.get(1).getColumn()].getColour()
-                        .equals(board[f.get(1).getRow()][f.get(1).getColumn()].getColour());
-            }
+        if( (board[f.get(0).getRow()][f.get(0).getColumn()].getName().equals("rook")
+                && board[f.get(1).getRow()][f.get(1).getColumn()].getName().equals("king"))
+                ||
+                (board[f.get(0).getRow()][f.get(0).getColumn()].getName().equals("king")
+                && board[f.get(1).getRow()][f.get(1).getColumn()].getName().equals("rook")) ){
+
+            return board[f.get(1).getRow()][f.get(1).getColumn()].getColour()
+                    .equals(board[f.get(1).getRow()][f.get(1).getColumn()].getColour());
         }
 
         return false;
@@ -434,14 +427,15 @@ public class ChessRules implements Rules {
             column++;
         }
 
-        for (int i = 0; i < possibleLocations.size(); i++) {
-            if(possibleLocations.get(i) == target){
+        for (Field possibleLocation : possibleLocations) {
+            if (possibleLocation == target) {
                 return true;
             }
         }
 
         return false;
     }
+
 
     private static boolean areDiagonalPathsFree(GameBoard gameBoard, String move){
         Field target = MoveConverter.getTargetField(move);
@@ -541,14 +535,15 @@ public class ChessRules implements Rules {
         }
 
         //check whether the targetPos is one of the possible locations
-        for (int i = 0; i < possibleLocations.size(); i++) {
-            if(possibleLocations.get(i) == target){
+        for (Field possibleLocation : possibleLocations) {
+            if (possibleLocation == target) {
                 return true;
             }
         }
 
         return false;
     }
+
 
     private static boolean areVerticalOrHorizontalPathsFree(GameBoard gameBoard, String move){
         Field target = MoveConverter.getTargetField(move);

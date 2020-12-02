@@ -6,10 +6,10 @@ import java.lang.Character;
  * The client only returns a simple String-description
  * of the move. MoveConverter converts this String into
  * the current state of the gameBoard.
- * @author Begüm Tosun
+ * @author Begüm Tosun & Alexander Posch
  */
 
-public class MoveConverter {
+public interface MoveConverter {
 
     /**
      * This method gets a String description of the move
@@ -19,19 +19,7 @@ public class MoveConverter {
      * @param move String
      * @return currentState: PlayingPiece[][]
      */
-    public static PlayingPiece[][] convertStringToState(GameBoard gameBoard, String move){
-        PlayingPiece[][] currentState = gameBoard.getState();
-        int newPosRow = convertPosIntoArrayCoordinate(move.charAt(4));
-        int newPosColumn = convertPosIntoArrayCoordinate(move.charAt(3));
-        int oldPosRow = convertPosIntoArrayCoordinate(move.charAt(1));
-        int oldPosColumn = convertPosIntoArrayCoordinate(move.charAt(0));
-
-        currentState[newPosRow][newPosColumn] = currentState[oldPosRow][oldPosColumn];
-
-        currentState[oldPosRow][oldPosColumn] = null;
-
-        return currentState;
-    }
+    PlayingPiece[][] convertStringToState(GameBoard gameBoard, String move);
 
     /**
      * Converts the new state which is a PlayingPiece[][] into a String which describes the move.
@@ -40,7 +28,7 @@ public class MoveConverter {
      * @param stateToCheck PlayingPiece[][]
      * @return String
      */
-    public static String stateToString(PlayingPiece[][] currentState, PlayingPiece[][] stateToCheck){
+    static String stateToString(PlayingPiece[][] currentState, PlayingPiece[][] stateToCheck){
         // Voraussetzung move != castling
         StringBuilder move = new StringBuilder();
         Field start = new Field();
@@ -71,7 +59,7 @@ public class MoveConverter {
      * @param i int
      * @return String
      */
-    public static String convertArrayCoordinateIntoPosRow(int i){
+    static String convertArrayCoordinateIntoPosRow(int i){
 
         switch (i){
             case 0:
@@ -108,7 +96,7 @@ public class MoveConverter {
      * @param i int
      * @return String
      */
-    public static String convertArrayCoordinateIntoPosColumn(int i){
+    static String convertArrayCoordinateIntoPosColumn(int i){
         switch (i){
             case 0:
                 return "a";
@@ -144,7 +132,7 @@ public class MoveConverter {
      * @param c field-description
      * @return array coordinate
      */
-    public static int convertPosIntoArrayCoordinate(char c) {
+    static int convertPosIntoArrayCoordinate(char c) {
         if (Character.isLetter(c)){
             c = Character.toLowerCase(c);
         }
@@ -185,7 +173,7 @@ public class MoveConverter {
      * @param move String
      * @return Field
      */
-    public static Field getTargetField(String move){
+    static Field getTargetField(String move){
         return new Field(convertPosIntoArrayCoordinate(move.charAt(4)),
                 convertPosIntoArrayCoordinate(move.charAt(3)));
     }
@@ -195,7 +183,7 @@ public class MoveConverter {
      * @param move String
      * @return Field
      */
-    public static Field getStartField(String move){
+    static Field getStartField(String move){
         return new Field(convertPosIntoArrayCoordinate(move.charAt(1)),
                 convertPosIntoArrayCoordinate(move.charAt(0)));
     }

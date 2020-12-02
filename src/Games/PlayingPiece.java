@@ -15,6 +15,7 @@ public abstract class PlayingPiece {
      */
     private String colour;
 
+    private String position;
 
     public String getName() {
         return name;
@@ -35,6 +36,22 @@ public abstract class PlayingPiece {
     public void outOfGame(){
         colour = null;
         name = null;
+    }
+
+    public String getPosition(){
+        return position;
+    }
+
+    public void setPosition(String position){
+        this.position = position;
+    }
+
+    public String toString(){
+        StringBuilder output = new StringBuilder();
+
+        output.append(name).append(",").append(colour).append("=").append(position);
+
+        return output.toString();
     }
 
     public abstract void move(GameBoard board, String move);
