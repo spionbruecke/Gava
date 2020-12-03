@@ -20,15 +20,6 @@ public class ChessBoard extends GameBoard {
     private ChessPlayingPiece[] playingpieces = new ChessPlayingPiece[32];
     private String currentGameBoard;
 
-    public static void main(String[] args) {
-        ChessBoard chess = new ChessBoard();
-        System.out.println(chess.convertBoardtoString());
-        String newBoard = "<rook,black=A4><knight,black=B8><bishop,black=C8><queen,black=D8><king,black=E8><bishop,black=F8><knight,black=G8><rook,black=H8><pawn,black=A7><pawn,black=B7><pawn,black=C7><pawn,black=D7><pawn,black=E7><pawn,black=F7><pawn,black=G7><pawn,black=H7><rook,white=A1><knight,white=B1><bishop,white=C1><queen,white=D1><king,white=E1><bishop,white=F1><knight,white=G1><rook,white=H1><pawn,white= 2><pawn,white=A2><pawn,white=B2><pawn,white=C2><pawn,white=D2><pawn,white=E2><pawn,white=F2><pawn,white=G2>";
-        String move = chess.getNewMove(newBoard);
-    
-        chess.setNewMove(move);
-        System.out.println((chess.currentGameBoard).equals(newBoard));
-    }
 
     /**
      * The constructor creates a chess board with an ID and its initial state.
