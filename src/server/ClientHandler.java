@@ -43,6 +43,7 @@ public class ClientHandler extends Thread {
                     outputStream.writeUTF("<Connectionstatus=Connected>");
                     player = new Player();
                     player.setClientHandler(this);
+                    gameRoom = null;
                     
                     while(connected){
                         input = inputStream.readUTF();
@@ -55,7 +56,8 @@ public class ClientHandler extends Thread {
                                 LogWriter.writeToLog("Player " + player.getName() + " is in a Room with " + gameRoom.getTheOtherPlayer(player) + " with the mode " + gameRoom.getGame()) ;
                                 break;
                             case GAMEBOARD:
-                            
+                                if(gameRoom != null)
+                                    outputStream.writeUTF(gameRoom.setInput(information));
                                 break;
                             case LOGIN:
                             	if (information.equals("tobi,123")){

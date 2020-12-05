@@ -1,6 +1,6 @@
 package src.organisation;
 
-import src.Games.PlayingPiece;
+import src.games.PlayingPiece;
 
 /**
  * 

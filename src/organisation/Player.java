@@ -1,8 +1,9 @@
 package src.organisation;
 
 import java.util.*;
-import src.Games.*;
+
 import src.chess.*;
+import src.games.*;
 import src.server.ClientHandler;
 
 

@@ -1,7 +1,8 @@
 package src.chess;
 
-import src.Games.*;
 import java.util.ArrayList;
+
+import src.games.*;
 
 
 /**

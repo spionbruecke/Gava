@@ -1,4 +1,4 @@
-package src.Games;
+package src.games;
 
 public class WrongFormatException extends Exception {
 

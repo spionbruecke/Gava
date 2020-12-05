@@ -1,7 +1,8 @@
 package src.organisation;
 
 import java.util.*;
-import src.Games.*;
+
+import src.games.*;
 
 /**
  * @author Alexander Posch

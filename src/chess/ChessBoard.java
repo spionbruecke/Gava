@@ -2,7 +2,7 @@ package src.chess;
 
 import java.util.Arrays;
 
-import src.Games.*;
+import src.games.*;
 
 /**
  * @author Begüm Tosun, Alexander Posch
@@ -21,14 +21,13 @@ public class ChessBoard extends GameBoard {
     static final String KING = "king";
     static final String PAWN = "pawn";
     private ChessPlayingPiece[] playingpieces = new ChessPlayingPiece[32];
-    private ChessPlayingPiece[][] currentGameBoard;
 
     public static void main(String[] args) {
         ChessBoard chessi = new ChessBoard();
         String board = chessi.convertPiecestoString();
         try {
             String old = chessi.convertPiecestoString();
-            chessi.currentGameBoard = (ChessPlayingPiece[][]) chessi.getBoardFromString(board);
+            chessi.setState(chessi.getBoardFromString(board));
             String newOne = chessi.convertPiecestoString();
             System.out.println(newOne.equals(old));
         } catch (WrongFormatException e) {
@@ -184,7 +183,6 @@ public class ChessBoard extends GameBoard {
 
         initialState[7][7] = playingpieces[24];
 
-        currentGameBoard = initialState;
         return initialState;
     }
 

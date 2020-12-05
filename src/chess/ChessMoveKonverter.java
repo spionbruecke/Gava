@@ -1,6 +1,6 @@
 package src.chess;
 
-import src.Games.*;
+import src.games.*;
 
 public class ChessMoveKonverter implements MoveConverter {
     

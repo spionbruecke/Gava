@@ -1,7 +1,7 @@
 package src.organisation;
 
-import src.Games.*;
 import src.chess.*;
+import src.games.*;
 
 /**
  * @author Alexander Posch
@@ -68,6 +68,52 @@ public class GameRoom{
         return true;
     }
     
+    public String setInput(String information){
+        if(this.currentGame instanceof ChessGame){
+            return setChessInput(information);
+        }
+        return "<Error=Error while processing the Movement: Programming Error>";
+
+    }
+
+    private String setChessInput(String information){
+        ChessMessages message;
+        message = ChessMessages.VICTORY;
+        //dummyFunction(gameBoard.getState(), this.gameBoard.getBoardFromString(information));
+        switch(message){
+            case VICTORY:
+                return "<Gameend=Victory>";
+            case DEFEATED:
+                return "<Gameend=Defeated>";
+            case MOVE_ALLOWED:
+                return "<Gameboard=" + this.gameBoard.convertPiecestoString() + ">";
+            case ERROR_WRONGMOVEMENT_DIRECTION_BISHOP:
+                return "<Error=Bishop is only allowed to move "; //TODO(Alex) Write some good Error Descrition for the player
+            case ERROR_WRONGMOVEMENT_DIRECTION_KING:
+                return "<Error=Bishop is only allowed to move ";
+            case ERROR_WRONGMOVEMENT_DIRECTION_KNIGHT:
+
+            case ERROR_WRONGMOVEMENT_DIRECTION_PAWN:
+
+            case ERROR_WRONGMOVEMENT_DIRECTION_QUEEN:
+
+            case ERROR_WRONGMOVEMENT_DIRECTION_ROOK:
+
+            case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_BISHOP:
+
+            case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_KING:
+
+            case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_KNIGHT:
+
+            case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_PAWN:
+
+            case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_QUEEN:
+
+            case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_ROOK:
+
+        }
+        return null;
+    }
     //****  Getter ****
     
     public Player getTheOtherPlayer( Player player){

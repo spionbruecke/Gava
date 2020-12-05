@@ -1,4 +1,4 @@
-package src.Games;
+package src.games;
 
 import java.lang.Character;
 

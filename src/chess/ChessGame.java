@@ -1,6 +1,6 @@
 package src.chess;
 
-import src.Games.Game;
+import src.games.Game;
 
 /**
  * @author Begüm Tosun
