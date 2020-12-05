@@ -1,11 +1,14 @@
 package src.chess;
 
-import src.Games.GameBoard;
+import java.util.Arrays;
+
+import src.Games.*;
 
 /**
  * @author Begüm Tosun, Alexander Posch
  *
- * ChessBoard extends the class Gameboard from src.Games and is sed for constructing an intial chess board.
+ *         ChessBoard extends the class Gameboard from src.Games and is sed for
+ *         constructing an intial chess board.
  */
 public class ChessBoard extends GameBoard {
 
@@ -18,9 +21,21 @@ public class ChessBoard extends GameBoard {
     static final String KING = "king";
     static final String PAWN = "pawn";
     private ChessPlayingPiece[] playingpieces = new ChessPlayingPiece[32];
-    private String currentGameBoard;
+    private ChessPlayingPiece[][] currentGameBoard;
 
-
+    public static void main(String[] args) {
+        ChessBoard chessi = new ChessBoard();
+        String board = chessi.convertPiecestoString();
+        try {
+            String old = chessi.convertPiecestoString();
+            chessi.currentGameBoard = (ChessPlayingPiece[][]) chessi.getBoardFromString(board);
+            String newOne = chessi.convertPiecestoString();
+            System.out.println(newOne.equals(old));
+        } catch (WrongFormatException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
     /**
      * The constructor creates a chess board with an ID and its initial state.
      */
@@ -103,11 +118,10 @@ public class ChessBoard extends GameBoard {
         for (int x = 24; x < 32; x++) {
             playingpieces[x].setName(PAWN);
             playingpieces[x].setColour(WHITE);
-            playingpieces[x].setPosition(getColumn(x - 25)+"2");
+            playingpieces[x].setPosition(getColumn(x - 24)+"2");
         }
 
         super.setState(setUpPlayingPieces());
-        currentGameBoard =  convertBoardtoString();
     }
 
     /**
@@ -170,10 +184,39 @@ public class ChessBoard extends GameBoard {
 
         initialState[7][7] = playingpieces[24];
 
+        currentGameBoard = initialState;
         return initialState;
     }
 
+    @Override
+    public PlayingPiece[][] getBoardFromString(String input) throws WrongFormatException {
+        ChessPlayingPiece[][] newBoard = new ChessPlayingPiece[8][8];
+        StringBuilder position = new StringBuilder();
+        int counter = 0;
+        int column;
+        int row;
+        
+        for(int i = 0; i < input.length(); i++){
+            if(input.charAt(i) == '='){
 
+                position.append(input.charAt(i + 1)).append(input.charAt(i + 2));
+                playingpieces[counter].setPosition(position.toString());
+
+                row = Character.getNumericValue((input.charAt(i+2))) - 1;
+                column = getColumnNumber(input.charAt(i + 1));
+                newBoard[row][column] = playingpieces[counter];
+                
+                position = new StringBuilder();
+                counter = counter + 1;
+                i = i + 3;
+            }
+        }
+
+        return newBoard;
+    }
+
+    /*
+    * We dont use this anymore
     @Override
     public String getNewMove(String newBoard) {
         StringBuilder newMove = new StringBuilder();
@@ -206,10 +249,10 @@ public class ChessBoard extends GameBoard {
             }
         } 
     }
-
+    */
 
     @Override
-    public String convertBoardtoString() {
+    public String convertPiecestoString() {
         StringBuilder output = new StringBuilder();
 
         for(int i = 0; i < 32; i++){
@@ -242,6 +285,30 @@ public class ChessBoard extends GameBoard {
                 return 'H';
             default:
                 return ' ';
+        }
+    }
+
+    private int getColumnNumber(char column) throws WrongFormatException {
+        switch(column){
+            case 'A':
+                return 0;
+            case 'B':
+                return 1;
+            case 'C':
+                return 2;
+            case 'D':
+                return 3;
+            case 'E':
+                return 4;
+            case 'F':
+                return 5;
+            case 'G':
+                return 6;
+            case 'H':
+                return 7;
+            default:
+                System.out.println(column);
+                throw new WrongFormatException();
         }
     }
 

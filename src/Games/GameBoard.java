@@ -75,11 +75,13 @@ public abstract class GameBoard {
         prevState = new Cache(this);
     }
 
-    public abstract String getNewMove(String newBoard);
+    public abstract PlayingPiece[][] getBoardFromString(String input) throws WrongFormatException;
+    
+    //public abstract String getNewMove(String newBoard);
 
-    public abstract void setNewMove(String move);
+    //public abstract void setNewMove(String move);
 
-    public abstract String convertBoardtoString();
+    public abstract String convertPiecestoString();
     
     protected abstract PlayingPiece[][] setUpPlayingPieces();
 }
