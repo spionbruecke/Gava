@@ -3,9 +3,9 @@ package src.chess;
 import src.games.Game;
 
 /**
- * @author Begüm Tosun
- *
  * ChessGame extends the class Game from src.Games and is used for creating a new chess game.
+ *
+ * @author Begüm Tosun
  */
 public class ChessGame extends Game {
 
@@ -21,12 +21,4 @@ public class ChessGame extends Game {
         board = new ChessBoard();
     }
 
-    /*
-    @Override
-    public void start() {}
-    @Override
-    public void end() {}
-    @Override
-    public void play() {}
-     */
 }

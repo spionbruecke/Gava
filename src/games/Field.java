@@ -1,10 +1,10 @@
 package src.games;
 
 /**
- * @author Begüm Tosun
+ * Field has the attributes row and column. It is used for saving the
+ * coordinates of a certain field from a two dimensional array.
  *
- * Field has the attributes row and column. It is used for saving the coordinates of a certain field from a two
- * dimensional array.
+ * @author Begüm Tosun
  */
 
 public class Field {

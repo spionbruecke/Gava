@@ -2,7 +2,7 @@ package src.chess;
 
 import src.games.*;
 
-public class ChessMoveKonverter implements MoveConverter {
+public class ChessMoveConverter implements MoveConverter {
     
 
     /**

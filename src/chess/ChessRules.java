@@ -6,9 +6,9 @@ import src.games.*;
 
 
 /**
- * @author Begüm Tosun
- *
  * ChessRules implements Rules from src.Games and checks if the given move is valid.
+ *
+ * @author Begüm Tosun
  */
 public class ChessRules implements Rules {
 

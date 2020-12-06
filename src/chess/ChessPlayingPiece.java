@@ -3,13 +3,13 @@ package src.chess;
 import src.games.*;
 
 /**
- * @author Begüm Tosun
- *
  * ChessPlayingPiece extends the class PlayingPiece and contains an additional attribute hasMoved.
+ *
+ * @author Begüm Tosun
  */
 public class ChessPlayingPiece extends PlayingPiece {
     private boolean hasMoved = false;
-    private ChessMoveKonverter konverter = new ChessMoveKonverter();
+    private ChessMoveConverter converter = new ChessMoveConverter();
 
     /**
      * The method move(GameBoard gameBoard, String move) executes the move and updates the current state of the game board.
@@ -18,7 +18,7 @@ public class ChessPlayingPiece extends PlayingPiece {
      */
     @Override
     public void move(GameBoard board, String move) {
-        board.setState(konverter.convertStringToState(board, move));
+        board.setState(converter.convertStringToState(board, move));
         hasMoved = true;
     }
 

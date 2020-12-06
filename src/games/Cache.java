@@ -6,14 +6,14 @@ package src.games;
  * @author Begüm Tosun
  */
 public class Cache {
-    private GameBoard board;
+    private PlayingPiece[][] state;
 
     /**
      * Constructs a Cache-object.
-     * @param board GameBoard-object
+     * @param state PlayingPiece
      */
-    public Cache(GameBoard board){
-        this.board = board;
+    public Cache(PlayingPiece[][] state){
+        this.state = state;
     }
 
     /**
@@ -21,22 +21,7 @@ public class Cache {
      * @return state
      */
     public PlayingPiece[][] getState(){
-        return board.getState();
+        return state;
     }
 
-    /**
-     * Sets state to the given parameter.
-     * @param state a multidimensional PlayingPiece array
-     */
-    public void setState(PlayingPiece[][] state){
-        board.setState(state);
-    }
-
-    /**
-     * returns an long value
-     * @return gameBoardID
-     */
-    public long getGameBoardID(){
-        return board.getGameBoardID();
-    }
 }

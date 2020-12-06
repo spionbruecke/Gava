@@ -29,7 +29,7 @@ public abstract class GameBoard {
      */
     public void setState(PlayingPiece[][] state){
         this.state = state;
-        saveStateToMemento();
+        saveStateToMemento(state);
     }
 
     /**
@@ -71,8 +71,8 @@ public abstract class GameBoard {
      * it will be overwritten otherwise the method will create a new list element and add
      * it to the list.
      */
-    private void saveStateToMemento() {
-        prevState = new Cache(this);
+    private void saveStateToMemento(PlayingPiece[][] state) {
+        prevState = new Cache(state);
     }
 
     public abstract PlayingPiece[][] getBoardFromString(String input) throws WrongFormatException;
@@ -81,7 +81,7 @@ public abstract class GameBoard {
 
     //public abstract void setNewMove(String move);
 
-    public abstract String convertPiecestoString();
+    public abstract String convertPiecesToString();
     
     protected abstract PlayingPiece[][] setUpPlayingPieces();
 }

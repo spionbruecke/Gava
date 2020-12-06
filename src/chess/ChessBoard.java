@@ -5,10 +5,10 @@ import java.util.Arrays;
 import src.games.*;
 
 /**
- * @author Begüm Tosun, Alexander Posch
+ *   ChessBoard extends the class Gameboard from src.Games and is used for
+ *   constructing an initial chess board.
  *
- *         ChessBoard extends the class Gameboard from src.Games and is sed for
- *         constructing an intial chess board.
+ *   @author Begüm Tosun, Alexander Posch
  */
 public class ChessBoard extends GameBoard {
 
@@ -24,11 +24,11 @@ public class ChessBoard extends GameBoard {
 
     public static void main(String[] args) {
         ChessBoard chessi = new ChessBoard();
-        String board = chessi.convertPiecestoString();
+        String board = chessi.convertPiecesToString();
         try {
-            String old = chessi.convertPiecestoString();
+            String old = chessi.convertPiecesToString();
             chessi.setState(chessi.getBoardFromString(board));
-            String newOne = chessi.convertPiecestoString();
+            String newOne = chessi.convertPiecesToString();
             System.out.println(newOne.equals(old));
         } catch (WrongFormatException e) {
             // TODO Auto-generated catch block
@@ -186,6 +186,7 @@ public class ChessBoard extends GameBoard {
         return initialState;
     }
 
+    // Converts the String list (not the simple String "A1 A2") into a two dim. PlayingPiece Array
     @Override
     public PlayingPiece[][] getBoardFromString(String input) throws WrongFormatException {
         ChessPlayingPiece[][] newBoard = new ChessPlayingPiece[8][8];
@@ -249,8 +250,9 @@ public class ChessBoard extends GameBoard {
     }
     */
 
+    //constructs the String list
     @Override
-    public String convertPiecestoString() {
+    public String convertPiecesToString() {
         StringBuilder output = new StringBuilder();
 
         for(int i = 0; i < 32; i++){

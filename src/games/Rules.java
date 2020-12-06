@@ -1,5 +1,7 @@
 package src.games;
 
+import src.chess.ChessMessages;
+
 /**
  * @author Begüm Tosun
  */
@@ -10,6 +12,6 @@ public interface Rules {
     static boolean isFieldOccupied(GameBoard board, int row, int column){
         return board.getState()[row][column] != null;
     }
-    
-    //boolean isFieldOccupiedByOwnPlayingP(GameBoard board, String move);
+
+    //ChessMessages isGameFinished(GameBoard board);
 }

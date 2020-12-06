@@ -99,28 +99,28 @@ public interface MoveConverter {
     static String convertArrayCoordinateIntoPosColumn(int i){
         switch (i){
             case 0:
-                return "a";
+                return "A";
 
             case 1:
-                return "b";
+                return "B";
 
             case 2:
-                return "c";
+                return "C";
 
             case 3:
-                return "d";
+                return "D";
 
             case 4:
-                return "e";
+                return "E";
 
             case 5:
-                return "f";
+                return "F";
 
             case 6:
-                return "g";
+                return "G";
 
             case 7:
-                return "h";
+                return "H";
 
             default:
                 return "";
