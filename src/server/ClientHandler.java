@@ -34,6 +34,7 @@ public class ClientHandler extends Thread {
         GameRoom gameRoom;
         String input;
         String information;
+        String tmp;
         boolean connected;
 
         connected = true;
@@ -44,7 +45,7 @@ public class ClientHandler extends Thread {
                     player = new Player();
                     player.setClientHandler(this);
                     gameRoom = null;
-                    
+
                     while(connected){
                         input = inputStream.readUTF();
                         information = StringConverter.getInformation(input);
@@ -56,8 +57,15 @@ public class ClientHandler extends Thread {
                                 LogWriter.writeToLog("Player " + player.getName() + " is in a Room with " + gameRoom.getTheOtherPlayer(player) + " with the mode " + gameRoom.getGame()) ;
                                 break;
                             case GAMEBOARD:
-                                if(gameRoom != null)
-                                    outputStream.writeUTF(gameRoom.setInput(information));
+                                if(gameRoom != null){
+                                    tmp = gameRoom.setInput(information);
+                                    if(StringConverter.stringToInformation(tmp).equals(InformationsTypes.ERROR)){
+                                        
+                                    }
+
+                                    outputStream.writeUTF(tmp);
+                                }
+                                    
                                 break;
                             case LOGIN:
                             	if (information.equals("tobi,123")){
