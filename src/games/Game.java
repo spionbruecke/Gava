@@ -15,14 +15,6 @@ public abstract class Game {
     // Creates new Gameboard
     public abstract void initialize();
 
-    /*
-    public abstract void start();
-
-    public abstract void end();
-
-    public abstract void play();
-    */
-
     public String getName(){
         return gameName.toString();
     }
@@ -30,9 +22,5 @@ public abstract class Game {
     public abstract void timer();
     Do we need this method?
      */
-
-     public String toString(){
-         return gameName.toString();
-     }
 
 }

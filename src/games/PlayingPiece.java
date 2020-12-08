@@ -3,7 +3,7 @@ package src.games;
 /**
  * @author Begüm Tosun
  */
-public abstract class PlayingPiece {
+public class PlayingPiece {
 
     /**
      * Description of the PlayingPiece
@@ -15,7 +15,16 @@ public abstract class PlayingPiece {
      */
     private String colour;
 
+    /**
+     * Describes Position on the GameBoard
+     */
     private String position;
+
+    /**
+     * Tells whether the PlayingPiece has been moved or not. (initial value = false)
+     */
+    private boolean hasMoved = false;
+
 
     public String getName() {
         return name;
@@ -54,7 +63,14 @@ public abstract class PlayingPiece {
         return output.toString();
     }
 
-    public abstract void move(GameBoard board, String move);
+    /**
+     * True if chess playing piece has moved else false.
+     * @return boolean
+     */
+    public boolean hasMoved(){return hasMoved;}
 
-    public abstract boolean hasMoved();
+    /*public void setHasMoved(){
+        hasMoved = true;
+    }*/
+
 }

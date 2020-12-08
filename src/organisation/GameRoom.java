@@ -77,6 +77,7 @@ public class GameRoom{
     }
 
     private String setChessInput(String information){
+         ChessMoveConverter converter = new ChessMoveConverter();
         ChessMessages message;
         message = ChessMessages.VICTORY;
         //dummyFunction(gameBoard.getState(), this.gameBoard.getBoardFromString(information));
@@ -86,7 +87,7 @@ public class GameRoom{
             case DEFEATED:
                 return "<Gameend=Defeated>";
             case MOVE_ALLOWED:
-                return "<Gameboard=" + this.gameBoard.convertPiecestoString() + ">";
+                return "<Gameboard=" + converter.convertPiecesToString(this.gameBoard) + ">";
             case ERROR_WRONGMOVEMENT_DIRECTION_BISHOP:
                 return "<Error=Bishop is only allowed to move "; //TODO(Alex) Write some good Error Descrition for the player
             case ERROR_WRONGMOVEMENT_DIRECTION_KING:

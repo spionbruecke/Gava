@@ -1,7 +1,6 @@
 package src.chess;
 
 import java.util.ArrayList;
-
 import src.games.*;
 
 
@@ -11,6 +10,7 @@ import src.games.*;
  * @author Begüm Tosun
  */
 public class ChessRules implements Rules {
+    private static ChessMoveConverter converter = new ChessMoveConverter();
 
     /**
      * Checks if the target square/field of the given move is occupied by ones own playing piece.
@@ -19,8 +19,8 @@ public class ChessRules implements Rules {
      * @return boolean
      */
     public static boolean isFieldOccupiedByOwnPlayingP(GameBoard board, String move) {
-        int row = MoveConverter.convertPosIntoArrayCoordinate(move.charAt(4));
-        int column = MoveConverter.convertPosIntoArrayCoordinate(move.charAt(3));
+        int row = converter.convertPosIntoArrayCoordinate(move.charAt(4));
+        int column = converter.convertPosIntoArrayCoordinate(move.charAt(3));
 
         String ownColour = board.getState()[(int)(move.charAt(1))][(int)(move.charAt(0))].getColour();
 
@@ -36,71 +36,86 @@ public class ChessRules implements Rules {
      * @param stateToCheck ChessPlayingPiece[][]
      * @return boolean
      */
-    public static boolean isMoveAllowed(GameBoard gameBoard, ChessPlayingPiece[][] stateToCheck) {
+    public Messages isMoveAllowed(GameBoard gameBoard, PlayingPiece[][] stateToCheck) {
         if(isMoveCastling(gameBoard, stateToCheck))
-            return true;
+            return Messages.MOVE_ALLOWED;
 
-        String move = MoveConverter.stateToString(gameBoard.getState(), stateToCheck);
+        String move = converter.stateToString(gameBoard.getState(), stateToCheck);
 
         return checkEachPossibleMove(gameBoard, stateToCheck, move);
     }
 
-    private static boolean checkEachPossibleMove(GameBoard gameBoard, ChessPlayingPiece[][] stateToCheck, String move){
-        int row = MoveConverter.convertPosIntoArrayCoordinate(move.charAt(1));
-        int column = MoveConverter.convertPosIntoArrayCoordinate(move.charAt(0));
+    private static Messages checkEachPossibleMove(GameBoard gameBoard, PlayingPiece[][] stateToCheck, String move){
+        int row = converter.convertPosIntoArrayCoordinate(move.charAt(1));
+        int column = converter.convertPosIntoArrayCoordinate(move.charAt(0));
 
         switch(gameBoard.getState()[row][column].getName()){
             case "rook":
-                return checkRookMoves(move) && isRookPathFree(gameBoard, move);
+                if((checkRookMoves(move) == Messages.MOVE_ALLOWED) && isRookPathFree(gameBoard, move) )
+                    return Messages.MOVE_ALLOWED;
+                else
+                    return Messages.ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_ROOK;
 
             case "knight":
-                return checkKnightMoves(move) && isKnightTargetFree(gameBoard, move);
+                if((checkKnightMoves(move) == Messages.MOVE_ALLOWED) && isKnightTargetFree(gameBoard, move))
+                    return Messages.MOVE_ALLOWED;
+                else
+                    return Messages.ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_KNIGHT;
 
             case "bishop":
-                return checkBishopMoves(move) && isBishopPathFree(gameBoard, move);
+                if((checkBishopMoves(move) == Messages.MOVE_ALLOWED) && isBishopPathFree(gameBoard, move))
+                    return Messages.MOVE_ALLOWED;
+                else
+                    return Messages.ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_BISHOP;
 
             case "queen":
-                return checkQueenMoves(move) && isQueenPathFree(gameBoard, move);
+                if((checkQueenMoves(move) == Messages.MOVE_ALLOWED) && isQueenPathFree(gameBoard, move))
+                    return Messages.MOVE_ALLOWED;
+                else
+                    return Messages.ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_QUEEN;
 
             case "king":
-                return checkKingMoves(move) && isKingTargetFree(gameBoard, move);
+                if((checkKingMoves(move) == Messages.MOVE_ALLOWED) && isKingTargetFree(gameBoard, move))
+                    return Messages.MOVE_ALLOWED;
+                else
+                    return Messages.ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_KING;
 
             case "pawn":
                 return checkPawnMoves(gameBoard, stateToCheck);
 
             default:
-                return false;
+                return Messages.ERROR_NO_SUCH_PLAYINGPIECE;
         }
     }
 
-    private static boolean checkPawnMoves(GameBoard gameBoard, ChessPlayingPiece[][] stateToCheck){
-        Field target = MoveConverter.getTargetField(MoveConverter.stateToString(gameBoard.getState(), stateToCheck));
-        Field start = MoveConverter.getStartField(MoveConverter.stateToString(gameBoard.getState(), stateToCheck));
+    private static Messages checkPawnMoves(GameBoard gameBoard, PlayingPiece[][] stateToCheck){
+        Field target = converter.getChessTargetField(converter.stateToString(gameBoard.getState(), stateToCheck));
+        Field start = converter.getChessStartField(converter.stateToString(gameBoard.getState(), stateToCheck));
 
         // move two squares forward
         if(target.getRow() == start.getRow()+2
                 && !gameBoard.getState()[start.getRow()][start.getColumn()].hasMoved()
                 && gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("black")
                 && isPawnPathFree(gameBoard, start)
-                && isFieldOccupiedByOwnPlayingP(gameBoard, MoveConverter.stateToString(gameBoard.getState(), stateToCheck))){
-            return true;
+                && isFieldOccupiedByOwnPlayingP(gameBoard, converter.stateToString(gameBoard.getState(), stateToCheck))){
+            return Messages.MOVE_ALLOWED;
         }else if(target.getRow() == start.getRow()-2
                 && !gameBoard.getState()[start.getRow()][start.getColumn()].hasMoved()
                 && gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("white")
                 && isPawnPathFree(gameBoard, start)
-                && isFieldOccupiedByOwnPlayingP(gameBoard, MoveConverter.stateToString(gameBoard.getState(), stateToCheck))){
-            return true;
+                && isFieldOccupiedByOwnPlayingP(gameBoard, converter.stateToString(gameBoard.getState(), stateToCheck))){
+            return Messages.MOVE_ALLOWED;
         }
 
         // move one square forward
         if(target.getRow() == start.getRow()+1
                 && gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("black")
-                && isFieldOccupiedByOwnPlayingP(gameBoard, MoveConverter.stateToString(gameBoard.getState(), stateToCheck))){
-            return true;
+                && isFieldOccupiedByOwnPlayingP(gameBoard, converter.stateToString(gameBoard.getState(), stateToCheck))){
+            return Messages.MOVE_ALLOWED;
         }else if(target.getRow() == start.getRow()-1
                 && gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("white")
-                && isFieldOccupiedByOwnPlayingP(gameBoard, MoveConverter.stateToString(gameBoard.getState(), stateToCheck))){
-            return true;
+                && isFieldOccupiedByOwnPlayingP(gameBoard, converter.stateToString(gameBoard.getState(), stateToCheck))){
+            return Messages.MOVE_ALLOWED;
         }
 
         //en passant
@@ -108,22 +123,40 @@ public class ChessRules implements Rules {
                 && (target.getColumn() == start.getColumn()+1 || target.getColumn() == start.getColumn()-1)
                 && gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("black")
                 && isEnPassantAllowed(gameBoard, start, target)){
-            return true;
+            return Messages.MOVE_ALLOWED;
         }else if(target.getRow() == start.getRow()-1
                 && (target.getColumn() == start.getColumn()+1 || target.getColumn() == start.getColumn()-1)
                 && gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("white")
                 && isEnPassantAllowed(gameBoard, start, target)){
-            return true;
+            return Messages.MOVE_ALLOWED;
+        }
+
+        return Messages.ERROR_WRONGMOVEMENT_DIRECTION_PAWN;
+    }
+
+    public boolean isPromotion(GameBoard gameBoard, PlayingPiece[][] stateToCheck){
+        Field target = converter.getChessTargetField(converter.stateToString(gameBoard.getState(), stateToCheck));
+        Field start = converter.getChessStartField(converter.stateToString(gameBoard.getState(), stateToCheck));
+
+        int counter = 0;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if(gameBoard.getState()[i][j] != stateToCheck[i][j])
+                    counter++;
+            }
+        }
+
+        //more than one piece has been moved
+        if(counter > 2){
+            return false;
         }
 
         //promotion
         if(gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("white")
                 && target.getRow() == 0){
-            stateToCheck[target.getRow()][target.getColumn()].promotion("TODO");
             return true;
         }else if(gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("black")
                 && target.getRow() == 7){
-            stateToCheck[target.getRow()][target.getColumn()].promotion("TODO");
             return true;
         }
 
@@ -142,11 +175,11 @@ public class ChessRules implements Rules {
                 && board.getState()[start.getRow()][target.getColumn()] != null;
     }
 
-    private static boolean checkKingMoves(String move){
+    private static Messages checkKingMoves(String move){
         ArrayList<Field> possibleLocations = new ArrayList<Field>();
 
-        Field target = MoveConverter.getTargetField(move);
-        Field start = MoveConverter.getStartField(move);
+        Field target = converter.getChessTargetField(move);
+        Field start = converter.getChessStartField(move);
 
         if( (start.getRow()-1 >= 0) && (start.getColumn()-1 >= 0) ){
             possibleLocations.add(new Field(start.getRow()-1, start.getColumn()-1));
@@ -182,11 +215,11 @@ public class ChessRules implements Rules {
 
         for (Field possibleLocation : possibleLocations) {
             if (possibleLocation == target) {
-                return true;
+                return Messages.MOVE_ALLOWED;
             }
         }
 
-        return false;
+        return Messages.ERROR_WRONGMOVEMENT_DIRECTION_KING;
     }
 
     private static boolean isKingTargetFree(GameBoard gameBoard, String move){
@@ -194,27 +227,33 @@ public class ChessRules implements Rules {
     }
 
 
-    private static boolean checkQueenMoves(String move){
-        return checkVerticalAndHorizontalMoves(move) || checkDiagonalMoves(move);
+    private static Messages checkQueenMoves(String move){
+        if (checkVerticalAndHorizontalMoves(move) || checkDiagonalMoves(move))
+            return Messages.MOVE_ALLOWED;
+        else
+            return Messages.ERROR_WRONGMOVEMENT_DIRECTION_QUEEN;
     }
 
     private static boolean isQueenPathFree(GameBoard gameBoard, String move){
         return areVerticalOrHorizontalPathsFree(gameBoard, move) || areDiagonalPathsFree(gameBoard, move);
     }
 
-    private static boolean checkBishopMoves(String move){
-        return checkDiagonalMoves(move);
+    private static Messages checkBishopMoves(String move){
+        if(checkDiagonalMoves(move))
+            return Messages.MOVE_ALLOWED;
+        else
+            return Messages.ERROR_WRONGMOVEMENT_DIRECTION_BISHOP;
     }
 
     private static boolean isBishopPathFree(GameBoard gameBoard, String move){
         return areDiagonalPathsFree(gameBoard, move);
     }
 
-    private static boolean checkKnightMoves(String move){
+    private static Messages checkKnightMoves(String move){
         ArrayList<Field> possibleLocations = new ArrayList<Field>();
 
-        Field target = MoveConverter.getTargetField(move);
-        Field start = MoveConverter.getStartField(move);
+        Field target = converter.getChessTargetField(move);
+        Field start = converter.getChessStartField(move);
 
         //up-left
         if( (start.getRow()-2 >= 0) && (start.getColumn()-1 >= 0) ){
@@ -259,26 +298,29 @@ public class ChessRules implements Rules {
         //check whether the target is one of the possible locations and
         for (Field possibleLocation : possibleLocations) {
             if (possibleLocation == target) {
-                return true;
+                return Messages.MOVE_ALLOWED;
             }
         }
 
-        return false;
+        return Messages.ERROR_WRONGMOVEMENT_DIRECTION_KNIGHT;
     }
 
     private static boolean isKnightTargetFree(GameBoard gameBoard, String move){
         return !isFieldOccupiedByOwnPlayingP(gameBoard, move);
     }
 
-    private static boolean checkRookMoves(String move){
-        return checkVerticalAndHorizontalMoves(move);
+    private static Messages checkRookMoves(String move){
+        if(checkVerticalAndHorizontalMoves(move))
+            return Messages.MOVE_ALLOWED;
+        else
+            return Messages.ERROR_WRONGMOVEMENT_DIRECTION_ROOK;
     }
 
     private static boolean isRookPathFree(GameBoard gameBoard, String move){
         return areVerticalOrHorizontalPathsFree(gameBoard, move);
     }
 
-    private static boolean isMoveCastling(GameBoard gameBoard, ChessPlayingPiece[][] stateToCheck){
+    private static boolean isMoveCastling(GameBoard gameBoard, PlayingPiece[][] stateToCheck){
         int counter = 0;
         ArrayList<Field> check = new ArrayList<Field>();
 
@@ -331,7 +373,7 @@ public class ChessRules implements Rules {
         return false;
     }
 
-    private static boolean isCastlingPathFree(GameBoard board, Field rook, ChessPlayingPiece[][] stateToCheck){
+    private static boolean isCastlingPathFree(GameBoard board, Field rook, PlayingPiece[][] stateToCheck){
         if(rook.getRow()==0 && rook.getColumn()==0){
             for (int i = 1; i < 4; i++) {
                 if(Rules.isFieldOccupied(board, 0, i) || isFieldAttacked(board, 0, i, stateToCheck)){
@@ -361,21 +403,21 @@ public class ChessRules implements Rules {
         return true;
     }
 
-    private static boolean isFieldAttacked(GameBoard board, int row, int column, ChessPlayingPiece[][] stateToCheck){
+    private static boolean isFieldAttacked(GameBoard board, int row, int column, PlayingPiece[][] stateToCheck){
         String move = "";
         StringBuilder stringB = new StringBuilder();
 
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                stringB.append(MoveConverter.convertArrayCoordinateIntoPosColumn(j));
-                stringB.append(MoveConverter.convertArrayCoordinateIntoPosRow(i));
+                stringB.append(converter.convertArrayCoordinateIntoPosColumn(j));
+                stringB.append(converter.convertArrayCoordinateIntoPosRow(i));
                 stringB.append(" ");
-                stringB.append(MoveConverter.convertArrayCoordinateIntoPosColumn(column));
-                stringB.append(MoveConverter.convertArrayCoordinateIntoPosRow(row));
+                stringB.append(converter.convertArrayCoordinateIntoPosColumn(column));
+                stringB.append(converter.convertArrayCoordinateIntoPosRow(row));
 
                 move = stringB.toString();
 
-                if(checkEachPossibleMove(board, stateToCheck, move))
+                if(checkEachPossibleMove(board, stateToCheck, move) == Messages.MOVE_ALLOWED)
                     return true;
             }
         }
@@ -385,8 +427,8 @@ public class ChessRules implements Rules {
     private static boolean checkDiagonalMoves(String move){
         ArrayList<Field> possibleLocations = new ArrayList<Field>();
 
-        Field target = MoveConverter.getTargetField(move);
-        Field start = MoveConverter.getStartField(move);
+        Field target = converter.getChessTargetField(move);
+        Field start = converter.getChessStartField(move);
 
         //left-up diagonal
         int row = start.getRow() - 1;
@@ -439,8 +481,8 @@ public class ChessRules implements Rules {
 
 
     private static boolean areDiagonalPathsFree(GameBoard gameBoard, String move){
-        Field target = MoveConverter.getTargetField(move);
-        Field start = MoveConverter.getStartField(move);
+        Field target = converter.getChessTargetField(move);
+        Field start = converter.getChessStartField(move);
 
         if(isFieldOccupiedByOwnPlayingP(gameBoard, move))
             return false;
@@ -506,8 +548,8 @@ public class ChessRules implements Rules {
     private static boolean checkVerticalAndHorizontalMoves(String move){
         ArrayList<Field> possibleLocations = new ArrayList<Field>();
 
-        Field target = MoveConverter.getTargetField(move);
-        Field start = MoveConverter.getStartField(move);
+        Field target = converter.getChessTargetField(move);
+        Field start = converter.getChessStartField(move);
 
         //determine every theoretically possible move and add the target field into a list
         for (int i = start.getRow(); i >= 0; i--) {
@@ -547,8 +589,8 @@ public class ChessRules implements Rules {
 
 
     private static boolean areVerticalOrHorizontalPathsFree(GameBoard gameBoard, String move){
-        Field target = MoveConverter.getTargetField(move);
-        Field start = MoveConverter.getStartField(move);
+        Field target = converter.getChessTargetField(move);
+        Field start = converter.getChessStartField(move);
 
         if(isFieldOccupiedByOwnPlayingP(gameBoard, move))
             return false;
@@ -593,4 +635,30 @@ public class ChessRules implements Rules {
         return true;
     }
 
+    private boolean checkmate(GameBoard gameBoard, String colour){
+        int row = -1;
+        int column = -1;
+
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if(gameBoard.getState()[i][j].getColour().equals(colour)
+                        && gameBoard.getState()[i][j].getName().equals("king")) {
+                    row = i;
+                    column = j;
+                }
+            }
+        }
+
+        //king is not in the game anymore
+        if(row == -1)
+            return true;
+
+        //TODO
+        return false;
+    }
+
+    /*public ArrayList<Messages> isGameFinished(GameBoard board){
+        if()
+
+    }*/
 }
