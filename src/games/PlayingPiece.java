@@ -69,8 +69,8 @@ public class PlayingPiece {
      */
     public boolean hasMoved(){return hasMoved;}
 
-    /*public void setHasMoved(){
+    public void setHasMoved(){
         hasMoved = true;
-    }*/
+    }
 
 }
