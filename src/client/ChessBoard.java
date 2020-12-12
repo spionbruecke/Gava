@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 public class ChessBoard extends JFrame implements MouseListener, MouseMotionListener {
+	
 	JLayeredPane layeredPane;
 	JPanel chessBoard;
 	JLabel chessPiece;
@@ -18,19 +19,20 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 	Color dark = new Color(255,235,205);
 	Color light = new Color(160,82,45);
 	
-	Figure[][] fArray = new Figure[8][8];
-	ArrayList<Figure> figures;
+	Figure[][] boardMatrix = new Figure[8][8];
+	ArrayList<Figure> figuresList;
 	
 	int[] moveFrom = new int[2];
 	int[] moveTo = new int[2];
 	
+	String color;
+	String currentState;
+	String newState = " ";
 	
 	int x;
 	int y;
 	
-	
-	
-	String color = "black";
+	Boolean movePerformed = false;
 	
 	ImageIcon black_king = new ImageIcon("/home/tobias/Documents/resources/black_king.png");
 	ImageIcon black_queen = new ImageIcon("/home/tobias/Documents/resources/black_queen.png");
@@ -67,57 +69,19 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 	ImageIcon white_pawn_8 = new ImageIcon("/home/tobias/Documents/resources/white_pawn.png");
 	
 		
-	
-	
-	public ChessBoard() {
+	public ChessBoard(String color, String currentState) {
+		this.currentState = currentState;
+		
+		this.color = color;
 		
 		setupBoard();
+		
 		initializeBoard();
+
+		updateBoardGUI(this.currentState);
 		
-		//updateBoardGUI("<rook,black=null><knight,black=B8><bishop,black=C8><queen,black=D8><king,black=E8><bishop,black=F8><knight,black=G8><rook,black=H8><pawn,black=A7><pawn,black=B7><pawn,black=C7><pawn,black=D7><pawn,black=E7><pawn,black=F7><pawn,black=G7><pawn,black=H7><rook,white=A1><knight,white=B1><bishop,white=C1><queen,white=D1><king,white=E1><bishop,white=F1><knight,white=G1><rook,white=H1><pawn,white=A2><pawn,white=B2><pawn,white=C2><pawn,white=D2><pawn,white=E2><pawn,white=F2><pawn,white=G2><pawn,white=H2>");
-		//System.out.println("<rook,black=A8><knight,black=B8><bishop,black=C8><queen,black=D8><king,black=E8><bishop,black=F8><knight,black=G8><rook,black=H8><pawn,black=A7><pawn,black=B7><pawn,black=C7><pawn,black=D7><pawn,black=E7><pawn,black=F7><pawn,black=G7><pawn,black=H7><rook,white=A1><knight,white=B1><bishop,white=C1><queen,white=D1><king,white=E1><bishop,white=F1><knight,white=G1><rook,white=H1><pawn,white= 2><pawn,white=A2><pawn,white=B2><pawn,white=C2><pawn,white=D2><pawn,white=E2><pawn,white=F2><pawn,white=G2>");
-		updateBoard();
-		
-		for (int i = 0; i < figures.size(); i++) {
-			JPanel panel = (JPanel)chessBoard.getComponent(figures.get(i).getPosition());
-			panel.add(figures.get(i).getJLabel());
-		}
-		
-		updateBoard();
 	}
 	
-	
-	public void parseString(String s) {
-		char column;
-		char row;
-		String color = "";
-		String name = "";
-		
-		for (int i = 0; i < s.length(); i++) {
-			if(s.charAt(i) == '<') {
-				i++;
-				while(s.charAt(i) != ',') {
-					name += s.charAt(i);
-					i++;
-				}
-				i++;
-				while(s.charAt(i) != '=') {
-					color+= s.charAt(i);
-					i++;
-				}
-				i++;
-				i++;
-				column = s.charAt(i);
-				i++;
-				row = s.charAt(i);
-				i++;
-				if (s.charAt(i) == '>')
-					i++;
-			color = "";
-			name = "";
-			}
-		}
-	}
 	
 	
 	public void updateBoardGUI(String s) {
@@ -131,9 +95,8 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 			}
 			i++;
 			
-			Figure f = figures.get(count);
-			
-			
+			Figure f = figuresList.get(count);
+						
 			if (s.charAt(i) == 'n')
 				f.setBeaten(true);
 			else {
@@ -143,32 +106,41 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 			
 				f.column = column;
 				f.row = row;
-				
-				System.out.println(row + " " + column);
 			}
 			count++;
 		}
+		
+		updateBoard();
+		
+		for (int i = 0; i < figuresList.size(); i++) {
+			if (figuresList.get(i).getBeaten() == false) {
+				JPanel panel = (JPanel)chessBoard.getComponent(figuresList.get(i).getPosition());
+				panel.add(figuresList.get(i).getJLabel());
+			}
+		}	
 	}
 	
 	
 	
-	public String createString() {
+	public void createString() {
 		String s;
 		StringBuilder builder = new StringBuilder();
 		
-		for (int i = 0; i < figures.size(); i++) {
-			Figure f = figures.get(i);
+		for (int i = 0; i < figuresList.size(); i++) {
+			Figure f = figuresList.get(i);
 			if (f.getBeaten() == true)
 				s = "<" + f.name + "," + f.color + "=" + "null" + ">";
 			else
 				s = "<" + f.name + "," + f.color + "=" + f.column + f.row + ">";
 			builder.append(s);
-		}
-		
-		return builder.toString();
+		}	
+		newState =  builder.toString();
+	}
+	
+	public String getNewState() {
+		return this.newState;
 	}
 
-	
 	
 	public void setupBoard() {
 		layeredPane = new JLayeredPane();
@@ -238,7 +210,7 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 		Figure f30 = new Figure(white_pawn_7, 'G', '2', "pawn", "white", true);
 		Figure f31 = new Figure(white_pawn_8, 'H', '2', "pawn", "white", true);
 		
-		figures = new ArrayList<Figure>() {
+		this.figuresList = new ArrayList<Figure>() {
 			{
 				add(f0);
 				add(f1);
@@ -271,19 +243,17 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 				add(f28);
 				add(f29);
 				add(f30);
-				add(f31);
-				
+				add(f31);			
 			}
 		};
 		
-		for (int i = 0; i < figures.size(); i++) {
-			if (figures.get(i).getBeaten() == false) {
-				JPanel panel = (JPanel)chessBoard.getComponent(figures.get(i).getPosition());
-				panel.add(figures.get(i).getJLabel());
-			}
-		}
-		
-		updateBoard();
+//		for (int i = 0; i < figuresList.size(); i++) {
+//			if (figuresList.get(i).getBeaten() == false) {
+//				JPanel panel = (JPanel)chessBoard.getComponent(figuresList.get(i).getPosition());
+//				panel.add(figuresList.get(i).getJLabel());
+//			}
+//		}	
+//		updateBoard();
 	}
 	
 	
@@ -291,19 +261,19 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 	public void printFigures() {	
 		for (int j = 0; j < 8; j++) {
 			for (int i = 0; i < 8; i++) {
-				if (fArray[i][j] instanceof Figure)
-					System.out.println(fArray[i][j].name + " " + fArray[i][j].column + " " +  fArray[i][j].row);
+				if (boardMatrix[i][j] instanceof Figure)
+					System.out.println(boardMatrix[i][j].name + " " + boardMatrix[i][j].column + " " +  boardMatrix[i][j].row);
 			}
 		}
 	}
 
 	public void updateBoard() {
-		this.fArray = new Figure[8][8];
-		for (int i = 0; i < figures.size(); i++) {
-			if (figures.get(i).getBeaten() == false) {
-				int x = figures.get(i).getX();
-				int y = figures.get(i).getY();
-				fArray[x][y] = figures.get(i);
+		this.boardMatrix = new Figure[8][8];
+		for (int i = 0; i < figuresList.size(); i++) {
+			if (figuresList.get(i).getBeaten() == false) {
+				int x = figuresList.get(i).getX();
+				int y = figuresList.get(i).getY();
+				boardMatrix[x][y] = figuresList.get(i);
 			}
 		}
 	}
@@ -345,15 +315,18 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 		
 		if (c instanceof JPanel)
 			return;
-		
+				
 		int row = me.getY() / c.getWidth();
 		int col = me.getX() / c.getHeight();
 		
 		moveFrom[0] = row;
 		moveFrom[1] = col;
 		
-		Figure f = fArray[col][row];
-		if (f.color.equals(color) == false)
+		Figure f = boardMatrix[col][row];
+		if (f.color.equals(this.color) == false)
+			return;
+		
+		if (movePerformed == true)
 			return;
 		
 		moveFrom[0] = row;
@@ -364,6 +337,9 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 		y = parentLocation.y - me.getY();
 	
 		chessPiece = (JLabel)c;
+				
+		
+		
 		chessPiece.setLocation(me.getX() + x, me.getY() + y);
 		chessPiece.setSize(chessPiece.getWidth(), chessPiece.getHeight());
 		layeredPane.add(chessPiece, JLayeredPane.DRAG_LAYER);
@@ -389,8 +365,8 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 			parent.remove(0);
 			parent.add( chessPiece );
 			
-			Figure f = fArray[moveFrom[1]][moveFrom[0]];
-			Figure f2 = fArray[moveTo[1]][moveTo[0]];
+			Figure f = boardMatrix[moveFrom[1]][moveFrom[0]];
+			Figure f2 = boardMatrix[moveTo[1]][moveTo[0]];
 			f2.setBeaten(true);
 			f.setColumn(moveTo[1]);
 			f.setRow(moveTo[0]);
@@ -399,11 +375,13 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 			Container parent = (Container)c;
 			parent.add( chessPiece );
 			
-			Figure f = fArray[moveFrom[1]][moveFrom[0]];
+			Figure f = boardMatrix[moveFrom[1]][moveFrom[0]];
 			f.setColumn(moveTo[1]);
 			f.setRow(moveTo[0]);
 			updateBoard();
 		} 
 		chessPiece.setVisible(true);
+		movePerformed = true;
+		createString();
 	}
 }
