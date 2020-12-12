@@ -88,10 +88,10 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 			
 		while(System.currentTimeMillis() < end) {
 			
-			menuFrame.setVisible(false);
+			menuFrame.setVisible(true);
 		}
 		
-		menuFrame.setVisible(true);
+		menuFrame.setVisible(false);
 	}
 	
 	
