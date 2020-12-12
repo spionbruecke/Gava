@@ -29,6 +29,8 @@ public class StringConverter{
                 return InformationsTypes.MESSAGE;
             case "Sucess" :
                 return InformationsTypes.SUCESS;
+            case "Color" :
+                return InformationsTypes.COLOR;
             default:
                 throw new WrongInformationFormatException();
         }

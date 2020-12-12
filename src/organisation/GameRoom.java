@@ -24,7 +24,7 @@ public class GameRoom{
     private GameBoard gameBoard;
     private Rules rule;
 
-    public GameRoom(Game game){
+    public GameRoom(Game game){ //<- Bullshit weil Spieler zwei fehlt : Verschieben nach StartUp
         currentGame = game;
         //Decides Randomly who is allowed to start
         if ((int) ( Math.random() * 2 + 1) == 1){

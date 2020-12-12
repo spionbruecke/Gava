@@ -55,16 +55,17 @@ public class ClientHandler extends Thread {
                                 player.setGame(information);
                                 LogWriter.writeToLog("The Player " +  player.getName() + "choosed the Gamemode: " + information);
                                 gameRoom = controller.addPlayer(player);
-                                LogWriter.writeToLog("Player " + player.getName() + " is in a Room with " + gameRoom.getTheOtherPlayer(player) + " with the mode " + gameRoom.getGame()) ;
+                                LogWriter.writeToLog("Player " + player.getName() + " is in a Room with " + gameRoom.getTheOtherPlayer(player) + " with the mode " + gameRoom.getGame());
+                                //Falls zweiter Spieler vorhanden -> Spiel start + Farbe an Client + Spieler benachrichtigen + Spielbretter schicken
                                 break;
                             case GAMEBOARD:
                                 if(gameRoom != null){
                                     tmp = gameRoom.setInput(information);
                                     if(StringConverter.getInformationType(tmp).equals(InformationsTypes.ERROR)){
                                         outputStream.writeUTF(tmp);
-                                    } else { 
+                                    } else {  //TODO(Alex) Informationstype Win or Lose
                                         outputStream.writeUTF("<Sucess>");  
-                                        gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage(ChessMoveConverter.convertPiecesToString((ChessBoard)gameRoom.getGameBoard()));
+                                        gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard)gameRoom.getGameBoard()));
                                     }
                                 }
                                     
