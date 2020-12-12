@@ -1,6 +1,5 @@
 package src.games;
 
-import java.lang.Character;
 
 /**
  * The client only returns a simple String-description

@@ -202,7 +202,8 @@ public class ChessMoveConverter implements MoveConverter {
      * @return PlayingPiece[][]
      * @throws WrongFormatException
      */
-    public static PlayingPiece[][] getBoardFromString(String input, ChessBoard board) throws WrongFormatException {
+    public static PlayingPiece[][] getBoardFromString(String input) throws WrongFormatException {
+        ChessBoard board = new ChessBoard();
         PlayingPiece[][] newBoard = new PlayingPiece[8][8];
         StringBuilder position = new StringBuilder();
         int counter = 0;
@@ -224,10 +225,8 @@ public class ChessMoveConverter implements MoveConverter {
                 i = i + 3;
             }
         }
-
         return newBoard;
     }
-
     //constructs the String list
     public static String convertPiecesToString(ChessBoard board) {
         StringBuilder output = new StringBuilder();

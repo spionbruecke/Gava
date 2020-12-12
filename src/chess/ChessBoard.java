@@ -1,7 +1,5 @@
 package src.chess;
 
-import java.util.Arrays;
-
 import src.games.*;
 
 /**
@@ -27,7 +25,11 @@ public class ChessBoard extends GameBoard {
         String board = ChessMoveConverter.convertPiecesToString(chessi);
         try {
             String old = ChessMoveConverter.convertPiecesToString(chessi);
-            chessi.setState(ChessMoveConverter.getBoardFromString(board, chessi));
+            ChessMoveConverter.getBoardFromString(board);
+            String neues = "<rook,black=B5><knight,black=B8><bishop,black=C8><queen,black=D8><king,black=E8><bishop,black=F8><knight,black=G8><rook,black=H8><pawn,black=A7><pawn,black=B7><pawn,black=C7><pawn,black=D7><pawn,black=E7><pawn,black=F7><pawn,black=G7><pawn,black=H7><rook,white=A1><knight,white=B1><bishop,white=C1><queen,white=D1><king,white=E1><bishop,white=F1><knight,white=G1><rook,white=H1><pawn,white=A2><pawn,white=B2><pawn,white=C2><pawn,white=D2><pawn,white=E2><pawn,white=F2><pawn,white=G2><pawn,white=H2>";
+            System.out.println(ChessMoveConverter.convertPiecesToString(chessi));
+            chessi.setnewBoard(neues);
+            System.out.println(ChessMoveConverter.convertPiecesToString(chessi));
             String newOne = ChessMoveConverter.convertPiecesToString(chessi);
             System.out.println(newOne.equals(old));
         } catch (WrongFormatException e) {
@@ -185,44 +187,35 @@ public class ChessBoard extends GameBoard {
 
         return initialState;
     }
-
-    /*
-    * We dont use this anymore
-    @Override
-    public String getNewMove(String newBoard) {
-        StringBuilder newMove = new StringBuilder();
-        int tmp = 0;
-        for(int i = 0; i < newBoard.length(); i ++){
-            if (newBoard.charAt(i) == '=')
-                tmp = i;
-            if(newBoard.charAt(i) != currentGameBoard.charAt(i)){
-                newMove.append(currentGameBoard.charAt(tmp + 1)).append(currentGameBoard.charAt(tmp + 2)).append(" ");
-                newMove.append(newBoard.charAt(tmp + 1)).append(newBoard.charAt(tmp + 2));
-                return newMove.toString();
-            }
-        }
-        return "No Movement";
-    }
-
-    @Override
-    public void setNewMove(String move) {
-        StringBuilder start = new StringBuilder();
-        start.append(move.charAt(0)).append(move.charAt(1));
-
-        StringBuilder end = new StringBuilder();
-        end.append(move.charAt(3)).append(move.charAt(4));
-
-        for(int i = 0; i < playingPieces.length; i++){
-            if(playingPieces[i].getPosition().equals(start.toString())){
-                playingPieces[i].setPosition(end.toString());
-                currentGameBoard =  convertBoardtoString();
-                break;
-            }
-        } 
-    }
-    */
     
     protected PlayingPiece[] getPlayingPieces(){
         return playingPieces;
+    }
+
+    @Override
+    public void setnewBoard(String input) throws WrongFormatException {
+        PlayingPiece[][] newBoard = new PlayingPiece[8][8];
+        StringBuilder position = new StringBuilder();
+        int counter = 0;
+        int column;
+        int row;
+
+        for(int i = 0; i < input.length(); i++){
+            if(input.charAt(i) == '='){
+
+                position.append(input.charAt(i + 1)).append(input.charAt(i + 2));
+                this.getPlayingPieces()[counter].setPosition(position.toString());
+
+                row = Character.getNumericValue((input.charAt(i+2))) - 1;
+                column = ChessMoveConverter.convertPosIntoArrayCoordinate(input.charAt(i + 1));
+                newBoard[row][column] = this.getPlayingPieces()[counter];
+
+                position = new StringBuilder();
+                counter++;
+                i = i + 3;
+            }
+        }
+
+        this.setState(newBoard);
     }
 }
