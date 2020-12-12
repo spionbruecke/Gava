@@ -2,6 +2,7 @@ package src.server;
 
 import java.io.*;
 import java.net.*;
+import src.chess.*;
 import src.organisation.*;
 
 /**
@@ -49,7 +50,7 @@ public class ClientHandler extends Thread {
                     while(connected){
                         input = inputStream.readUTF();
                         information = StringConverter.getInformation(input);
-                        switch(StringConverter.stringToInformation(input)){
+                        switch(StringConverter.getInformationType(input)){
                             case GAMEMODE:
                                 player.setGame(information);
                                 LogWriter.writeToLog("The Player " +  player.getName() + "choosed the Gamemode: " + information);
@@ -59,11 +60,12 @@ public class ClientHandler extends Thread {
                             case GAMEBOARD:
                                 if(gameRoom != null){
                                     tmp = gameRoom.setInput(information);
-                                    if(StringConverter.stringToInformation(tmp).equals(InformationsTypes.ERROR)){
-                                        
+                                    if(StringConverter.getInformationType(tmp).equals(InformationsTypes.ERROR)){
+                                        outputStream.writeUTF(tmp);
+                                    } else { 
+                                        outputStream.writeUTF("<Sucess>");  
+                                        gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage(ChessMoveConverter.convertPiecesToString((ChessBoard)gameRoom.getGameBoard()));
                                     }
-
-                                    outputStream.writeUTF(tmp);
                                 }
                                     
                                 break;
@@ -76,7 +78,7 @@ public class ClientHandler extends Thread {
                             		outputStream.writeUTF("<Login=False>");
                                 break;
                             case CREATEACCOUNT:
-                            
+                                //dummyfunctionLogin(Name, pW)
                             	break;
                             case CONNECTIONSTATUS:
                                 if(information.equals("Exit"))
@@ -101,5 +103,9 @@ public class ClientHandler extends Thread {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+
+        public void sendMessage(String message) throws IOException {
+            outputStream.writeUTF(message);
         }
 }

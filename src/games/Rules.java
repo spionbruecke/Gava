@@ -1,7 +1,5 @@
 package src.games;
 
-import java.util.ArrayList;
-
 /**
  * @author Begüm Tosun
  */

@@ -1,7 +1,5 @@
 package src.organisation;
 
-import src.games.PlayingPiece;
-
 /**
  * 
  * @author Alexander Posch
@@ -16,7 +14,7 @@ public class StringConverter{
 
     private StringConverter(){}
 
-    public static InformationsTypes stringToInformation(String input)throws WrongInformationFormatException{
+    public static InformationsTypes getInformationType(String input)throws WrongInformationFormatException{
 
         switch(getKeyword(input)){
             case "Gamemode":
@@ -29,6 +27,8 @@ public class StringConverter{
                 return InformationsTypes.CONNECTIONSTATUS;
             case "Message" :
                 return InformationsTypes.MESSAGE;
+            case "Sucess" :
+                return InformationsTypes.SUCESS;
             default:
                 throw new WrongInformationFormatException();
         }

@@ -75,9 +75,7 @@ public abstract class GameBoard {
         prevState = new Cache(state);
     }
     
-    //public abstract String getNewMove(String newBoard);
-
-    //public abstract void setNewMove(String move);
+    public abstract void setnewBoard(String input) throws WrongFormatException;
     
     protected abstract PlayingPiece[][] setUpPlayingPieces();
 }

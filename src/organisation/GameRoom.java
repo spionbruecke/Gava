@@ -77,42 +77,51 @@ public class GameRoom{
     }
 
     private String setChessInput(String information){
-         ChessMoveConverter converter = new ChessMoveConverter();
-        ChessMessages message;
-        message = ChessMessages.VICTORY;
-        //dummyFunction(gameBoard.getState(), this.gameBoard.getBoardFromString(information));
-        switch(message){
-            case VICTORY:
-                return "<Gameend=Victory>";
-            case DEFEATED:
-                return "<Gameend=Defeated>";
-            case MOVE_ALLOWED:
-                return "<Gameboard=" + converter.convertPiecesToString(this.gameBoard) + ">";
-            case ERROR_WRONGMOVEMENT_DIRECTION_BISHOP:
-                return "<Error=Bishop is only allowed to move "; //TODO(Alex) Write some good Error Descrition for the player
-            case ERROR_WRONGMOVEMENT_DIRECTION_KING:
-                return "<Error=Bishop is only allowed to move ";
-            case ERROR_WRONGMOVEMENT_DIRECTION_KNIGHT:
+        try{
+            Messages message;
+            message = rule.isMoveAllowed(gameBoard, ChessMoveConverter.getBoardFromString(information));
+            switch(message){
+                case VICTORY_WHITE:
+                    return "<Gameend=Victory>";
+                case VICTORY_BLACK:
+                    return "<Gameend=Victory>";
+                case DEFEATED:
+                    return "<Gameend=Defeated>";
+                case MOVE_ALLOWED:
+                    gameBoard.setnewBoard(information);
+                    return "<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard) this.gameBoard) + ">";
+                case ERROR_WRONGMOVEMENT_DIRECTION_BISHOP:
+                    return "<Error=Bishop is only allowed to move "; //TODO(Alex) Write some good Error Descrition for the player
+                case ERROR_WRONGMOVEMENT_DIRECTION_KING:
+                    return "<Error=Bishop is only allowed to move ";
+                case ERROR_WRONGMOVEMENT_DIRECTION_KNIGHT:
 
-            case ERROR_WRONGMOVEMENT_DIRECTION_PAWN:
+                case ERROR_WRONGMOVEMENT_DIRECTION_PAWN:
 
-            case ERROR_WRONGMOVEMENT_DIRECTION_QUEEN:
+                case ERROR_WRONGMOVEMENT_DIRECTION_QUEEN:
 
-            case ERROR_WRONGMOVEMENT_DIRECTION_ROOK:
+                case ERROR_WRONGMOVEMENT_DIRECTION_ROOK:
 
-            case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_BISHOP:
+                case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_BISHOP:
 
-            case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_KING:
+                case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_KING:
 
-            case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_KNIGHT:
+                case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_KNIGHT:
 
-            case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_PAWN:
+                case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_PAWN:
 
-            case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_QUEEN:
+                case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_QUEEN:
 
-            case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_ROOK:
+                case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_ROOK:
+                case ERROR_NO_SUCH_PLAYINGPIECE:
+                    break;
+                default:
+                    break;
 
-        }
+            }
+    }catch (Exception e){
+        System.err.println(e);
+    }
         return null;
     }
     //****  Getter ****
@@ -127,10 +136,7 @@ public class GameRoom{
     }
     
     public boolean getTurn(Player player){
-        if(player == turnOfPlayer)
-            return true;
-        else    
-            return false;
+        return player == turnOfPlayer;
     }
 
     public int getNumberOfPlayer()      {return numberOfPlayer;}
