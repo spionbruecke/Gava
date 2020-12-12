@@ -32,7 +32,7 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 	protected DataInputStream dis = null;
 	protected DataOutputStream dos = null;
 	
-	protected Boolean isPlaying = true;
+	protected static Boolean isPlaying = false;
 	private String playerName = null;
 	private String currentGame = null;
 	private boolean isLoggedIn = false;
@@ -56,6 +56,15 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 	protected JSeparator separator_2;
 	
 	
+	protected JFrame board;
+	
+	String newState = " ";
+	
+	
+	String s1 = "<rook,black=A8><knight,black=B8><bishop,black=C8><queen,black=D8><king,black=E8><bishop,black=F8><knight,black=G8><rook,black=H8><pawn,black=A7><pawn,black=B7><pawn,black=C7><pawn,black=D7><pawn,black=E7><pawn,black=F7><pawn,black=G7><pawn,black=H7><rook,white=A1><knight,white=B1><bishop,white=C1><queen,white=D1><king,white=E1><bishop,white=F1><knight,white=G1><rook,white=H1><pawn,white=A2><pawn,white=B2><pawn,white=C2><pawn,white=D2><pawn,white=E2><pawn,white=F2><pawn,white=G2><pawn,white=H2>";
+	
+	String s2 = "<rook,black=null><knight,black=null><bishop,black=C8><queen,black=D8><king,black=E8><bishop,black=F8><knight,black=G8><rook,black=H8><pawn,black=A7><pawn,black=B7><pawn,black=C7><pawn,black=D7><pawn,black=E7><pawn,black=F7><pawn,black=G7><pawn,black=H7><rook,white=A1><knight,white=B1><bishop,white=C1><queen,white=D1><king,white=E1><bishop,white=F1><knight,white=G1><rook,white=H1><pawn,white=A2><pawn,white=B2><pawn,white=C2><pawn,white=D2><pawn,white=E2><pawn,white=F2><pawn,white=G2><pawn,white=H2>";
+	
     /**
      * This method is called when user starts the application
      * it connects to server
@@ -70,8 +79,7 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 			dos = new DataOutputStream(connection.getOutputStream()); // get data to server
 			setupGUI();
 			String s = dis.readUTF();
-			System.out.println("s. " + s);
-			//run();
+			run();
 			
 		} catch (IOException ieo) {
 			JOptionPane.showMessageDialog(null, "Server is not running", "Connection Error", JOptionPane.ERROR_MESSAGE);
@@ -82,16 +90,26 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 	@Override
 	public void run() {
 		long t= System.currentTimeMillis();
-		long end = t+15000;
-
+		long end = t+5000;
+		System.out.println("run");
+		boolean b = false;
 		
-			
-		while(System.currentTimeMillis() < end) {
-			
-			menuFrame.setVisible(true);
+		setupGameBoard(s1);
+		
+		while(newState == " ") {
+			newState = ((ChessBoard) board).getNewState();
 		}
 		
-		menuFrame.setVisible(false);
+		String newS = ((ChessBoard) board).getNewState();
+		System.out.println(newS);
+	
+		board.dispose();
+		setupGameBoard(s2);
+		
+		t = System.currentTimeMillis();
+		end = t + 4000;
+		while(System.currentTimeMillis() < end) {
+		}
 	}
 	
 	
@@ -266,13 +284,13 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 		playChessButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				currentGame = "Chess";
+				isPlaying = true; //TDO
 				try {
 					dos.writeUTF("<Gamemode=Chess>");
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				run();
 			}
 		});
 		playChessButton.setBounds(413, 232, 117, 41);
@@ -289,7 +307,6 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				run();
 			}
 		});
 		playMillButton.setBounds(646, 229, 117, 44);
@@ -369,7 +386,17 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 	}
 
 
-	public abstract void setupGameBoard();
+	public void setupGameBoard(String s) {
+		
+		board = new ChessBoard("black", s);
+		board.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		board.pack();
+		board.setResizable(true);
+		board.setLocationRelativeTo( null );
+		board.setVisible(true);
+
+		
+	}
 	
 	public abstract void updateBoard();
 	
