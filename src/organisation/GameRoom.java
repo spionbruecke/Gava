@@ -110,9 +110,7 @@ public class GameRoom{
         String pieceintheWay = "<Error=There is some piece in the way>";
         try{
             Messages message;
-            System.out.println("before is allowed");
             message = rule.isMoveAllowed(gameBoard, ChessMoveConverter.getBoardFromString(information));
-            System.out.println(message);
             switch(message){
                 case VICTORY_WHITE:
                     return "<Gameend=Victory>";

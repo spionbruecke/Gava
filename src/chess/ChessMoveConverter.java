@@ -20,23 +20,23 @@ public class ChessMoveConverter implements MoveConverter {
         StringBuilder move = new StringBuilder();
         Field start = new Field();
         Field target = new Field();
-        System.out.println("1");
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if (currentState[i][j].getName() != stateToCheck[i][j].getName() && stateToCheck[i][j].getName() == null){
-                    start = new Field(i, j);
-                }else if(currentState[i][j].getName() != stateToCheck[i][j].getName() && stateToCheck[i][j].getName() != null){
-                    target = new Field(i, j);
+                if (!currentState[i][j].getName().equals(stateToCheck[i][j].getName()) && stateToCheck[i][j].getName().equals("null")){
+                    start = new Field(j, i);
+                }else if(!currentState[i][j].getName().equals(stateToCheck[i][j].getName()) && !stateToCheck[i][j].getName().equals("null")){
+                    target = new Field(j, i);
                 }
             }
         }
-        System.out.println("1");
-        move.append(convertArrayCoordinateIntoPosRow(start.getColumn()));
-        move.append(convertArrayCoordinateIntoPosColumn(start.getRow()));
-        move.append(" ");
-        move.append(convertArrayCoordinateIntoPosRow(target.getColumn()));
-        move.append(convertArrayCoordinateIntoPosColumn(target.getRow()));
 
+        
+        move.append(convertArrayCoordinateIntoPosColumn(start.getRow()));
+        move.append(convertArrayCoordinateIntoPosRow(start.getColumn()));
+        move.append(" ");
+       
+        move.append(convertArrayCoordinateIntoPosColumn(target.getRow()));
+        move.append(convertArrayCoordinateIntoPosRow(target.getColumn()));
 
         return move.toString();
     }
@@ -58,7 +58,7 @@ public class ChessMoveConverter implements MoveConverter {
 
         currentState[newPosRow][newPosColumn] = currentState[oldPosRow][oldPosColumn];
 
-        currentState[oldPosRow][oldPosColumn] = null;
+        currentState[oldPosRow][oldPosColumn] = new PlayingPiece();;
 
 
         return currentState;
@@ -109,33 +109,33 @@ public class ChessMoveConverter implements MoveConverter {
      * @return String
      */
     static String convertArrayCoordinateIntoPosRow(int i){
-
         switch (i){
             case 0:
-                return "8";
-
-            case 1:
-                return "7";
-
-            case 2:
-                return "6";
-
-            case 3:
-                return "5";
-
-            case 4:
-                return "4";
-
-            case 5:
-                return "3";
-
-            case 6:
-                return "2";
-
-            case 7:
                 return "1";
 
+            case 1:
+                return "2";
+
+            case 2:
+                return "3";
+
+            case 3:
+                return "4";
+
+            case 4:
+                return "5";
+
+            case 5:
+                return "6";
+
+            case 6:
+                return "7";
+
+            case 7:
+                return "8";
+
             default:
+                System.out.println("Error convert into PosRow: " + i);
                 return "";
         }
     }
@@ -209,6 +209,14 @@ public class ChessMoveConverter implements MoveConverter {
         int counter = 0;
         int column;
         int row;
+
+        for(int i = 0; i < 8;i++){
+            for(int j = 0; j < 8; j++){
+                newBoard[j][i] = new PlayingPiece();
+                newBoard[j][i].setName("null");
+                newBoard[j][i].setColour("null");
+            }
+        }
 
         for(int i = 0; i < input.length(); i++){
             if(input.charAt(i) == '='){

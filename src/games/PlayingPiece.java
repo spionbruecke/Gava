@@ -5,6 +5,7 @@ package src.games;
  */
 public class PlayingPiece {
 
+    public PlayingPiece(){}
     /**
      * Description of the PlayingPiece
      */

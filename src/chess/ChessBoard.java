@@ -160,8 +160,8 @@ public class ChessBoard extends GameBoard {
 
         for (int i = 0; i < 8; i++) {
             for (int j = 2; j < 6; j++) {
-                initialState[j][i].setName(null);
-                initialState[j][i].setColour(null);
+                initialState[j][i].setName("null");
+                initialState[j][i].setColour("null");
             }
         }
 
@@ -169,21 +169,21 @@ public class ChessBoard extends GameBoard {
             initialState[6][x] = playingPieces[24 + x];
         }
 
-        initialState[7][0] = playingPieces[17];
+        initialState[7][0] = playingPieces[16];
 
-        initialState[7][1] = playingPieces[18];
+        initialState[7][1] = playingPieces[17];
 
-        initialState[7][2] = playingPieces[19];
+        initialState[7][2] = playingPieces[18];
 
-        initialState[7][3] = playingPieces[20];
+        initialState[7][3] = playingPieces[19];
 
-        initialState[7][4] = playingPieces[21];
+        initialState[7][4] = playingPieces[20];
 
-        initialState[7][5] = playingPieces[22];
+        initialState[7][5] = playingPieces[21];
 
-        initialState[7][6] = playingPieces[23];
+        initialState[7][6] = playingPieces[22];
 
-        initialState[7][7] = playingPieces[24];
+        initialState[7][7] = playingPieces[23];
 
         return initialState;
     }
@@ -213,6 +213,13 @@ public class ChessBoard extends GameBoard {
                 position = new StringBuilder();
                 counter++;
                 i = i + 3;
+            }
+        }
+
+        for(int k = 0 ; k < 8; k ++) {
+            for (int j = 0; j < 8; j ++){
+                if(newBoard[k][j] == null)
+                    newBoard[k][j] = new PlayingPiece();
             }
         }
 

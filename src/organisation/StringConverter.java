@@ -38,6 +38,8 @@ public class StringConverter{
                 return InformationsTypes.SUCESS;
             case "Start":
                 return InformationsTypes.START;
+            case "Error":
+                return InformationsTypes.ERROR;
             default:
                 throw new WrongInformationFormatException();
         }
