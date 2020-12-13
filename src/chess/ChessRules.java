@@ -37,8 +37,8 @@ public class ChessRules implements Rules {
      * @return boolean
      */
     public Messages isMoveAllowed(GameBoard gameBoard, PlayingPiece[][] stateToCheck) {
-        if(isMoveCastling(gameBoard, stateToCheck))
-            return Messages.MOVE_ALLOWED;
+        //if(isMoveCastling(gameBoard, stateToCheck))
+          //  return Messages.MOVE_ALLOWED;
 
         String move = converter.stateToString(gameBoard.getState(), stateToCheck);
         System.out.println("Move = " + move);
@@ -323,7 +323,7 @@ public class ChessRules implements Rules {
     private static boolean isMoveCastling(GameBoard gameBoard, PlayingPiece[][] stateToCheck){
         int counter = 0;
         ArrayList<Field> check = new ArrayList<Field>();
-
+        System.out.println("Here?");
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if(gameBoard.getState()[i][j] != stateToCheck[i][j] && gameBoard.getState()[i][j].getName() != null) {
