@@ -1,5 +1,7 @@
 package src.organisation;
 
+import java.io.IOException;
+
 import src.chess.*;
 import src.games.*;
 
@@ -11,8 +13,6 @@ import src.games.*;
  * It checks for Rules and decides whos turn it is
  * 
  */
-
-
 public class GameRoom{
 
     //private GameBoard currentGameBoard;
@@ -23,38 +23,52 @@ public class GameRoom{
     private int numberOfPlayer;
     private GameBoard gameBoard;
     private Rules rule;
+    private String game;
 
-    public GameRoom(Game game){ //<- Bullshit weil Spieler zwei fehlt : Verschieben nach StartUp
-        currentGame = game;
+    public GameRoom(Game gamemode){
+        currentGame = gamemode;
+
+        if(gamemode instanceof ChessGame){
+            game = "Chess";
+        }
+    }
+    
+    /**
+     * Init the GameBoard and the rules depending on the GameMode, when there a 2 Players in the Room.
+     * Randomly choosing a player to start.
+     * 
+     * @author Alexander Posch
+     * @throws IOException
+     */
+    private void getStart() throws IOException{
         //Decides Randomly who is allowed to start
         if ((int) ( Math.random() * 2 + 1) == 1){
             turnOfPlayer = player1;
+            player1.getClientHandler().sendMessage("<Start=1>");
+            player2.getClientHandler().sendMessage("<Start=0>");
         } else {
             turnOfPlayer = player2;
+            player1.getClientHandler().sendMessage("<Start=0>");
+            player2.getClientHandler().sendMessage("<Start=1>");
         }
 
-        if(game instanceof ChessGame)
+        if(game.equals("Chess")){
             rule = new ChessRules();
+            gameBoard = new ChessBoard();
+        }
+
     }
-    //****  Functions ****
-
-    //protected void getStart(){}
     
-    // Get the new Move. Checks if it is allowed and send the new Board to the other Player.
-    //public Boolean setInput(String move, Player player){
-        /*PlayingPiece[][] newState = MoveConverter.convertStringToState(gameBoard, move);
-        if(rule.isMoveAllowed(gameBoard, move)){
-            this.gameBoard.setState(newState);
-            turnOfPlayer = getTheOtherPlayer(player);
-            turnOfPlayer.setNewStateAvaible(true);
-            turnOfPlayer.setLatestMove(move);
-            return true;
-        } else
-            return false;
-    }*/
 
-    //check which position is free and add the player to this position
-     protected boolean addPlayer(Player player){
+    /**
+     * Simply adds a Player an return a boolean, when it was sucessfull.
+     * If the second player was added, the methode getStart will be called.
+     * 
+     * @author Alexander Posch
+     * @param player
+     * @return was it sucessfull
+     */
+     protected boolean addPlayer(Player player) throws IOException{
         if(numberOfPlayer == 0) {
             player1 = player;
             numberOfPlayer ++;
@@ -62,12 +76,20 @@ public class GameRoom{
         } else if(numberOfPlayer == 1) {
             player2 = player;
             numberOfPlayer ++;
+            getStart();
         } else {
             return false;
         }
         return true;
     }
     
+    /**
+     * Depending on the GameMode the new Board with the new Move will be handeled different
+     * 
+     * @author Alexander Posch
+     * @param information
+     * @return Message, if allowed or not
+     */
     public String setInput(String information){
         if(this.currentGame instanceof ChessGame){
             return setChessInput(information);
@@ -76,7 +98,16 @@ public class GameRoom{
 
     }
 
+    /**
+     * New GameBoard with new Move will be testet in the Methode isMoveAllowed.
+     * This Methode will handle the outcome and set the new Board if the Move is allowed.
+     * 
+     * @author Alexander Posch
+     * @param information
+     * @return Message, if allowed or not
+     */
     private String setChessInput(String information){
+        String pieceintheWay = "<Error=There is some piece in the way>";
         try{
             Messages message;
             message = rule.isMoveAllowed(gameBoard, ChessMoveConverter.getBoardFromString(information));
@@ -89,32 +120,34 @@ public class GameRoom{
                     return "<Gameend=Defeated>";
                 case MOVE_ALLOWED:
                     gameBoard.setnewBoard(information);
+                    this.turnOfPlayer = getTheOtherPlayer(turnOfPlayer);
                     return "<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard) this.gameBoard) + ">";
                 case ERROR_WRONGMOVEMENT_DIRECTION_BISHOP:
-                    return "<Error=Bishop is only allowed to move "; //TODO(Alex) Write some good Error Descrition for the player
+                    return "<Error=Bishop is only allowed to move directional>"; //TODO(Alex) Write some good Error Descrition for the player
                 case ERROR_WRONGMOVEMENT_DIRECTION_KING:
-                    return "<Error=Bishop is only allowed to move ";
+                    return "<Error=King is only allowed to move one Step>";
                 case ERROR_WRONGMOVEMENT_DIRECTION_KNIGHT:
-
+                    return "<Error=Knight is only allowed to move one Step in one Axes and two Steps in another>";
                 case ERROR_WRONGMOVEMENT_DIRECTION_PAWN:
-
+                    return "<Error=Pawn is only allowed tom move two Steps forward, when he hasn't moved jet. Otherwise he move one Step forward or directional to strike against an enemy piece>";
                 case ERROR_WRONGMOVEMENT_DIRECTION_QUEEN:
-
+                    return "<Error=Queen is only allowed to move straight in every direction>";
                 case ERROR_WRONGMOVEMENT_DIRECTION_ROOK:
-
+                    return "<Error=Rook is only allowed to move straight in the x- or y-axis>";
                 case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_BISHOP:
-
+                    return pieceintheWay;
                 case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_KING:
-
+                    return pieceintheWay;
                 case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_KNIGHT:
-
+                    return pieceintheWay;
                 case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_PAWN:
-
+                    return pieceintheWay;
                 case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_QUEEN:
-
+                    return pieceintheWay;
                 case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_ROOK:
+                    return pieceintheWay;
                 case ERROR_NO_SUCH_PLAYINGPIECE:
-                    break;
+                    return "<Error=There is no such playing piece";
                 default:
                     break;
 
@@ -124,8 +157,13 @@ public class GameRoom{
     }
         return null;
     }
-    //****  Getter ****
-    
+    /**
+     * Returns the other player of the gameroom.
+     * 
+     * @author Alexander Posch
+     * @param player
+     * @return The other Player
+     */
     public Player getTheOtherPlayer( Player player){
         if (player1 == player && player2 != null)
             return player2;

@@ -28,7 +28,7 @@ public class ClientHandler extends Thread {
         this.controller = controller;
     }
 
-    // The class have some Features who are temporary because, we need them to test the Code, after the implementation of some Rules we delete most of them
+
     @Override
     public void run() {
         Player player;
@@ -56,7 +56,6 @@ public class ClientHandler extends Thread {
                                 LogWriter.writeToLog("The Player " +  player.getName() + "choosed the Gamemode: " + information);
                                 gameRoom = controller.addPlayer(player);
                                 LogWriter.writeToLog("Player " + player.getName() + " is in a Room with " + gameRoom.getTheOtherPlayer(player) + " with the mode " + gameRoom.getGame());
-                                //Falls zweiter Spieler vorhanden -> Spiel start + Farbe an Client + Spieler benachrichtigen + Spielbretter schicken
                                 break;
                             case GAMEBOARD:
                                 if(gameRoom != null){

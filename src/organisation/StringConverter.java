@@ -14,6 +14,13 @@ public class StringConverter{
 
     private StringConverter(){}
 
+    /**
+     * Scans the input-String for a Type, which is neccesary for the server. 
+     * 
+     * @param input
+     * @return InformationTyp
+     * @throws WrongInformationFormatException
+     */
     public static InformationsTypes getInformationType(String input)throws WrongInformationFormatException{
 
         switch(getKeyword(input)){
@@ -29,13 +36,20 @@ public class StringConverter{
                 return InformationsTypes.MESSAGE;
             case "Sucess" :
                 return InformationsTypes.SUCESS;
-            case "Color" :
-                return InformationsTypes.COLOR;
+            case "Start":
+                return InformationsTypes.START;
             default:
                 throw new WrongInformationFormatException();
         }
     } 
     
+    /**
+     * Scans the input until '=' appears and send them back
+     * 
+     * @param input
+     * @return keyword As String
+     * @throws WrongInformationFormatException
+     */
     public static String getKeyword(String input)throws WrongInformationFormatException{
         char currentChar;
         int i;
@@ -59,6 +73,13 @@ public class StringConverter{
         }
     }
 
+    /**
+     * Get the information of the string, which is located after the '='.
+     * 
+     * @author Alexander Posch
+     * @param input
+     * @return information the String contains
+     */
     public static String getInformation(String input){
         StringBuilder information = new StringBuilder();
         int charNumber = 0;
@@ -83,9 +104,5 @@ public class StringConverter{
             information.append(input.charAt(i));
         }
         return information.toString();
-    }
-
-    public static String getNewMove(){
-        return null;
     }
 }
