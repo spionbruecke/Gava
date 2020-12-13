@@ -129,13 +129,11 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 						}
 						
 						try {
-							dos.writeUTF("<Boardgame=" + newState + ">");
+							dos.writeUTF("<Gameboard=" + newState + ">");
 						} catch (IOException e) {	
 						}
 						
 						System.out.println(this.newState);
-						
-						System.out.println("<Boardgame=" + newState + ">");
 						
 						this.newState = " ";
 						myTurn = false;
@@ -151,7 +149,21 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 				case GAMEBOARD:
 					setupGameBoard(information);
 					myTurn = true;
-					makeMove();
+					
+					while(newState == " " && myTurn == true) {
+						newState = ((ChessBoard) board).getNewState();
+					}
+					
+					try {
+						dos.writeUTF("<Gameboard=" + newState + ">");
+					} catch (IOException e) {	
+					}
+					
+					System.out.println(this.newState);
+							
+					this.newState = " ";
+					myTurn = false;
+
 					break;
 					
 				default:
