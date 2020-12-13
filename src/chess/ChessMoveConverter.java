@@ -225,7 +225,6 @@ public class ChessMoveConverter implements MoveConverter {
                 i = i + 3;
             }
         }
-        System.out.println(newBoard.length);
         return newBoard;
     }
     //constructs the String list
