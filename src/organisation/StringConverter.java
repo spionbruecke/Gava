@@ -26,7 +26,7 @@ public class StringConverter{
         switch(getKeyword(input)){
             case "Gamemode":
                 return InformationsTypes.GAMEMODE;
-            case "Boardgame":
+            case "Gameboard":
                 return InformationsTypes.GAMEBOARD;
             case "Login":
                 return InformationsTypes.LOGIN;
