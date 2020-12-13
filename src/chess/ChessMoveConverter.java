@@ -20,7 +20,7 @@ public class ChessMoveConverter implements MoveConverter {
         StringBuilder move = new StringBuilder();
         Field start = new Field();
         Field target = new Field();
-
+        System.out.println("1");
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (currentState[i][j].getName() != stateToCheck[i][j].getName() && stateToCheck[i][j].getName() == null){
@@ -30,7 +30,7 @@ public class ChessMoveConverter implements MoveConverter {
                 }
             }
         }
-
+        System.out.println("1");
         move.append(convertArrayCoordinateIntoPosRow(start.getColumn()));
         move.append(convertArrayCoordinateIntoPosColumn(start.getRow()));
         move.append(" ");

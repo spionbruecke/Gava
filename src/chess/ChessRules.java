@@ -37,11 +37,11 @@ public class ChessRules implements Rules {
      * @return boolean
      */
     public Messages isMoveAllowed(GameBoard gameBoard, PlayingPiece[][] stateToCheck) {
-        //if(isMoveCastling(gameBoard, stateToCheck))
-          //  return Messages.MOVE_ALLOWED;
+        if(isMoveCastling(gameBoard, stateToCheck))
+            return Messages.MOVE_ALLOWED;
 
+        System.out.println("before move");
         String move = converter.stateToString(gameBoard.getState(), stateToCheck);
-        System.out.println("Move = " + move);
         return checkEachPossibleMove(gameBoard, stateToCheck, move);
     }
 
