@@ -111,6 +111,7 @@ public class GameRoom{
         try{
             Messages message;
             message = rule.isMoveAllowed(gameBoard, ChessMoveConverter.getBoardFromString(information));
+            System.out.println(message);
             switch(message){
                 case VICTORY_WHITE:
                     return "<Gameend=Victory>";
@@ -148,9 +149,6 @@ public class GameRoom{
                     return pieceintheWay;
                 case ERROR_NO_SUCH_PLAYINGPIECE:
                     return "<Error=There is no such playing piece";
-                default:
-                    break;
-
             }
     }catch (Exception e){
         System.err.println(e);
