@@ -149,6 +149,8 @@ public class GameRoom{
                     return pieceintheWay;
                 case ERROR_NO_SUCH_PLAYINGPIECE:
                     return "<Error=There is no such playing piece";
+                default:
+                    System.out.println("Big ERROR: " + message);
             }
     }catch (Exception e){
         System.err.println(e);
