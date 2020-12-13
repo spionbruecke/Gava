@@ -120,9 +120,6 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 						myTurn = true;
 						setupGameBoard(s1);
 						JOptionPane.showMessageDialog(null, "Its your turn", "Your Turn", JOptionPane.INFORMATION_MESSAGE);
-						System.out.println("TEST");
-						//makeMove();
-						System.out.println("TEST after move");
 						
 						while(newState == " " && myTurn == true) {
 							newState = ((ChessBoard) board).getNewState();
