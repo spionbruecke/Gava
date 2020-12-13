@@ -16,14 +16,6 @@ public class Client extends FrameworkClient{
 		connect(host, port);
 	}
 
-
-
-	@Override
-	public void setupGameBoard() {
-
-		
-	}
-
 	@Override
 	public void updateBoard() {
 		// TODO Auto-generated method stub
