@@ -22,8 +22,9 @@ public class ChessRules implements Rules {
         int row = converter.convertPosIntoArrayCoordinate(move.charAt(4));
         int column = converter.convertPosIntoArrayCoordinate(move.charAt(3));
 
-        String ownColour = board.getState()[Character.getNumericValue(move.charAt(1))][converter.convertPosIntoArrayCoordinate(move.charAt(0))].getColour();
-        
+        String ownColour = board.getState()[converter.convertPosIntoArrayCoordinate(move.charAt(1))][converter.convertPosIntoArrayCoordinate(move.charAt(0))].getColour();
+    
+
         if(board.getState()[row][column]==null){
             return false;
         }else
@@ -95,23 +96,23 @@ public class ChessRules implements Rules {
                 && !gameBoard.getState()[start.getRow()][start.getColumn()].hasMoved()
                 && gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("black")
                 && isPawnPathFree(gameBoard, start)
-                && isFieldOccupiedByOwnPlayingP(gameBoard, converter.stateToString(gameBoard.getState(), stateToCheck))){
+                && !isFieldOccupiedByOwnPlayingP(gameBoard, converter.stateToString(gameBoard.getState(), stateToCheck))){
             return Messages.MOVE_ALLOWED;
         }else if(target.getRow() == start.getRow()-2
                 && !gameBoard.getState()[start.getRow()][start.getColumn()].hasMoved()
                 && gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("white")
                 && isPawnPathFree(gameBoard, start)
-                && isFieldOccupiedByOwnPlayingP(gameBoard, converter.stateToString(gameBoard.getState(), stateToCheck))){
+                && !isFieldOccupiedByOwnPlayingP(gameBoard, converter.stateToString(gameBoard.getState(), stateToCheck))){
             return Messages.MOVE_ALLOWED;
         }
         // move one square forward
         if(target.getRow() == start.getRow()+1
                 && gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("black")
-                && isFieldOccupiedByOwnPlayingP(gameBoard, converter.stateToString(gameBoard.getState(), stateToCheck))){
+                && !isFieldOccupiedByOwnPlayingP(gameBoard, converter.stateToString(gameBoard.getState(), stateToCheck))){
             return Messages.MOVE_ALLOWED;
         }else if(target.getRow() == start.getRow()-1
                 && gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("white")
-                && isFieldOccupiedByOwnPlayingP(gameBoard, converter.stateToString(gameBoard.getState(), stateToCheck))){
+                && !isFieldOccupiedByOwnPlayingP(gameBoard, converter.stateToString(gameBoard.getState(), stateToCheck))){
             return Messages.MOVE_ALLOWED;
         }
         //en passant
@@ -167,7 +168,7 @@ public class ChessRules implements Rules {
     }
 
     private static boolean isEnPassantAllowed(GameBoard board, Field start, Field target){
-        return board.getStateFromMemento().getState()[start.getRow()][target.getColumn()].getName() == null
+        return board.getStateFromMemento().getState()[start.getRow()][target.getColumn()].getName() == "null"
                 && board.getState()[start.getRow()][target.getColumn()] != null;
     }
 
@@ -321,7 +322,7 @@ public class ChessRules implements Rules {
         ArrayList<Field> check = new ArrayList<Field>();
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if(gameBoard.getState()[i][j] != stateToCheck[i][j] && gameBoard.getState()[i][j].getName() != null) {
+                if(gameBoard.getState()[i][j] != stateToCheck[i][j] && gameBoard.getState()[i][j].getName() != "null") {
                     counter++;
                     check.add(new Field(i, j));
                 }
@@ -479,7 +480,7 @@ public class ChessRules implements Rules {
         Field target = converter.getChessTargetField(move);
         Field start = converter.getChessStartField(move);
 
-        if(isFieldOccupiedByOwnPlayingP(gameBoard, move))
+        if(!isFieldOccupiedByOwnPlayingP(gameBoard, move))
             return false;
 
 
@@ -587,7 +588,7 @@ public class ChessRules implements Rules {
         Field target = converter.getChessTargetField(move);
         Field start = converter.getChessStartField(move);
 
-        if(isFieldOccupiedByOwnPlayingP(gameBoard, move))
+        if(!isFieldOccupiedByOwnPlayingP(gameBoard, move))
             return false;
 
         if(start.getRow()==target.getRow()){

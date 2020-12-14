@@ -135,6 +135,8 @@ public class ChessBoard extends GameBoard {
         for(int k = 0 ; k < 8; k ++) {
             for (int j = 0; j < 8; j ++){
                 initialState[k][j] = new PlayingPiece();
+                initialState[k][j].setName("null");
+                initialState[k][j].setColour("null");
             }
         }
 
@@ -156,13 +158,6 @@ public class ChessBoard extends GameBoard {
 
         for (int x = 0; x < 8; x++) {
             initialState[1][x] = playingPieces[8 + x];
-        }
-
-        for (int i = 0; i < 8; i++) {
-            for (int j = 2; j < 6; j++) {
-                initialState[j][i].setName(null);
-                initialState[j][i].setColour(null);
-            }
         }
 
         for (int x = 0; x < 8; x++) {
@@ -200,26 +195,27 @@ public class ChessBoard extends GameBoard {
         int column;
         int row;
 
+        for(int k = 0 ; k < 8; k ++) {
+            for (int j = 0; j < 8; j ++){
+                newBoard[k][j] = new PlayingPiece();
+                newBoard[k][j].setName("null");
+                newBoard[k][j].setColour("null");
+            }
+        }
+
         for(int i = 0; i < input.length(); i++){
             if(input.charAt(i) == '='){
 
                 position.append(input.charAt(i + 1)).append(input.charAt(i + 2));
                 this.getPlayingPieces()[counter].setPosition(position.toString());
 
-                row = Character.getNumericValue((input.charAt(i+2))) - 1;
+                row = ChessMoveConverter.convertPosIntoArrayCoordinate(input.charAt(i+2));
                 column = ChessMoveConverter.convertPosIntoArrayCoordinate(input.charAt(i + 1));
                 newBoard[row][column] = this.getPlayingPieces()[counter];
 
                 position = new StringBuilder();
                 counter++;
                 i = i + 3;
-            }
-        }
-
-        for(int k = 0 ; k < 8; k ++) {
-            for (int j = 0; j < 8; j ++){
-                if(newBoard[k][j] == null)
-                    newBoard[k][j] = new PlayingPiece();
             }
         }
 

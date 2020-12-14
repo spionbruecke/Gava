@@ -44,8 +44,8 @@ public class PlayingPiece {
     }
 
     public void outOfGame(){
-        colour = null;
-        name = null;
+        colour = "null";
+        name = "null";
     }
 
     public String getPosition(){
