@@ -65,10 +65,10 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 	boolean myTurn;
 	
 	String newState = " ";
-	
+	String oldState = "<rook,black=A8><knight,black=B8><bishop,black=C8><queen,black=D8><king,black=E8><bishop,black=F8><knight,black=G8><rook,black=H8><pawn,black=A7><pawn,black=B7><pawn,black=C7><pawn,black=D7><pawn,black=E7><pawn,black=F7><pawn,black=G7><pawn,black=H7><rook,white=A1><knight,white=B1><bishop,white=C1><queen,white=D1><king,white=E1><bishop,white=F1><knight,white=G1><rook,white=H1><pawn,white=A2><pawn,white=B2><pawn,white=C2><pawn,white=D2><pawn,white=E2><pawn,white=F2><pawn,white=G2><pawn,white=H2>";
 	String defaultSetup = "<rook,black=A8><knight,black=B8><bishop,black=C8><queen,black=D8><king,black=E8><bishop,black=F8><knight,black=G8><rook,black=H8><pawn,black=A7><pawn,black=B7><pawn,black=C7><pawn,black=D7><pawn,black=E7><pawn,black=F7><pawn,black=G7><pawn,black=H7><rook,white=A1><knight,white=B1><bishop,white=C1><queen,white=D1><king,white=E1><bishop,white=F1><knight,white=G1><rook,white=H1><pawn,white=A2><pawn,white=B2><pawn,white=C2><pawn,white=D2><pawn,white=E2><pawn,white=F2><pawn,white=G2><pawn,white=H2>";
 	
-	String s2 = "<rook,black=null><knight,black=null><bishop,black=C8><queen,black=D8><king,black=E8><bishop,black=F8><knight,black=G8><rook,black=H8><pawn,black=A7><pawn,black=B7><pawn,black=C7><pawn,black=D7><pawn,black=E7><pawn,black=F7><pawn,black=G7><pawn,black=H7><rook,white=A1><knight,white=B1><bishop,white=C1><queen,white=D1><king,white=E1><bishop,white=F1><knight,white=G1><rook,white=H1><pawn,white=A2><pawn,white=B2><pawn,white=C2><pawn,white=D2><pawn,white=E2><pawn,white=F2><pawn,white=G3><pawn,white=H5>";
+	String currentSate = "";
 	
     /**
      * This method is called when user starts the application
@@ -127,6 +127,8 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 							newState = ((ChessBoard) board).getNewState();
 						}
 						
+						currentSate = newState;
+						
 						System.out.println(color + "  " + newState);
 						
 						try {
@@ -157,6 +159,8 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 						newState = ((ChessBoard) board).getNewState();
 					}
 					
+					currentSate = newState;
+					
 					try {
 						dos.writeUTF("<Gameboard=" + newState + ">");
 					} catch (IOException e) {	
@@ -166,6 +170,35 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 							
 					newState = " ";
 					
+					break;
+					
+				case ERROR:
+					board.dispose();
+					
+					myTurn = true;
+					
+					setupGameBoard(oldState);
+					JOptionPane.showMessageDialog(null, information, "Error", JOptionPane.INFORMATION_MESSAGE);
+					
+					System.out.println(this.color + " " + information);
+					
+					while(newState == " ") {
+						newState = ((ChessBoard) board).getNewState();
+					}
+					
+					try {
+						dos.writeUTF("<Gameboard=" + newState + ">");
+					} catch (IOException e) {	
+					}
+					
+					System.out.println(color + "  " + newState);
+							
+					newState = " ";
+					
+					break;
+				
+				case SUCESS:
+					oldState = currentSate;
 					break;
 					
 				default:
