@@ -213,8 +213,8 @@ public class ChessMoveConverter implements MoveConverter {
         for(int i = 0; i < 8;i++){
             for(int j = 0; j < 8; j++){
                 newBoard[j][i] = new PlayingPiece();
-                newBoard[j][i].setName("null");
-                newBoard[j][i].setColour("null");
+                newBoard[j][i].setName(null);
+                newBoard[j][i].setColour(null);
             }
         }
 

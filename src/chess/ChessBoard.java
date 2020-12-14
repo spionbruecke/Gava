@@ -160,8 +160,8 @@ public class ChessBoard extends GameBoard {
 
         for (int i = 0; i < 8; i++) {
             for (int j = 2; j < 6; j++) {
-                initialState[j][i].setName("null");
-                initialState[j][i].setColour("null");
+                initialState[j][i].setName(null);
+                initialState[j][i].setColour(null);
             }
         }
 

@@ -80,7 +80,6 @@ public class ChessRules implements Rules {
                     return Messages.ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_KING;
 
             case "pawn":
-            
                 return checkPawnMoves(gameBoard, stateToCheck);
 
             default:
@@ -117,12 +116,12 @@ public class ChessRules implements Rules {
         }
         //en passant
         if(target.getRow() == start.getRow()+1
-                && (target.getColumn() == start.getColumn()+1 || target.getColumn() == start.getColumn()-1)
+                && ((target.getColumn() == start.getColumn()+1 || target.getColumn() == start.getColumn()-1))
                 && gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("black")
                 && isEnPassantAllowed(gameBoard, start, target)){
             return Messages.MOVE_ALLOWED;
         }else if(target.getRow() == start.getRow()-1
-                && (target.getColumn() == start.getColumn()+1 || target.getColumn() == start.getColumn()-1)
+                && ((target.getColumn() == start.getColumn()+1 || target.getColumn() == start.getColumn()-1))
                 && gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("white")
                 && isEnPassantAllowed(gameBoard, start, target)){
             return Messages.MOVE_ALLOWED;
@@ -211,7 +210,7 @@ public class ChessRules implements Rules {
         }
 
         for (Field possibleLocation : possibleLocations) {
-            if (possibleLocation == target) {
+            if (possibleLocation.getRow() == target.getRow() && possibleLocation.getColumn() == target.getColumn()) {
                 return Messages.MOVE_ALLOWED;
             }
         }
