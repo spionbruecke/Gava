@@ -11,68 +11,70 @@ import javax.swing.*;
 
 public class ChessBoard extends JFrame implements MouseListener, MouseMotionListener {
 	
-	JLayeredPane layeredPane;
-	JPanel chessBoard;
-	JLabel chessPiece;
-	Dimension boardSize = new Dimension(600,600);
+	protected JLayeredPane layeredPane;
+	protected JPanel chessBoard;
+	protected JLabel chessPiece;
+	protected Dimension boardSize = new Dimension(600,600);
 	
-	Color dark = new Color(255,235,205);
-	Color light = new Color(160,82,45);
+	protected Color dark = new Color(255,235,205);
+	protected Color light = new Color(160,82,45);
 	
-	Figure[][] boardMatrix = new Figure[8][8];
-	ArrayList<Figure> figuresList;
+	protected Figure[][] boardMatrix = new Figure[8][8];
+	protected ArrayList<Figure> figuresList;
 	
-	int[] moveFrom = new int[2];
-	int[] moveTo = new int[2];
+	protected int[] moveFrom = new int[2];
+	protected int[] moveTo = new int[2];
 	
-	String color;
-	String currentState;
-	String newState = " ";
+	protected String color;
+	protected String currentState;
+	protected String oldState;
+	protected String newState = " ";
 	
-	int x;
-	int y;
+	protected int x;
+	protected int y;
 	
 	
-	boolean myTurn;
-	Boolean movePerformed = false;
+	protected boolean myTurn;
+	protected boolean movePerformed = false;
 	
-	ImageIcon black_king = new ImageIcon("resources/chess/black_king.png");
-	ImageIcon black_queen = new ImageIcon("resources/chess/black_queen.png");
-	ImageIcon black_knight_1 = new ImageIcon("resources/chess/black_knight.png");
-	ImageIcon black_knight_2 = new ImageIcon("resources/chess/black_knight.png");
-	ImageIcon black_rook_1 = new ImageIcon("resources/chess/black_rook.png");
-	ImageIcon black_rook_2 = new ImageIcon("resources/chess/black_rook.png");
-	ImageIcon black_bishop_1 = new ImageIcon("resources/chess/black_bishop.png");
-	ImageIcon black_bishop_2 = new ImageIcon("resources/chess/black_bishop.png");
-	ImageIcon black_pawn_1 = new ImageIcon("resources/chess/black_pawn.png");
-	ImageIcon black_pawn_2 = new ImageIcon("resources/chess/black_pawn.png");
-	ImageIcon black_pawn_3 = new ImageIcon("resources/chess/black_pawn.png");
-	ImageIcon black_pawn_4 = new ImageIcon("resources/chess/black_pawn.png");
-	ImageIcon black_pawn_5 = new ImageIcon("resources/chess/black_pawn.png");
-	ImageIcon black_pawn_6 = new ImageIcon("resources/chess/black_pawn.png");
-	ImageIcon black_pawn_7 = new ImageIcon("resources/chess/black_pawn.png");
-	ImageIcon black_pawn_8 = new ImageIcon("resources/chess/black_pawn.png");
+	ImageIcon black_king = new ImageIcon("Gava/resources/chess/black_king.png");
+	ImageIcon black_queen = new ImageIcon("Gava/resources/chess/black_queen.png");
+	ImageIcon black_knight_1 = new ImageIcon("Gava/resources/chess/black_knight.png");
+	ImageIcon black_knight_2 = new ImageIcon("Gava/resources/chess/black_knight.png");
+	ImageIcon black_rook_1 = new ImageIcon("Gava/resources/chess/black_rook.png");
+	ImageIcon black_rook_2 = new ImageIcon("Gava/resources/chess/black_rook.png");
+	ImageIcon black_bishop_1 = new ImageIcon("Gava/resources/chess/black_bishop.png");
+	ImageIcon black_bishop_2 = new ImageIcon("Gava/resources/chess/black_bishop.png");
+	ImageIcon black_pawn_1 = new ImageIcon("Gava/resources/chess/black_pawn.png");
+	ImageIcon black_pawn_2 = new ImageIcon("Gava/resources/chess/black_pawn.png");
+	ImageIcon black_pawn_3 = new ImageIcon("Gava/resources/chess/black_pawn.png");
+	ImageIcon black_pawn_4 = new ImageIcon("Gava/resources/chess/black_pawn.png");
+	ImageIcon black_pawn_5 = new ImageIcon("Gava/resources/chess/black_pawn.png");
+	ImageIcon black_pawn_6 = new ImageIcon("Gava/resources/chess/black_pawn.png");
+	ImageIcon black_pawn_7 = new ImageIcon("Gava/resources/chess/black_pawn.png");
+	ImageIcon black_pawn_8 = new ImageIcon("Gava/resources/chess/black_pawn.png");
 	
-	ImageIcon white_king = new ImageIcon("resources/chess/white_king.png");
-	ImageIcon white_queen = new ImageIcon("resources/chess/white_queen.png");
-	ImageIcon white_knight_1 = new ImageIcon("resources/chess/white_knight.png");
-	ImageIcon white_knight_2 = new ImageIcon("resources/chess/white_knight.png");
-	ImageIcon white_rook_1 = new ImageIcon("resources/chess/white_rook.png");
-	ImageIcon white_rook_2 = new ImageIcon("resources/chess/white_rook.png");
-	ImageIcon white_bishop_1 = new ImageIcon("resources/chess/white_bishop.png");
-	ImageIcon white_bishop_2 = new ImageIcon("resources/chess/white_bishop.png");
-	ImageIcon white_pawn_1 = new ImageIcon("resources/chess/white_pawn.png");
-	ImageIcon white_pawn_2 = new ImageIcon("resources/chess/white_pawn.png");
-	ImageIcon white_pawn_3 = new ImageIcon("resources/chess/white_pawn.png");
-	ImageIcon white_pawn_4 = new ImageIcon("resources/chess/white_pawn.png");
-	ImageIcon white_pawn_5 = new ImageIcon("resources/chess/white_pawn.png");
-	ImageIcon white_pawn_6 = new ImageIcon("resources/chess/white_pawn.png");
-	ImageIcon white_pawn_7 = new ImageIcon("resources/chess/white_pawn.png");
-	ImageIcon white_pawn_8 = new ImageIcon("resources/chess/white_pawn.png");
+	ImageIcon white_king = new ImageIcon("Gava/resources/chess/white_king.png");
+	ImageIcon white_queen = new ImageIcon("Gava/resources/chess/white_queen.png");
+	ImageIcon white_knight_1 = new ImageIcon("Gava/resources/chess/white_knight.png");
+	ImageIcon white_knight_2 = new ImageIcon("Gava/resources/chess/white_knight.png");
+	ImageIcon white_rook_1 = new ImageIcon("Gava/resources/chess/white_rook.png");
+	ImageIcon white_rook_2 = new ImageIcon("Gava/resources/chess/white_rook.png");
+	ImageIcon white_bishop_1 = new ImageIcon("Gava/resources/chess/white_bishop.png");
+	ImageIcon white_bishop_2 = new ImageIcon("Gava/resources/chess/white_bishop.png");
+	ImageIcon white_pawn_1 = new ImageIcon("Gava/resources/chess/white_pawn.png");
+	ImageIcon white_pawn_2 = new ImageIcon("Gava/resources/chess/white_pawn.png");
+	ImageIcon white_pawn_3 = new ImageIcon("Gava/resources/chess/white_pawn.png");
+	ImageIcon white_pawn_4 = new ImageIcon("Gava/resources/chess/white_pawn.png");
+	ImageIcon white_pawn_5 = new ImageIcon("Gava/resources/chess/white_pawn.png");
+	ImageIcon white_pawn_6 = new ImageIcon("Gava/resources/chess/white_pawn.png");
+	ImageIcon white_pawn_7 = new ImageIcon("Gava/resources/chess/white_pawn.png");
+	ImageIcon white_pawn_8 = new ImageIcon("Gava/resources/chess/white_pawn.png");
 	
 		
 	public ChessBoard(String color, String currentState, boolean myTurn) {
 		this.currentState = currentState;
+		this.oldState = currentState;
 		
 		this.color = color;
 		
@@ -137,8 +139,13 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 			else
 				s = "<" + f.name + "," + f.color + "=" + f.column + f.row + ">";
 			builder.append(s);
-		}	
-		newState =  builder.toString();
+		}
+		String helper = builder.toString();
+		
+		if(helper.equals(oldState))
+			movePerformed = false;
+		else
+			newState =  builder.toString();
 	}
 	
 	public String getNewState() {
