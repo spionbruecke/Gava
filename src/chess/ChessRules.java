@@ -186,7 +186,8 @@ public class ChessRules implements Rules {
     }
 
     private static boolean isEnPassantAllowed(GameBoard board, Field start, Field target){
-        return board.getStateFromMemento().getState()[start.getRow()][target.getColumn()].getName() == "null"
+        return !board.getStateFromMemento().getState()[start.getRow()][target.getColumn()]
+                    .equals(board.getState()[start.getRow()][target.getColumn()])
                 && board.getState()[start.getRow()][target.getColumn()].getName() != "null"
                 && !board.getState()[start.getRow()][target.getColumn()].getColour()
                         .equals(board.getState()[start.getRow()][start.getColumn()].getColour());
