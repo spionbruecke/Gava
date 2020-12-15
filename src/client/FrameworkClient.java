@@ -64,9 +64,11 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 	String color;
 	boolean myTurn;
 	
-	String newState = " ";
-	String oldState = "<rook,black=A8><knight,black=B8><bishop,black=C8><queen,black=D8><king,black=E8><bishop,black=F8><knight,black=G8><rook,black=H8><pawn,black=A7><pawn,black=B7><pawn,black=C7><pawn,black=D7><pawn,black=E7><pawn,black=F7><pawn,black=G7><pawn,black=H7><rook,white=A1><knight,white=B1><bishop,white=C1><queen,white=D1><king,white=E1><bishop,white=F1><knight,white=G1><rook,white=H1><pawn,white=A2><pawn,white=B2><pawn,white=C2><pawn,white=D2><pawn,white=E2><pawn,white=F2><pawn,white=G2><pawn,white=H2>";
-	String defaultSetup = "<rook,black=A8><knight,black=B8><bishop,black=C8><queen,black=D8><king,black=E8><bishop,black=F8><knight,black=G8><rook,black=H8><pawn,black=A7><pawn,black=B7><pawn,black=C7><pawn,black=D7><pawn,black=E7><pawn,black=F7><pawn,black=G7><pawn,black=H7><rook,white=A1><knight,white=B1><bishop,white=C1><queen,white=D1><king,white=E1><bishop,white=F1><knight,white=G1><rook,white=H1><pawn,white=A2><pawn,white=B2><pawn,white=C2><pawn,white=D2><pawn,white=E2><pawn,white=F2><pawn,white=G2><pawn,white=H2>";
+	String newState = " ";	
+	String oldState = "<rook,black,0=A8><knight,black,0=B8><bishop,black,0=C8><queen,black,0=D8><king,black,0=E8><bishop,black,0=F8><knight,black,0=G8><rook,black,0=H8><pawn,black,0=A7><pawn,black,0=B7><pawn,black,0=C7><pawn,black,0=D7><pawn,black,0=E7><pawn,black,0=F7><pawn,black,0=G7><pawn,black,0=H7><rook,white,0=A1><knight,white,0=B1><bishop,white,0=C1><queen,white,0=D1><king,white,0=E1><bishop,white,0=F1><knight,white,0=G1><rook,white,0=H1><pawn,white,0=A2><pawn,white,0=B2><pawn,white,0=C2><pawn,white,0=D2><pawn,white,0=E2><pawn,white,0=F2><pawn,white,0=G2><pawn,white,0=H2>";
+	String defaultSetup = "<rook,black,0=A8><knight,black,0=B8><bishop,black,0=C8><queen,black,0=D8><king,black,0=E8><bishop,black,0=F8><knight,black,0=G8><rook,black,0=H8><pawn,black,0=A7><pawn,black,0=B7><pawn,black,0=C7><pawn,black,0=D7><pawn,black,0=E7><pawn,black,0=F7><pawn,black,0=G7><pawn,black,0=H7><rook,white,0=A1><knight,white,0=B1><bishop,white,0=C1><queen,white,0=D1><king,white,0=E1><bishop,white,0=F1><knight,white,0=G1><rook,white,0=H1><pawn,white,0=A2><pawn,white,0=B2><pawn,white,0=C2><pawn,white,0=D2><pawn,white,0=E2><pawn,white,0=F2><pawn,white,0=G2><pawn,white,0=H2>";
+
+	
 	
 	String currentSate = "";
 	
@@ -110,10 +112,13 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 				input = dis.readUTF();
 				information = StringConverter.getInformation(input);
 				
+				System.out.println("receive  " + information);
+				
 				switch(StringConverter.getInformationType(input)){
 				
 				case START:
-					if (information.equals("1")) {			
+					if (information.equals("1")) {
+						System.out.println("start  " + information);
 						color = "white";
 						myTurn = true;		
 						setupGameBoard(defaultSetup);			
@@ -122,6 +127,9 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 							newState = ((ChessBoard) board).getNewState();
 						}					
 						currentSate = newState;
+						
+						System.out.println("newstate " + currentSate);
+						
 						try {
 							dos.writeUTF("<Gameboard=" + newState + ">");
 						} catch (IOException e) {	
@@ -138,13 +146,16 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 					
 				case GAMEBOARD:
 					board.dispose();					
-					myTurn = true;		
+					myTurn = true;
+					System.out.println("gameboard   " + information);
 					setupGameBoard(information);
+					JOptionPane.showMessageDialog(null, "Its your turn", "Your Turn", JOptionPane.INFORMATION_MESSAGE);	
 					oldState = information;
 					while(newState == " ") {
 						newState = ((ChessBoard) board).getNewState();
 					}
 					currentSate = newState;	
+					System.out.println("gameboard new state  " + currentSate);
 					try {
 						dos.writeUTF("<Gameboard=" + newState + ">");
 					} catch (IOException e) {	
@@ -153,8 +164,9 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 					break;
 					
 				case ERROR:
-					board.dispose();	
+					board.dispose();
 					myTurn = true;
+					System.out.println("error  " + information);
 					setupGameBoard(oldState);
 					JOptionPane.showMessageDialog(null, information, "Error", JOptionPane.INFORMATION_MESSAGE);
 					while(newState == " ") {
@@ -495,3 +507,4 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 	
 	public abstract void undoMove();
 }
+

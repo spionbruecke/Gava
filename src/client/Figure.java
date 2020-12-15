@@ -6,31 +6,30 @@ import javax.swing.JLabel;
 
 public class Figure {
 	
-	ImageIcon icon;
-	char row;
-	char column;
-	String name;
-	String color;
-	Boolean visible = true;
-	Boolean beaten = false;
-	int x;
-	int y;
+	protected ImageIcon icon;
+	protected char row;
+	protected char column;
+	protected String name;
+	protected String color;
+	protected Boolean visible = true;
+	protected Boolean beaten = false;
+	protected int x;
+	protected int y;
+	protected String hasMoved;
 	
-	JLabel piece;
+	protected JLabel piece;
 	
 	
 	
-	public Figure(ImageIcon icon, char column, char row, String name, String color, Boolean visible) {
-		this.icon = icon;
-		this.row = row;
-		this.column = column;
+	public Figure(String name, String color, String hasMoved, char column, char row, boolean beaten, ImageIcon icon) {
 		this.name = name;
 		this.color = color;
-		this.visible = true;
-		this.piece = new JLabel(this.icon);
-		
-		
-		this.piece.setVisible(visible);
+		this.hasMoved = hasMoved;
+		this.column = column;
+		this.row = row;
+		this.beaten = beaten;
+		this.icon = icon;
+		this.piece = new JLabel(this.icon);	
 	}
 	
 	public void setBeaten(Boolean b) {

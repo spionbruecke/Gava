@@ -20,7 +20,7 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 	protected Color light = new Color(160,82,45);
 	
 	protected Figure[][] boardMatrix = new Figure[8][8];
-	protected ArrayList<Figure> figuresList;
+	protected ArrayList<Figure> figuresList = new ArrayList<Figure>();
 	
 	protected int[] moveFrom = new int[2];
 	protected int[] moveTo = new int[2];
@@ -37,95 +37,124 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 	protected boolean myTurn;
 	protected boolean movePerformed = false;
 	
-	ImageIcon black_king = new ImageIcon("resources/chess/black_king.png");
-	ImageIcon black_queen = new ImageIcon("resources/chess/black_queen.png");
-	ImageIcon black_knight_1 = new ImageIcon("resources/chess/black_knight.png");
-	ImageIcon black_knight_2 = new ImageIcon("resources/chess/black_knight.png");
-	ImageIcon black_rook_1 = new ImageIcon("resources/chess/black_rook.png");
-	ImageIcon black_rook_2 = new ImageIcon("resources/chess/black_rook.png");
-	ImageIcon black_bishop_1 = new ImageIcon("resources/chess/black_bishop.png");
-	ImageIcon black_bishop_2 = new ImageIcon("resources/chess/black_bishop.png");
-	ImageIcon black_pawn_1 = new ImageIcon("resources/chess/black_pawn.png");
-	ImageIcon black_pawn_2 = new ImageIcon("resources/chess/black_pawn.png");
-	ImageIcon black_pawn_3 = new ImageIcon("resources/chess/black_pawn.png");
-	ImageIcon black_pawn_4 = new ImageIcon("resources/chess/black_pawn.png");
-	ImageIcon black_pawn_5 = new ImageIcon("resources/chess/black_pawn.png");
-	ImageIcon black_pawn_6 = new ImageIcon("resources/chess/black_pawn.png");
-	ImageIcon black_pawn_7 = new ImageIcon("resources/chess/black_pawn.png");
-	ImageIcon black_pawn_8 = new ImageIcon("resources/chess/black_pawn.png");
-	
-	ImageIcon white_king = new ImageIcon("resources/chess/white_king.png");
-	ImageIcon white_queen = new ImageIcon("resources/chess/white_queen.png");
-	ImageIcon white_knight_1 = new ImageIcon("resources/chess/white_knight.png");
-	ImageIcon white_knight_2 = new ImageIcon("resources/chess/white_knight.png");
-	ImageIcon white_rook_1 = new ImageIcon("resources/chess/white_rook.png");
-	ImageIcon white_rook_2 = new ImageIcon("resources/chess/white_rook.png");
-	ImageIcon white_bishop_1 = new ImageIcon("resources/chess/white_bishop.png");
-	ImageIcon white_bishop_2 = new ImageIcon("resources/chess/white_bishop.png");
-	ImageIcon white_pawn_1 = new ImageIcon("resources/chess/white_pawn.png");
-	ImageIcon white_pawn_2 = new ImageIcon("resources/chess/white_pawn.png");
-	ImageIcon white_pawn_3 = new ImageIcon("resources/chess/white_pawn.png");
-	ImageIcon white_pawn_4 = new ImageIcon("resources/chess/white_pawn.png");
-	ImageIcon white_pawn_5 = new ImageIcon("resources/chess/white_pawn.png");
-	ImageIcon white_pawn_6 = new ImageIcon("resources/chess/white_pawn.png");
-	ImageIcon white_pawn_7 = new ImageIcon("resources/chess/white_pawn.png");
-	ImageIcon white_pawn_8 = new ImageIcon("resources/chess/white_pawn.png");
+
 	
 		
-	public ChessBoard(String color, String currentState, boolean myTurn) {
+	public ChessBoard(String color, String currentState, boolean myTurn) {	
 		this.currentState = currentState;
 		this.oldState = currentState;
-		
 		this.color = color;
-		
 		this.myTurn = myTurn;
 		
 		setupBoard();
 		
-		initializeBoard();
-
-		updateBoardGUI(this.currentState);
-		
+		initialize(currentState);
 	}
 	
-	
-	
-	public void updateBoardGUI(String s) {
-		int count = 0;
-		char row;
-		char column;
+	public void initialize(String input) {
 		
-		for (int i = 0; i < s.length() - 2; i++) {
-			while(s.charAt(i) != '=') { 
-				i++;
-			}
-			i++;
+		for (int i = 0; i < input.length(); i++) {
+			String name = "";
+			String color = "";
+			String hasMoved = "";
+			char column = 'A';
+			char row = '0';
+			boolean beaten = false;
 			
-			Figure f = figuresList.get(count);
-						
-			if (s.charAt(i) == 'n')
-				f.setBeaten(true);
-			else {
-				column = s.charAt(i);
-				i++;
-				row = s.charAt(i);
-			
-				f.column = column;
-				f.row = row;
+			if (input.charAt(i) == '<') {
+				i++; // <
+				while (input.charAt(i) != ',') {
+					name += input.charAt(i);
+					i++;
+				}
+				i++; // ,
+				while (input.charAt(i) != ',') {
+					color += input.charAt(i);
+					i++;
+				}
+				i++; // hasMoved
+				hasMoved += input.charAt(i);
+				i++; // =
+				i++; //n or column
+				if (input.charAt(i) == 'n') {
+					beaten = true;
+					while (input.charAt(i) != '>') {
+						i++;
+					}
+				} else {
+					column = input.charAt(i);
+					i++; // row
+					row = input.charAt(i);
+					i++; // >	
+				}
 			}
-			count++;
+			ImageIcon icon = getImageIcon(name, color);
+		
+			Figure f = new Figure(name, color, hasMoved, column, row, beaten, icon);
+			figuresList.add(f);
 		}
 		
 		updateBoard();
-		
+				
 		for (int i = 0; i < figuresList.size(); i++) {
 			if (figuresList.get(i).getBeaten() == false) {
 				JPanel panel = (JPanel)chessBoard.getComponent(figuresList.get(i).getPosition());
 				panel.add(figuresList.get(i).getJLabel());
 			}
-		}	
+		}
 	}
 	
+	public ImageIcon getImageIcon(String name, String color) {
+		
+		ImageIcon icon = null;
+		
+		if (color.equals("black")) {
+			
+			switch (name) {
+			
+			case "pawn":
+				icon = new ImageIcon("resources/chess/black_pawn.png");
+				break;
+			case "king":
+				icon = new ImageIcon("resources/chess/black_king.png");
+				break;
+			case "queen":
+				icon = new ImageIcon("resources/chess/black_queen.png");
+				break;
+			case "knight":
+				icon = new ImageIcon("resources/chess/black_knight.png");
+				break;
+			case "rook":
+				icon = new ImageIcon("resources/chess/black_rook.png");
+				break;
+			case "bishop":
+				icon = new ImageIcon("resources/chess/black_bishop.png");
+				break;
+			}
+		} else {
+			switch (name) {		
+			case "pawn":
+				icon = new ImageIcon("resources/chess/white_pawn.png");
+				break;
+			case "king":
+				icon = new ImageIcon("resources/chess/white_king.png");
+				break;
+			case "queen":
+				icon = new ImageIcon("resources/chess/white_queen.png");
+				break;
+			case "knight":
+				icon = new ImageIcon("resources/chess/white_knight.png");
+				break;
+			case "rook":
+				icon = new ImageIcon("resources/chess/white_rook.png");
+				break;
+			case "bishop":
+				icon = new ImageIcon("resources/chess/white_bishop.png");
+				break;
+			}		
+		}	
+		return icon;
+	}
 	
 	
 	public void createString() {
@@ -135,9 +164,9 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 		for (int i = 0; i < figuresList.size(); i++) {
 			Figure f = figuresList.get(i);
 			if (f.getBeaten() == true)
-				s = "<" + f.name + "," + f.color + "=" + "null" + ">";
+				s = "<" + f.name + "," + f.color + "," + f.hasMoved + "=" + "null" + ">";
 			else
-				s = "<" + f.name + "," + f.color + "=" + f.column + f.row + ">";
+				s = "<" + f.name + "," + f.color + "," + f.hasMoved + "=" + f.column + f.row + ">";
 			builder.append(s);
 		}
 		String helper = builder.toString();
@@ -147,6 +176,7 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 		else
 			newState =  builder.toString();
 	}
+	
 	
 	public String getNewState() {
 		return this.newState;
@@ -169,7 +199,7 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
 				JPanel square = new JPanel(new BorderLayout());
-				chessBoard.add(square);
+				chessBoard.add(square); //TODO
 				
 				if (i%2 == 0) {
 					if (j%2 == 0)
@@ -187,88 +217,6 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 	}
 	
 	
-	public void initializeBoard() {
-		Figure f0 = new Figure(black_rook_1, 'A', '8', "rook", "black", true);
-		Figure f1 = new Figure(black_knight_1, 'B', '8', "knight", "black", true);
-		Figure f2 = new Figure(black_bishop_1, 'C', '8', "bishop", "black", true);
-		Figure f3 = new Figure(black_queen, 'D', '8', "queen", "black", true);
-		Figure f4 = new Figure(black_king, 'E', '8', "king", "black", true);
-		Figure f5 = new Figure(black_bishop_2, 'F', '8', "bishop", "black", true);
-		Figure f6 = new Figure(black_knight_2, 'G', '8', "knight", "black", true);
-		Figure f7 = new Figure(black_rook_2, 'H', '8', "rook", "black", true);
-		Figure f8 = new Figure(black_pawn_1, 'A', '7', "pawn", "black", true);
-		Figure f9 = new Figure(black_pawn_2, 'B', '7', "pawn", "black", true);
-		Figure f10 = new Figure(black_pawn_3, 'C', '7', "pawn", "black", true);
-		Figure f11 = new Figure(black_pawn_4, 'D', '7', "pawn", "black", true);
-		Figure f12 = new Figure(black_pawn_5, 'E', '7', "pawn", "black", true);
-		Figure f13 = new Figure(black_pawn_6, 'F', '7', "pawn", "black", true);
-		Figure f14 = new Figure(black_pawn_7, 'G', '7', "pawn", "black", true);
-		Figure f15 = new Figure(black_pawn_8, 'H', '7', "pawn", "black", true);
-		Figure f16 = new Figure(white_rook_1, 'A', '1', "rook", "white", true);
-		Figure f17 = new Figure(white_knight_1, 'B', '1', "knight", "white", true);
-		Figure f18 = new Figure(white_bishop_1, 'C', '1', "bishop", "white", true);
-		Figure f19 = new Figure(white_queen, 'D', '1', "queen", "white", true);
-		Figure f20 = new Figure(white_king, 'E', '1', "king", "white", true);
-		Figure f21 = new Figure(white_bishop_2, 'F', '1', "bishop", "white", true);
-		Figure f22 = new Figure(white_knight_2, 'G', '1', "knight", "white", true);
-		Figure f23 = new Figure(white_rook_2, 'H', '1', "rook", "white", true);
-		Figure f24 = new Figure(white_pawn_1, 'A', '2', "pawn", "white", true);
-		Figure f25 = new Figure(white_pawn_2, 'B', '2', "pawn", "white", true);
-		Figure f26 = new Figure(white_pawn_3, 'C', '2', "pawn", "white", true);
-		Figure f27 = new Figure(white_pawn_4, 'D', '2', "pawn", "white", true);
-		Figure f28 = new Figure(white_pawn_5, 'E', '2', "pawn", "white", true);
-		Figure f29 = new Figure(white_pawn_6, 'F', '2', "pawn", "white", true);
-		Figure f30 = new Figure(white_pawn_7, 'G', '2', "pawn", "white", true);
-		Figure f31 = new Figure(white_pawn_8, 'H', '2', "pawn", "white", true);
-		
-		this.figuresList = new ArrayList<Figure>() {
-			{
-				add(f0);
-				add(f1);
-				add(f2);
-				add(f3);
-				add(f4);
-				add(f5);
-				add(f6);
-				add(f7);
-				add(f8);
-				add(f9);
-				add(f10);
-				add(f11);
-				add(f12);
-				add(f13);
-				add(f14);
-				add(f15);
-				add(f16);
-				add(f17);
-				add(f18);
-				add(f19);
-				add(f20);
-				add(f21);
-				add(f22);
-				add(f23);
-				add(f24);
-				add(f25);
-				add(f26);
-				add(f27);
-				add(f28);
-				add(f29);
-				add(f30);
-				add(f31);			
-			}
-		};
-		
-//		for (int i = 0; i < figuresList.size(); i++) {
-//			if (figuresList.get(i).getBeaten() == false) {
-//				JPanel panel = (JPanel)chessBoard.getComponent(figuresList.get(i).getPosition());
-//				panel.add(figuresList.get(i).getJLabel());
-//			}
-//		}	
-//		updateBoard();
-	}
-	
-	
-	
 	public void printFigures() {	
 		for (int j = 0; j < 8; j++) {
 			for (int i = 0; i < 8; i++) {
@@ -278,6 +226,7 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 		}
 	}
 
+	
 	public void updateBoard() {
 		this.boardMatrix = new Figure[8][8];
 		for (int i = 0; i < figuresList.size(); i++) {
