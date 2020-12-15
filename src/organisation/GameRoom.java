@@ -9,7 +9,7 @@ import src.games.*;
  * @author Alexander Posch
  * @version 0.2
  * 
- * The GameRoom organize and controll the Game.
+ * The GameRoom organize and control the Game.
  * It checks for Rules and decides whos turn it is
  * 
  */
@@ -112,14 +112,12 @@ public class GameRoom{
             Messages message;
             message = rule.isMoveAllowed(gameBoard, ChessMoveConverter.getBoardFromString(information));
             switch(message){
-                case VICTORY_WHITE:
-                    return "<Gameend=Victory>";
-                case VICTORY_BLACK:
+                case VICTORY:
                     return "<Gameend=Victory>";
                 case DEFEATED:
                     return "<Gameend=Defeated>";
                 case MOVE_ALLOWED:
-                    gameBoard.setnewBoard(information);
+                    gameBoard.setNewBoard(information);
                     this.turnOfPlayer = getTheOtherPlayer(turnOfPlayer);
                     return "<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard) this.gameBoard) + ">";
                 case ERROR_WRONGMOVEMENT_DIRECTION_BISHOP:
@@ -135,15 +133,10 @@ public class GameRoom{
                 case ERROR_WRONGMOVEMENT_DIRECTION_ROOK:
                     return "<Error=Rook is only allowed to move straight in the x- or y-axis>";
                 case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_BISHOP:
-                    return pieceintheWay;
                 case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_KING:
-                    return pieceintheWay;
                 case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_KNIGHT:
-                    return pieceintheWay;
                 case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_PAWN:
-                    return pieceintheWay;
                 case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_QUEEN:
-                    return pieceintheWay;
                 case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_ROOK:
                     return pieceintheWay;
                 case ERROR_NO_SUCH_PLAYINGPIECE:

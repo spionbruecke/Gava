@@ -28,7 +28,7 @@ public class ChessBoard extends GameBoard {
             ChessMoveConverter.getBoardFromString(board);
             String neues = "<rook,black=B5><knight,black=B8><bishop,black=C8><queen,black=D8><king,black=E8><bishop,black=F8><knight,black=G8><rook,black=H8><pawn,black=A7><pawn,black=B7><pawn,black=C7><pawn,black=D7><pawn,black=E7><pawn,black=F7><pawn,black=G7><pawn,black=H7><rook,white=A1><knight,white=B1><bishop,white=C1><queen,white=D1><king,white=E1><bishop,white=F1><knight,white=G1><rook,white=H1><pawn,white=A2><pawn,white=B2><pawn,white=C2><pawn,white=D2><pawn,white=E2><pawn,white=F2><pawn,white=G2><pawn,white=H2>";
             System.out.println(ChessMoveConverter.convertPiecesToString(chessi));
-            chessi.setnewBoard(neues);
+            chessi.setNewBoard(neues);
             System.out.println(ChessMoveConverter.convertPiecesToString(chessi));
             String newOne = ChessMoveConverter.convertPiecesToString(chessi);
             System.out.println(newOne.equals(old));
@@ -188,7 +188,7 @@ public class ChessBoard extends GameBoard {
     }
 
     @Override
-    public void setnewBoard(String input) throws WrongFormatException {
+    public void setNewBoard(String input) throws WrongFormatException {
         PlayingPiece[][] newBoard = new PlayingPiece[8][8];
         StringBuilder position = new StringBuilder();
         int counter = 0;

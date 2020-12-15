@@ -42,4 +42,8 @@ public class Field {
     public int getColumn() {
         return column;
     }
+
+    public boolean equals(Field f){
+        return (this.getRow() == f.getRow()) && (this.getColumn() == f.getColumn());
+    }
 }

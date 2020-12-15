@@ -8,8 +8,8 @@ public interface Rules {
     Messages isMoveAllowed(GameBoard gameBoard, PlayingPiece[][] stateToCheck);
 
     static boolean isFieldOccupied(GameBoard board, int row, int column){
-        return board.getState()[row][column] != null;
+        return board.getState()[row][column].getName() != "null";
     }
 
-    //ArrayList<Messages> isGameFinished(GameBoard board);
+    Messages isGameFinished(GameBoard board, String colour);
 }
