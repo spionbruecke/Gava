@@ -83,7 +83,7 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 			dis = new DataInputStream(connection.getInputStream()); // get data from sever
 			dos = new DataOutputStream(connection.getOutputStream()); // get data to server
 			//setupGUI();
-			String s = dis.readUTF();
+			//String s = dis.readUTF();
 			
 			this.start();
 			
@@ -109,33 +109,23 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 			try {
 				input = dis.readUTF();
 				information = StringConverter.getInformation(input);
-				System.out.println("what does the server say:    " + information);
 				
 				switch(StringConverter.getInformationType(input)){
 				
 				case START:
-					if (information.equals("1")) {
-						
+					if (information.equals("1")) {			
 						color = "white";
-						myTurn = true;
-						
-						setupGameBoard(defaultSetup);
-						
-						JOptionPane.showMessageDialog(null, "Its your turn", "Your Turn", JOptionPane.INFORMATION_MESSAGE);
-						
+						myTurn = true;		
+						setupGameBoard(defaultSetup);			
+						JOptionPane.showMessageDialog(null, "Its your turn", "Your Turn", JOptionPane.INFORMATION_MESSAGE);	
 						while(newState.equals(" ")) {
 							newState = ((ChessBoard) board).getNewState();
-						}
-						
+						}					
 						currentSate = newState;
-						
-						System.out.println(color + "  " + newState);
-						
 						try {
 							dos.writeUTF("<Gameboard=" + newState + ">");
 						} catch (IOException e) {	
 						}
-						
 						newState = " ";
 					}
 					else {
@@ -147,58 +137,39 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 					break;
 					
 				case GAMEBOARD:
-					board.dispose();
-					
-					myTurn = true;
-					
+					board.dispose();					
+					myTurn = true;		
 					setupGameBoard(information);
-					
-					System.out.println(this.color + " " + information);
-					
+					oldState = information;
 					while(newState == " ") {
 						newState = ((ChessBoard) board).getNewState();
 					}
-					
-					currentSate = newState;
-					
+					currentSate = newState;	
 					try {
 						dos.writeUTF("<Gameboard=" + newState + ">");
 					} catch (IOException e) {	
 					}
-					
-					System.out.println(color + "  " + newState);
-							
 					newState = " ";
-					
 					break;
 					
 				case ERROR:
-					board.dispose();
-					
+					board.dispose();	
 					myTurn = true;
-					
 					setupGameBoard(oldState);
 					JOptionPane.showMessageDialog(null, information, "Error", JOptionPane.INFORMATION_MESSAGE);
-					
-					System.out.println(this.color + " " + information);
-					
 					while(newState == " ") {
 						newState = ((ChessBoard) board).getNewState();
-					}
-					
+					}	
 					try {
 						dos.writeUTF("<Gameboard=" + newState + ">");
 					} catch (IOException e) {	
-					}
-					
-					System.out.println(color + "  " + newState);
-							
+					}		
 					newState = " ";
-					
 					break;
 				
 				case SUCESS:
 					oldState = currentSate;
+					System.out.println("success");
 					break;
 					
 				default:
@@ -506,7 +477,7 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 		
 
 		
-		while(newState == " " && myTurn == true) {
+		while(newState == " ") {
 			newState = ((ChessBoard) board).getNewState();
 		}
 		
@@ -515,10 +486,10 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 		} catch (IOException e) {	
 		}
 		
-		System.out.println(this.newState);
+		//return newState;
 		
-		this.newState = " ";
-		myTurn = false;
+//		this.newState = " ";
+//		myTurn = false;
 		
 	}
 	
