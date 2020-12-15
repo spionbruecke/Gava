@@ -36,6 +36,7 @@ public class ClientHandler extends Thread {
         String input;
         String information;
         String tmp;
+        InformationsTypes typ;
         boolean connected;
 
         connected = true;
@@ -60,8 +61,11 @@ public class ClientHandler extends Thread {
                             case GAMEBOARD:
                                 if(gameRoom != null){
                                     tmp = gameRoom.setInput(information);
-                                    if(StringConverter.getInformationType(tmp).equals(InformationsTypes.ERROR)){
+                                    typ = StringConverter.getInformationType(tmp);
+                                    if(typ.equals(InformationsTypes.ERROR)){
                                         outputStream.writeUTF(tmp);
+                                    } else if (typ.equals(InformationsTypes.PROMOTION)){
+
                                     } else {  //TODO(Alex) Informationstype Win or Lose
                                         outputStream.writeUTF("<Sucess>");  
                                         gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard)gameRoom.getGameBoard()));
