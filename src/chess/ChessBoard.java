@@ -194,7 +194,10 @@ public class ChessBoard extends GameBoard {
                     position.append("null");
 
                 this.getPlayingPieces()[counter].setPosition(position.toString());
-
+                
+                if(input.charAt(i - 1) == '1')
+                    this.getPlayingPieces()[counter].setHasMoved();
+                    
                 row = ChessMoveConverter.convertPosIntoArrayCoordinate(input.charAt(i+2));
                 column = ChessMoveConverter.convertPosIntoArrayCoordinate(input.charAt(i + 1));
             

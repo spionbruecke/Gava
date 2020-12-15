@@ -232,6 +232,9 @@ public class ChessMoveConverter implements MoveConverter {
                 else
                     position.append(input.charAt(i + 1)).append(input.charAt(i + 2));
 
+                if(input.charAt(i - 1) == '1')
+                    board.getPlayingPieces()[counter].setHasMoved();
+
                 board.getPlayingPieces()[counter].setPosition(position.toString());
                 row = convertPosIntoArrayCoordinate((input.charAt(i+2)));
                 column = convertPosIntoArrayCoordinate(input.charAt(i + 1));
