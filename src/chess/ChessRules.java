@@ -19,12 +19,12 @@ public class ChessRules implements Rules {
      * @return boolean
      */
     public static boolean isFieldOccupiedByOwnPlayingP(GameBoard board, String move) {
+
         int row = converter.convertPosIntoArrayCoordinate(move.charAt(4));
         int column = converter.convertPosIntoArrayCoordinate(move.charAt(3));
 
         String ownColour = board.getState()[converter.convertPosIntoArrayCoordinate(move.charAt(1))][converter.convertPosIntoArrayCoordinate(move.charAt(0))].getColour();
     
-
         if(board.getState()[row][column].getName()=="null"){
             return false;
         }else
@@ -47,6 +47,7 @@ public class ChessRules implements Rules {
     }
 
     private static Messages checkEachPossibleMove(GameBoard gameBoard, String move){
+     
         int row = converter.convertPosIntoArrayCoordinate(move.charAt(1));
         int column = converter.convertPosIntoArrayCoordinate(move.charAt(0));
 
@@ -87,6 +88,7 @@ public class ChessRules implements Rules {
             default:
                 return Messages.ERROR_NO_SUCH_PLAYINGPIECE;
         }
+        
     }
 
     private static Messages checkPawnMoves(GameBoard gameBoard, String move){

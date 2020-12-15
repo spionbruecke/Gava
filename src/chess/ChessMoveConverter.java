@@ -51,12 +51,14 @@ public class ChessMoveConverter implements MoveConverter {
      */
     public PlayingPiece[][] convertStringToState(GameBoard gameBoard, String move){
         PlayingPiece[][] currentState = gameBoard.getState();
+
         int newPosRow = convertPosIntoArrayCoordinate(move.charAt(4));
         int newPosColumn = convertPosIntoArrayCoordinate(move.charAt(3));
         int oldPosRow = convertPosIntoArrayCoordinate(move.charAt(1));
         int oldPosColumn = convertPosIntoArrayCoordinate(move.charAt(0));
 
-        currentState[newPosRow][newPosColumn] = currentState[oldPosRow][oldPosColumn];
+        if(newPosColumn != -2 && newPosRow != -2)
+            currentState[newPosRow][newPosColumn] = currentState[oldPosRow][oldPosColumn];
         currentState[oldPosRow][oldPosColumn] = new PlayingPiece();
         currentState[oldPosRow][oldPosColumn].setName("null");
         currentState[oldPosRow][oldPosColumn].setColour("null");
@@ -97,6 +99,9 @@ public class ChessMoveConverter implements MoveConverter {
             case '1':
                 return 7;
 
+            case 'n':
+            case 'u':
+                return -2;
             default:
                 System.out.println("WrongFormatException: -1 returned");
                 return -1;
@@ -218,15 +223,20 @@ public class ChessMoveConverter implements MoveConverter {
             }
         }
 
+
         for(int i = 0; i < input.length(); i++){
             if(input.charAt(i) == '='){
 
-                position.append(input.charAt(i + 1)).append(input.charAt(i + 2));
-                board.getPlayingPieces()[counter].setPosition(position.toString());
+                if(input.charAt(i + 1) == 'n')
+                    position.append("null");
+                else
+                    position.append(input.charAt(i + 1)).append(input.charAt(i + 2));
 
+                board.getPlayingPieces()[counter].setPosition(position.toString());
                 row = convertPosIntoArrayCoordinate((input.charAt(i+2)));
                 column = convertPosIntoArrayCoordinate(input.charAt(i + 1));
-                newBoard[row][column] = board.getPlayingPieces()[counter];
+                if (row != -2 && column != -2)
+                    newBoard[row][column] = board.getPlayingPieces()[counter];
 
                 
                 position = new StringBuilder();
@@ -234,6 +244,7 @@ public class ChessMoveConverter implements MoveConverter {
                 i = i + 3;
             }
         }
+  
         return newBoard;
     }
 

@@ -58,8 +58,12 @@ public class PlayingPiece {
 
     public String toString(){
         StringBuilder output = new StringBuilder();
-
-        output.append(name).append(",").append(colour).append("=").append(position);
+        String moved;
+        if(hasMoved)
+            moved = "1";
+        else
+            moved = "0";
+        output.append(name).append(",").append(colour).append(",").append(moved).append("=").append(position);
 
         return output.toString();
     }

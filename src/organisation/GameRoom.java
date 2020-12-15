@@ -111,6 +111,7 @@ public class GameRoom{
         try{
             Messages message;
             message = rule.isMoveAllowed(gameBoard, ChessMoveConverter.getBoardFromString(information));
+           
             switch(message){
                 case VICTORY:
                     return "<Gameend=Victory>";

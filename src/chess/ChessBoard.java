@@ -20,23 +20,6 @@ public class ChessBoard extends GameBoard {
     static final String PAWN = "pawn";
     private PlayingPiece[] playingPieces = new PlayingPiece[32];
 
-    public static void main(String[] args) {
-        ChessBoard chessi = new ChessBoard();
-        String board = ChessMoveConverter.convertPiecesToString(chessi);
-        try {
-            String old = ChessMoveConverter.convertPiecesToString(chessi);
-            ChessMoveConverter.getBoardFromString(board);
-            String neues = "<rook,black=B5><knight,black=B8><bishop,black=C8><queen,black=D8><king,black=E8><bishop,black=F8><knight,black=G8><rook,black=H8><pawn,black=A7><pawn,black=B7><pawn,black=C7><pawn,black=D7><pawn,black=E7><pawn,black=F7><pawn,black=G7><pawn,black=H7><rook,white=A1><knight,white=B1><bishop,white=C1><queen,white=D1><king,white=E1><bishop,white=F1><knight,white=G1><rook,white=H1><pawn,white=A2><pawn,white=B2><pawn,white=C2><pawn,white=D2><pawn,white=E2><pawn,white=F2><pawn,white=G2><pawn,white=H2>";
-            System.out.println(ChessMoveConverter.convertPiecesToString(chessi));
-            chessi.setNewBoard(neues);
-            System.out.println(ChessMoveConverter.convertPiecesToString(chessi));
-            String newOne = ChessMoveConverter.convertPiecesToString(chessi);
-            System.out.println(newOne.equals(old));
-        } catch (WrongFormatException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
     /**
      * The constructor creates a chess board with an ID and its initial state.
      */
@@ -202,16 +185,21 @@ public class ChessBoard extends GameBoard {
                 newBoard[k][j].setColour("null");
             }
         }
-
         for(int i = 0; i < input.length(); i++){
             if(input.charAt(i) == '='){
 
-                position.append(input.charAt(i + 1)).append(input.charAt(i + 2));
+                if(input.charAt(i+1) != 'n')
+                    position.append(input.charAt(i + 1)).append(input.charAt(i + 2));
+                else    
+                    position.append("null");
+
                 this.getPlayingPieces()[counter].setPosition(position.toString());
 
                 row = ChessMoveConverter.convertPosIntoArrayCoordinate(input.charAt(i+2));
                 column = ChessMoveConverter.convertPosIntoArrayCoordinate(input.charAt(i + 1));
-                newBoard[row][column] = this.getPlayingPieces()[counter];
+            
+                if(row != -2 && column != -2)
+                    newBoard[row][column] = this.getPlayingPieces()[counter];
 
                 position = new StringBuilder();
                 counter++;
