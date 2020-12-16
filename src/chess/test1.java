@@ -35,12 +35,21 @@ public class test1 {
         p[1][1].setName("pawn");
         p[1][1].setColour("white");
 
+        PlayingPiece[][] p_copy = p.clone();
+        p_copy[0][0].setName("pawn");
+        p_copy[0][0].setColour("white");
+
+        p_copy[1][1].setName("null");
+        p_copy[1][1].setColour("null");
+
         GameBoard b = new ChessBoard();
         b.setState(p);
         ChessRules rule = new ChessRules();
 
-        if(rule.checkPawnMoves(b, "B7 A8") == Messages.MOVE_ALLOWED)
+        if(rule.isMoveAllowed(b, p_copy) == Messages.MOVE_ALLOWED)
             System.out.println("Bauer schlaegt Bauer");
+
+        System.out.println(rule.isMoveAllowed(b, p_copy));
 
 //.......................Läufer schlägt Läufer..............//
         PlayingPiece[][] p2 = new PlayingPiece[8][8];
@@ -70,7 +79,7 @@ public class test1 {
         GameBoard board2 = new ChessBoard();
         board2.setState(p);
 
-        if(rule.checkPawnMoves(b, "B7 A8") == Messages.MOVE_ALLOWED)
+        if(rule.isMoveAllowed(b, p_copy) == Messages.MOVE_ALLOWED)
             System.out.println("Läufer schlaegt Läufer");
     }
 }

@@ -38,9 +38,6 @@ public class ChessRules implements Rules {
      * @return boolean
      */
     public Messages isMoveAllowed(GameBoard gameBoard, PlayingPiece[][] stateToCheck) {
-        if(isMoveCastling(gameBoard, stateToCheck))
-            return Messages.MOVE_ALLOWED;
-
         String move = converter.stateToString(gameBoard.getState(), stateToCheck);
 
         return checkEachPossibleMove(gameBoard, move);
@@ -204,9 +201,12 @@ public class ChessRules implements Rules {
         Field target = converter.getChessTargetField(move);
         Field start = converter.getChessStartField(move);
 
-        if(isFieldAttacked(board, target.getRow(), target.getColumn())){
+        if(isMoveCastling(board, move))
+            return Messages.MOVE_ALLOWED;
+
+        if(isFieldAttacked(board, target.getRow(), target.getColumn()))
             return Messages.ERROR_WRONGMOVEMENT_DIRECTION_KING;
-        }
+
 
         if( (start.getRow()-1 >= 0) && (start.getColumn()-1 >= 0) ){
             possibleLocations.add(new Field(start.getRow()-1, start.getColumn()-1));
@@ -347,38 +347,34 @@ public class ChessRules implements Rules {
         return areVerticalOrHorizontalPathsFree(gameBoard, move);
     }
 
-    private static boolean isMoveCastling(GameBoard gameBoard, PlayingPiece[][] stateToCheck){
-        int counter = 0;
-        ArrayList<Field> check = new ArrayList<Field>();
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if(!gameBoard.getState()[i][j].equals(stateToCheck[i][j]) && gameBoard.getState()[i][j].getName() != "null") {
-                    counter++;
-                    check.add(new Field(i, j));
-                }
-            }
-        }
+    private static boolean isMoveCastling(GameBoard gameBoard, String move){
+        int startRow = ChessMoveConverter.getChessStartField(move).getRow();
+        int startColumn = ChessMoveConverter.getChessStartField(move).getColumn();
 
-        Field rook;
-        Field king;
+        if(gameBoard.getState()[startRow][startColumn].hasMoved())
+            return false;
 
-        // if two playing piece have changed location
-        if(counter == 2 && arePieceRookAndKingFromSameColour(check, gameBoard.getState())){
+        final Field MOVE_TARGET = ChessMoveConverter.getChessTargetField(move);
 
-            if(gameBoard.getState()[check.get(0).getRow()][check.get(0).getColumn()].getName().equals("rook")){
-                rook = new Field(check.get(0).getRow(), check.get(0).getColumn());
-                king = new Field(check.get(1).getRow(), check.get(1).getColumn());
-            }else {
-                rook = new Field(check.get(1).getRow(), check.get(1).getColumn());
-                king = new Field(check.get(0).getRow(), check.get(0).getColumn());
-            }
+        final Field G8 = new Field(0,6);
+        final Field C8 = new Field(0, 2);
+        final Field G1 = new Field(7, 6);
+        final Field C1 = new Field(7, 2);
 
-            if(gameBoard.getState()[rook.getRow()][rook.getColumn()].hasMoved()
-                    || gameBoard.getState()[king.getRow()][king.getColumn()].hasMoved()){
-                return false;
-            }else {
-                return isCastlingPathFree(gameBoard, rook);
-            }
+        if(gameBoard.getState()[startRow][startColumn].getColour().equals("black")){
+
+            if(MOVE_TARGET.equals(G8) && !gameBoard.getState()[0][6].hasMoved())
+                return isCastlingPathFree(gameBoard, G8);
+            else if(MOVE_TARGET.equals(C8) && !gameBoard.getState()[0][2].hasMoved())
+                return isCastlingPathFree(gameBoard, C8);
+
+        }else {
+
+            if(MOVE_TARGET.equals(G1) && !gameBoard.getState()[7][6].hasMoved())
+                return isCastlingPathFree(gameBoard, G1);
+            else if(MOVE_TARGET.equals(C1) && !gameBoard.getState()[7][2].hasMoved())
+                return isCastlingPathFree(gameBoard, C1);
+
         }
 
         return false;
@@ -674,8 +670,7 @@ public class ChessRules implements Rules {
         return false;
     }
 
-// public for test purposes should be private
-    public static boolean areVerticalOrHorizontalPathsFree(GameBoard gameBoard, String move){
+    private static boolean areVerticalOrHorizontalPathsFree(GameBoard gameBoard, String move){
         Field target = converter.getChessTargetField(move);
         Field start = converter.getChessStartField(move);
 
