@@ -672,8 +672,8 @@ public class ChessRules implements Rules {
         return false;
     }
 
-// public for test purposes should be private
-    public static boolean areVerticalOrHorizontalPathsFree(GameBoard gameBoard, String move){
+
+    private static boolean areVerticalOrHorizontalPathsFree(GameBoard gameBoard, String move){
         Field target = converter.getChessTargetField(move);
         Field start = converter.getChessStartField(move);
 
@@ -803,5 +803,12 @@ public class ChessRules implements Rules {
             return Messages.DRAW;
         else
             return Messages.GO_ON;
+    }
+
+    public Messages executeMove(GameBoard board, String colour, PlayingPiece[][] stateToCheck){
+        if(isMoveAllowed(board, stateToCheck) == Messages.MOVE_ALLOWED)
+            board.setState(stateToCheck);
+
+        return isGameFinished(board, colour);
     }
 }
