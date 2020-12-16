@@ -114,7 +114,21 @@ public class GameRoom{
         String pieceintheWay = "<Error=There is some piece in the way>";
         try{
             Messages message;
+            Messages typ;
             message = rule.isMoveAllowed(gameBoard, ChessMoveConverter.getBoardFromString(information));
+
+            if(message == Messages.MOVE_ALLOWED){
+                typ = rule.isGameFinished(gameBoard, getTheOtherPlayer(turnOfPlayer).getColour());
+
+                if(typ == Messages.DEFEATED){
+                    getTheOtherPlayer(turnOfPlayer).getClientHandler().sendMessage("<Loss>");
+                    return "<Win>";
+                } else if (typ == message.DRAW){
+                    getTheOtherPlayer(turnOfPlayer).getClientHandler().sendMessage("<Draw>");
+                    return "<Draw>";
+                }
+
+            }
             switch(message){
                 case VICTORY:
                     return "<Gameend=Victory>";
