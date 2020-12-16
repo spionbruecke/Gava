@@ -61,16 +61,16 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 	
 	protected JFrame board;
 	
-	String color;
-	boolean myTurn;
+	protected String color = null;
+	protected boolean myTurn = false;
 	
-	String newState = " ";	
-	String oldState = "<rook,black,0=A8><knight,black,0=B8><bishop,black,0=C8><queen,black,0=D8><king,black,0=E8><bishop,black,0=F8><knight,black,0=G8><rook,black,0=H8><pawn,black,0=A7><pawn,black,0=B7><pawn,black,0=C7><pawn,black,0=D7><pawn,black,0=E7><pawn,black,0=F7><pawn,black,0=G7><pawn,black,0=H7><rook,white,0=A1><knight,white,0=B1><bishop,white,0=C1><queen,white,0=D1><king,white,0=E1><bishop,white,0=F1><knight,white,0=G1><rook,white,0=H1><pawn,white,0=A2><pawn,white,0=B2><pawn,white,0=C2><pawn,white,0=D2><pawn,white,0=E2><pawn,white,0=F2><pawn,white,0=G2><pawn,white,0=H2>";
-	String defaultSetup = "<rook,black,0=A8><knight,black,0=B8><bishop,black,0=C8><queen,black,0=D8><king,black,0=E8><bishop,black,0=F8><knight,black,0=G8><rook,black,0=H8><pawn,black,0=A7><pawn,black,0=B7><pawn,black,0=C7><pawn,black,0=D7><pawn,black,0=E7><pawn,black,0=F7><pawn,black,0=G7><pawn,black,0=H7><rook,white,0=A1><knight,white,0=B1><bishop,white,0=C1><queen,white,0=D1><king,white,0=E1><bishop,white,0=F1><knight,white,0=G1><rook,white,0=H1><pawn,white,0=A2><pawn,white,0=B2><pawn,white,0=C2><pawn,white,0=D2><pawn,white,0=E2><pawn,white,0=F2><pawn,white,0=G2><pawn,white,0=H2>";
+	protected String newState = " ";	
+	protected String oldState = "<rook,black,0=A8><knight,black,0=B8><bishop,black,0=C8><queen,black,0=D8><king,black,0=E8><bishop,black,0=F8><knight,black,0=G8><rook,black,0=H8><pawn,black,0=A7><pawn,black,0=B7><pawn,black,0=C7><pawn,black,0=D7><pawn,black,0=E7><pawn,black,0=F7><pawn,black,0=G7><pawn,black,0=H7><rook,white,0=A1><knight,white,0=B1><bishop,white,0=C1><queen,white,0=D1><king,white,0=E1><bishop,white,0=F1><knight,white,0=G1><rook,white,0=H1><pawn,white,0=A2><pawn,white,0=B2><pawn,white,0=C2><pawn,white,0=D2><pawn,white,0=E2><pawn,white,0=F2><pawn,white,0=G2><pawn,white,0=H2>";
+	protected String defaultSetup = "<rook,black,0=A8><knight,black,0=B8><bishop,black,0=C8><queen,black,0=D8><king,black,0=E8><bishop,black,0=F8><knight,black,0=G8><rook,black,0=H8><pawn,black,0=A7><pawn,black,0=B7><pawn,black,0=C7><pawn,black,0=D7><pawn,black,0=E7><pawn,black,0=F7><pawn,black,0=G7><pawn,black,0=H7><rook,white,0=A1><knight,white,0=B1><bishop,white,0=C1><queen,white,0=D1><king,white,0=E1><bishop,white,0=F1><knight,white,0=G1><rook,white,0=H1><pawn,white,0=A2><pawn,white,0=B2><pawn,white,0=C2><pawn,white,0=D2><pawn,white,0=E2><pawn,white,0=F2><pawn,white,0=G2><pawn,white,0=H2>";
 
 	
 	
-	String currentSate = "";
+	protected String currentSate = "";
 	
     /**
      * This method is called when user starts the application
@@ -107,16 +107,20 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 		}
 		isPlaying = true;
 		
+		//setupGameBoard(defaultSetup);
+		//JOptionPane.showMessageDialog(null, "Wait for second player", "Wait", JOptionPane.INFORMATION_MESSAGE);	
+		
 		while(isPlaying) {
 			try {
 				input = dis.readUTF();
 				information = StringConverter.getInformation(input);
 				
-				System.out.println("receive  " + information);
+				//System.out.println("receive  " + information);
 				
 				switch(StringConverter.getInformationType(input)){
 				
 				case START:
+					//board.dispose();
 					if (information.equals("1")) {
 						System.out.println("start  " + information);
 						color = "white";
@@ -128,7 +132,7 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 						}					
 						currentSate = newState;
 						
-						System.out.println("newstate " + currentSate);
+						//System.out.println("newstate " + currentSate);
 						
 						try {
 							dos.writeUTF("<Gameboard=" + newState + ">");
@@ -457,7 +461,11 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 
 	public void setupGameBoard(String s) {
 		
-		board = new ChessBoard(color, s, myTurn);
+		if (color == null)
+			board = new ChessBoard();
+		else
+			board = new ChessBoard(color, s, myTurn);
+		
 		board.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		board.pack();
 		board.setResizable(true);
@@ -470,6 +478,7 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 			public void windowClosing(WindowEvent e) {
 				try {
 					dos.writeUTF("<Connectionstatus=Exit>");
+					isPlaying = false;
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

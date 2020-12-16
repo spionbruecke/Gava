@@ -51,6 +51,10 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 		initialize(currentState);
 	}
 	
+	public ChessBoard() {
+		setupBoard();
+	}
+	
 	public void initialize(String input) {
 		
 		for (int i = 0; i < input.length(); i++) {
@@ -90,7 +94,7 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 			}
 			ImageIcon icon = getImageIcon(name, color);
 		
-			Figure f = new Figure(name, color, hasMoved, column, row, beaten, icon);
+			Figure f = new Figure(name, color, hasMoved, column, row, beaten, icon, this.color);
 			figuresList.add(f);
 		}
 		
@@ -104,14 +108,14 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 		}
 	}
 	
-	public ImageIcon getImageIcon(String name, String color) {
+	
+public ImageIcon getImageIcon(String name, String color) {
 		
 		ImageIcon icon = null;
 		
 		if (color.equals("black")) {
 			
-			switch (name) {
-			
+			switch (name) {		
 			case "pawn":
 				icon = new ImageIcon("resources/chess/black_pawn.png");
 				break;
@@ -201,17 +205,17 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 				JPanel square = new JPanel(new BorderLayout());
 				chessBoard.add(square); //TODO
 				
-				if (i%2 == 0) {
-					if (j%2 == 0)
-						square.setBackground(dark);
-					else
-						square.setBackground(light);
-				} else {
-					if (j%2 == 0)
-						square.setBackground(light);
-					else
-						square.setBackground(dark);
-				}
+					if (i%2 == 0) {
+						if (j%2 == 0)
+							square.setBackground(dark);
+						else
+							square.setBackground(light);
+					} else {
+						if (j%2 == 0)
+							square.setBackground(light);
+						else
+							square.setBackground(dark);
+					}
 			}	
 		}
 	}
@@ -286,22 +290,20 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 		if (f.color.equals(this.color) == false)
 			return;
 		
-		if (myTurn == false)
+		if (myTurn == false) //TODO brauch ich beide if Abfragen?
 			return;
 		
-		if (movePerformed == true)
+		if (movePerformed == true) //TODO
 			return;
 		
-		moveFrom[0] = row;
-		moveFrom[1] = col;
+//		moveFrom[0] = row;
+//		moveFrom[1] = col;
 			
 		Point parentLocation = c.getParent().getLocation();
 		x = parentLocation.x - me.getX();
 		y = parentLocation.y - me.getY();
 	
 		chessPiece = (JLabel)c;
-				
-		
 		
 		chessPiece.setLocation(me.getX() + x, me.getY() + y);
 		chessPiece.setSize(chessPiece.getWidth(), chessPiece.getHeight());
@@ -311,7 +313,6 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 	@Override
 	public void mouseReleased(MouseEvent me) {
 		
-
 		if(chessPiece == null) return;
 		  
 		chessPiece.setVisible(false);
@@ -320,8 +321,8 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 		int row = me.getY() / c.getWidth();
 		int col = me.getX() / c.getHeight();
 		
-		moveTo[0] = row;
-		moveTo[1] = col;
+		moveTo[0] = row; //TODO evtl löschen
+		moveTo[1] = col; //TODO evtl löschen
 		 
 		if (c instanceof JLabel){
 			Container parent = c.getParent();
@@ -333,7 +334,7 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 			f2.setBeaten(true);
 			f.setColumn(moveTo[1]);
 			f.setRow(moveTo[0]);
-			updateBoard();		
+			updateBoard(); //TODO brauch ich das?
 		} else {
 			Container parent = (Container)c;
 			parent.add( chessPiece );
@@ -341,7 +342,7 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 			Figure f = boardMatrix[moveFrom[1]][moveFrom[0]];
 			f.setColumn(moveTo[1]);
 			f.setRow(moveTo[0]);
-			updateBoard();
+			updateBoard(); //TODO brauch ich das?
 		} 
 		chessPiece.setVisible(true);
 		movePerformed = true;
