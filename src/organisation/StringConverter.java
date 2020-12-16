@@ -40,6 +40,12 @@ public class StringConverter{
                 return InformationsTypes.START;
             case "Error":
                 return InformationsTypes.ERROR;
+            case "Draw":
+                return InformationsTypes.DRAW;
+            case "Loss":
+                return InformationsTypes.LOSS;
+            case "Win":
+                return InformationsTypes.WIN;
             default:
                 throw new WrongInformationFormatException();
         }

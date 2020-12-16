@@ -2,6 +2,8 @@ package src.server;
 
 import java.io.*;
 import java.net.*;
+
+import src.games.*;
 import src.chess.*;
 import src.organisation.*;
 
@@ -107,6 +109,7 @@ public class ClientHandler extends Thread {
         private void handleChessgame(String information) throws WrongInformationFormatException, IOException {
             String tmp;
             InformationsTypes typ;
+            Messages finished;
 
             tmp = gameRoom.setInput(information);
             typ = StringConverter.getInformationType(tmp);
@@ -117,6 +120,20 @@ public class ClientHandler extends Thread {
             } else {  //TODO(Alex) Informationstype Win or Lose
                 outputStream.writeUTF("<Sucess>");  
                 gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard)gameRoom.getGameBoard()) + ">");
+                /*finished = gameRoom.getRules().isGameFinished(gameRoom.getGameBoard(),gameRoom.getTheOtherPlayer(player).getColour());
+                switch (finished){
+                    case DEFEATED:
+                        gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Loss>");
+                        outputStream.writeUTF("<Win>");
+                        break;
+                    case DRAW:
+                        gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Draw>");
+                        outputStream.writeUTF("<Draw>");
+                        break;
+                    default:
+                        System.out.println("Some mistake");
+
+                }*/
             }
         }
 }

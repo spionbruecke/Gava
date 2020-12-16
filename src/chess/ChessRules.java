@@ -806,4 +806,13 @@ public class ChessRules implements Rules {
         else
             return Messages.GO_ON;
     }
+
+    public Messages executeMove(GameBoard board, String colour, PlayingPiece[][] stateToCheck){
+        Messages message;
+
+        message = isMoveAllowed(board, stateToCheck);
+        if(message == Messages.MOVE_ALLOWED)
+            return isGameFinished(board, colour);
+        return message;
+    }
 }

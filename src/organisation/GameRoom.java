@@ -44,10 +44,14 @@ public class GameRoom{
         //Decides Randomly who is allowed to start
         if ((int) ( Math.random() * 2 + 1) == 1){
             turnOfPlayer = player1;
+            player1.setColour("white");
+            player2.setColour("black");
             player1.getClientHandler().sendMessage("<Start=1>");
             player2.getClientHandler().sendMessage("<Start=0>");
         } else {
             turnOfPlayer = player2;
+            player2.setColour("white");
+            player1.setColour("black");
             player1.getClientHandler().sendMessage("<Start=0>");
             player2.getClientHandler().sendMessage("<Start=1>");
         }
@@ -178,6 +182,8 @@ public class GameRoom{
     public Player getPlayer2()          {return player2;}
 
     public GameBoard getGameBoard()     {return gameBoard;}
+
+    public Rules getRules()              {return rule;}
 
 
     public String toString(){
