@@ -17,7 +17,7 @@ public class test1 {
 
         for (int row = 0; row < 8; row++) {
             for (int j = 0; j < 8; j++) {
-                if( ((row == 0) && (j == 0)) || ((row == 2) && (j == 0))){
+                if( ((row == 0) && (j == 0)) || ((row == 1) && (j == 1))){
                     // do nothing
                 }else{
                     p[row][j].setName("null");
@@ -29,14 +29,14 @@ public class test1 {
         p[0][0].setName("pawn");
         p[0][0].setColour("white");
 
-        p[2][0].setName("rook");
-        p[2][0].setColour("black");
+        p[1][1].setName("pawn");
+        p[1][1].setColour("black");
 
         GameBoard b = new ChessBoard();
         b.setState(p);
         ChessRules rule = new ChessRules();
 
-        if(rule.areVerticalOrHorizontalPathsFree(b, "A6 A8"))
+        if(rule.areVerticalOrHorizontalPathsFree(b, "B7 A8"))
             System.out.println("Turm laeuft einwandfrei");
 
     }
