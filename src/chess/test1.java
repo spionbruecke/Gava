@@ -1,14 +1,43 @@
 package src.chess;
 
 import src.games.Field;
+import src.games.GameBoard;
+import src.games.PlayingPiece;
+import src.chess.ChessRules;
 
 public class test1 {
 
     public static void main(String[] args){
-        Field f1 = new Field(2,1);
-        Field f2 = new Field(2,1);
+        PlayingPiece[][] p = new PlayingPiece[8][8];
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                p[i][j] = new PlayingPiece();
+            }
+        }
 
-        if(f1.equals(f2))
-            System.out.println("burdaaaa burda");
+        for (int row = 0; row < 8; row++) {
+            for (int j = 0; j < 8; j++) {
+                if( ((row == 0) && (j == 0)) || ((row == 2) && (j == 0))){
+                    // do nothing
+                }else{
+                    p[row][j].setName("null");
+                    p[row][j].setColour("null");
+                }
+            }
+        }
+
+        p[0][0].setName("pawn");
+        p[0][0].setColour("white");
+
+        p[2][0].setName("rook");
+        p[2][0].setColour("black");
+
+        GameBoard b = new ChessBoard();
+        b.setState(p);
+        ChessRules rule = new ChessRules();
+
+        if(rule.areVerticalOrHorizontalPathsFree(b, "A6 A8"))
+            System.out.println("Turm laeuft einwandfrei");
+
     }
 }

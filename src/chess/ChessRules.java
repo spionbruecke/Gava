@@ -77,7 +77,7 @@ public class ChessRules implements Rules {
                     return Messages.ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_QUEEN;
 
             case "king":
-                if((checkKingMoves(move) == Messages.MOVE_ALLOWED) && isKingTargetFree(gameBoard, move))
+                if((checkKingMoves(gameBoard, move) == Messages.MOVE_ALLOWED) && isKingTargetFree(gameBoard, move))
                     return Messages.MOVE_ALLOWED;
                 else
                     return Messages.ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_KING;
@@ -195,11 +195,15 @@ public class ChessRules implements Rules {
                         .equals(board.getState()[start.getRow()][start.getColumn()].getColour());
     }
 
-    private static Messages checkKingMoves(String move){
+    private static Messages checkKingMoves(GameBoard board, String move){
         ArrayList<Field> possibleLocations = new ArrayList<Field>();
 
         Field target = converter.getChessTargetField(move);
         Field start = converter.getChessStartField(move);
+
+        if(isFieldAttacked(board, target.getRow(), target.getColumn())){
+            return Messages.ERROR_WRONGMOVEMENT_DIRECTION_KING;
+        }
 
         if( (start.getRow()-1 >= 0) && (start.getColumn()-1 >= 0) ){
             possibleLocations.add(new Field(start.getRow()-1, start.getColumn()-1));
@@ -668,26 +672,27 @@ public class ChessRules implements Rules {
         return false;
     }
 
-
-    private static boolean areVerticalOrHorizontalPathsFree(GameBoard gameBoard, String move){
+// public for test purposes should be private
+    public static boolean areVerticalOrHorizontalPathsFree(GameBoard gameBoard, String move){
         Field target = converter.getChessTargetField(move);
         Field start = converter.getChessStartField(move);
 
         if(isFieldOccupiedByOwnPlayingP(gameBoard, move))
             return false;
 
+
         if(start.getRow()==target.getRow()){
 
             if(start.getColumn() < target.getColumn()){
-                //rook moved to the right side
-                for(int i = start.getColumn(); i < target.getColumn(); i++){
+                //moved to the right side
+                for(int i = start.getColumn()+1; i < target.getColumn(); i++){
                     if(Rules.isFieldOccupied(gameBoard, start.getRow(), i)){
                         return false;
                     }
                 }
             } else{
-                //rook moved to the left side
-                for(int i = start.getColumn(); i > target.getColumn(); i--) {
+                //moved to the left side
+                for(int i = start.getColumn()-1; i > target.getColumn(); i--) {
                     if (Rules.isFieldOccupied(gameBoard, start.getRow(), i)) {
                         return false;
                     }
@@ -697,15 +702,15 @@ public class ChessRules implements Rules {
         }else{
 
             if(start.getRow()>target.getRow()){
-                // rook moved upwards
-                for (int i = start.getRow(); i > target.getRow() ; i--) {
+                //moved upwards
+                for (int i = start.getRow()-1; i > target.getRow() ; i--) {
                     if(Rules.isFieldOccupied(gameBoard, i, start.getColumn())){
                         return false;
                     }
                 }
             }else{
-                //rook moved downwards
-                for (int i = start.getRow(); i < target.getRow() ; i++) {
+                //moved downwards
+                for (int i = start.getRow()+1; i < target.getRow() ; i++) {
                     if(Rules.isFieldOccupied(gameBoard, i, start.getColumn())){
                         return false;
                     }
