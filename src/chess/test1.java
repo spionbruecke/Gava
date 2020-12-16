@@ -2,12 +2,15 @@ package src.chess;
 
 import src.games.Field;
 import src.games.GameBoard;
+import src.games.Messages;
 import src.games.PlayingPiece;
 import src.chess.ChessRules;
 
 public class test1 {
 
     public static void main(String[] args){
+
+        //..................Bauer schlägt Bauer.................//
         PlayingPiece[][] p = new PlayingPiece[8][8];
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -27,17 +30,47 @@ public class test1 {
         }
 
         p[0][0].setName("pawn");
-        p[0][0].setColour("white");
+        p[0][0].setColour("black");
 
         p[1][1].setName("pawn");
-        p[1][1].setColour("black");
+        p[1][1].setColour("white");
 
         GameBoard b = new ChessBoard();
         b.setState(p);
         ChessRules rule = new ChessRules();
 
-        if(rule.areVerticalOrHorizontalPathsFree(b, "B7 A8"))
-            System.out.println("Turm laeuft einwandfrei");
+        if(rule.checkPawnMoves(b, "B7 A8") == Messages.MOVE_ALLOWED)
+            System.out.println("Bauer schlaegt Bauer");
 
+//.......................Läufer schlägt Läufer..............//
+        PlayingPiece[][] p2 = new PlayingPiece[8][8];
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                p2[i][j] = new PlayingPiece();
+            }
+        }
+
+        for (int row = 0; row < 8; row++) {
+            for (int j = 0; j < 8; j++) {
+                if( ((row == 0) && (j == 0)) || ((row == 1) && (j == 1))){
+                    // do nothing
+                }else{
+                    p2[row][j].setName("null");
+                    p2[row][j].setColour("null");
+                }
+            }
+        }
+
+        p2[0][0].setName("bishop");
+        p2[0][0].setColour("black");
+
+        p[1][1].setName("bishop");
+        p[1][1].setColour("white");
+
+        GameBoard board2 = new ChessBoard();
+        board2.setState(p);
+
+        if(rule.checkPawnMoves(b, "B7 A8") == Messages.MOVE_ALLOWED)
+            System.out.println("Läufer schlaegt Läufer");
     }
 }
