@@ -68,7 +68,8 @@ public class ClientHandler extends Thread {
 
                                     } else {  //TODO(Alex) Informationstype Win or Lose
                                         outputStream.writeUTF("<Sucess>");  
-                                        gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard)gameRoom.getGameBoard()));
+                                        System.out.println("<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard)gameRoom.getGameBoard()));
+                                        gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard)gameRoom.getGameBoard()) + ">");
                                     }
                                 }
                                     
