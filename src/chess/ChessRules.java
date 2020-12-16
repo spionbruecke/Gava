@@ -88,7 +88,8 @@ public class ChessRules implements Rules {
         
     }
 
-    private static Messages checkPawnMoves(GameBoard gameBoard, String move){
+    //public for test purposes
+    public static Messages checkPawnMoves(GameBoard gameBoard, String move){
         Field target = converter.getChessTargetField(move);
         Field start = converter.getChessStartField(move);
         // move two squares forward
