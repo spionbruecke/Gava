@@ -38,6 +38,9 @@ public class ChessRules implements Rules {
      * @return boolean
      */
     public Messages isMoveAllowed(GameBoard gameBoard, PlayingPiece[][] stateToCheck) {
+        if(isMoveCastling(gameBoard, stateToCheck))
+            return Messages.MOVE_ALLOWED;
+
         String move = converter.stateToString(gameBoard.getState(), stateToCheck);
 
         return checkEachPossibleMove(gameBoard, move);
@@ -108,10 +111,12 @@ public class ChessRules implements Rules {
 
         // move one square forward
         if(target.getRow() == start.getRow()+1
+                && target.getColumn() == start.getColumn()
                 && gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("black")
                 && !isFieldOccupiedByOwnPlayingP(gameBoard, move)){
             return Messages.MOVE_ALLOWED;
         }else if(target.getRow() == start.getRow()-1
+                && target.getColumn() == start.getColumn()
                 && gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("white")
                 && !isFieldOccupiedByOwnPlayingP(gameBoard, move)){
             return Messages.MOVE_ALLOWED;
@@ -198,13 +203,9 @@ public class ChessRules implements Rules {
         Field target = converter.getChessTargetField(move);
         Field start = converter.getChessStartField(move);
 
-        if(isFieldAttacked(board, target.getRow(), target.getColumn()))
+        if(isFieldAttacked(board, target.getRow(), target.getColumn())){
             return Messages.ERROR_WRONGMOVEMENT_DIRECTION_KING;
-
-
-        if(isMoveCastling(board, move))
-            return Messages.MOVE_ALLOWED;
-
+        }
 
         if( (start.getRow()-1 >= 0) && (start.getColumn()-1 >= 0) ){
             possibleLocations.add(new Field(start.getRow()-1, start.getColumn()-1));
@@ -345,35 +346,53 @@ public class ChessRules implements Rules {
         return areVerticalOrHorizontalPathsFree(gameBoard, move);
     }
 
-    private static boolean isMoveCastling(GameBoard gameBoard, String move){
-        int startRow = ChessMoveConverter.getChessStartField(move).getRow();
-        int startColumn = ChessMoveConverter.getChessStartField(move).getColumn();
+    private static boolean isMoveCastling(GameBoard gameBoard, PlayingPiece[][] stateToCheck){
+        int counter = 0;
+        ArrayList<Field> check = new ArrayList<Field>();
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if(!gameBoard.getState()[i][j].equals(stateToCheck[i][j]) && gameBoard.getState()[i][j].getName() != "null") {
+                    counter++;
+                    check.add(new Field(i, j));
+                }
+            }
+        }
 
-        if(gameBoard.getState()[startRow][startColumn].hasMoved())
-            return false;
+        Field rook;
+        Field king;
 
+        // if two playing piece have changed location
+        if(counter == 2 && arePieceRookAndKingFromSameColour(check, gameBoard.getState())){
 
-        final Field MOVE_TARGET = ChessMoveConverter.getChessTargetField(move);
+            if(gameBoard.getState()[check.get(0).getRow()][check.get(0).getColumn()].getName().equals("rook")){
+                rook = new Field(check.get(0).getRow(), check.get(0).getColumn());
+                king = new Field(check.get(1).getRow(), check.get(1).getColumn());
+            }else {
+                rook = new Field(check.get(1).getRow(), check.get(1).getColumn());
+                king = new Field(check.get(0).getRow(), check.get(0).getColumn());
+            }
 
-        final Field G8 = new Field(0,6);
-        final Field C8 = new Field(0, 2);
-        final Field G1 = new Field(7, 6);
-        final Field C1 = new Field(7, 2);
+            if(gameBoard.getState()[rook.getRow()][rook.getColumn()].hasMoved()
+                    || gameBoard.getState()[king.getRow()][king.getColumn()].hasMoved()){
+                return false;
+            }else {
+                return isCastlingPathFree(gameBoard, rook);
+            }
+        }
 
-        if(gameBoard.getState()[startRow][startColumn].getColour().equals("black")){
+        return false;
+    }
 
-            if(MOVE_TARGET.equals(G8) && !gameBoard.getState()[0][6].hasMoved())
-                return isCastlingPathFree(gameBoard, G8);
-            else if(MOVE_TARGET.equals(C8) && !gameBoard.getState()[0][2].hasMoved())
-                return isCastlingPathFree(gameBoard, C8);
+    private static boolean arePieceRookAndKingFromSameColour(ArrayList<Field> f, PlayingPiece[][] board){
 
-        }else{
+        if( (board[f.get(0).getRow()][f.get(0).getColumn()].getName().equals("rook")
+                && board[f.get(1).getRow()][f.get(1).getColumn()].getName().equals("king"))
+                ||
+                (board[f.get(0).getRow()][f.get(0).getColumn()].getName().equals("king")
+                && board[f.get(1).getRow()][f.get(1).getColumn()].getName().equals("rook")) ){
 
-            if(MOVE_TARGET.equals(G1) && !gameBoard.getState()[7][6].hasMoved())
-                return isCastlingPathFree(gameBoard, G1);
-            else if(MOVE_TARGET.equals(C1) && !gameBoard.getState()[7][2].hasMoved())
-                return isCastlingPathFree(gameBoard, C1);
-
+            return board[f.get(0).getRow()][f.get(0).getColumn()].getColour()
+                    .equals(board[f.get(1).getRow()][f.get(1).getColumn()].getColour());
         }
 
         return false;
@@ -537,7 +556,6 @@ public class ChessRules implements Rules {
             row++;
             column++;
         }
-
         for (Field possibleLocation : possibleLocations) {
             if (possibleLocation.equals(target)) {
                 return true;
@@ -655,8 +673,8 @@ public class ChessRules implements Rules {
         return false;
     }
 
-
-    private static boolean areVerticalOrHorizontalPathsFree(GameBoard gameBoard, String move){
+// public for test purposes should be private
+    public static boolean areVerticalOrHorizontalPathsFree(GameBoard gameBoard, String move){
         Field target = converter.getChessTargetField(move);
         Field start = converter.getChessStartField(move);
 
@@ -786,12 +804,5 @@ public class ChessRules implements Rules {
             return Messages.DRAW;
         else
             return Messages.GO_ON;
-    }
-
-    public Messages executeMove(GameBoard board, String colour, PlayingPiece[][] stateToCheck){
-        if(isMoveAllowed(board, stateToCheck) == Messages.MOVE_ALLOWED)
-            board.setState(stateToCheck);
-
-        return isGameFinished(board, colour);
     }
 }

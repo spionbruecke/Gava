@@ -1,6 +1,7 @@
 package src.chess;
 
 import src.games.*;
+//import sun.tools.jar.resources.jar;
 
 /**
  * @author Alexander Posch, Begüm Tosun
@@ -22,21 +23,21 @@ public class ChessMoveConverter implements MoveConverter {
         Field target = new Field();
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if (!currentState[i][j].getName().equals(stateToCheck[i][j].getName()) && stateToCheck[i][j].getName().equals("null")){
-                    start = new Field(j, i);
-                }else if(!currentState[i][j].getName().equals(stateToCheck[i][j].getName()) && !stateToCheck[i][j].getName().equals("null")){
-                    target = new Field(j, i);
+                if (!currentState[i][j].getName().equals("null") && stateToCheck[i][j].getName().equals("null")){
+                    start = new Field(i, j);
+                }else if(!currentState[i][j].getColour().equals(stateToCheck[i][j].getColour()) && !stateToCheck[i][j].getName().equals("null")){
+                    target = new Field(i, j);
                 }
             }
         }
 
         
-        move.append(convertArrayCoordinateIntoPosColumn(start.getRow()));
-        move.append(convertArrayCoordinateIntoPosRow(start.getColumn()));
+        move.append(convertArrayCoordinateIntoPosColumn(start.getColumn()));
+        move.append(convertArrayCoordinateIntoPosRow(start.getRow()));
         move.append(" ");
        
-        move.append(convertArrayCoordinateIntoPosColumn(target.getRow()));
-        move.append(convertArrayCoordinateIntoPosRow(target.getColumn()));
+        move.append(convertArrayCoordinateIntoPosColumn(target.getColumn()));
+        move.append(convertArrayCoordinateIntoPosRow(target.getRow()));
 
         return move.toString();
     }
@@ -187,6 +188,7 @@ public class ChessMoveConverter implements MoveConverter {
      * @return Field
      */
     static Field getChessTargetField(String move){
+        
         return new Field(convertPosIntoArrayCoordinate(move.charAt(4)),
                 convertPosIntoArrayCoordinate(move.charAt(3)));
     }
