@@ -193,6 +193,9 @@ public class ChessBoard extends GameBoard {
                 else    
                     position.append("null");
 
+                if(!this.getPlayingPieces()[counter].getPosition().equals(position.toString()))
+                    this.getPlayingPieces()[counter].setHasMoved();
+
                 this.getPlayingPieces()[counter].setPosition(position.toString());
                 
                 if(input.charAt(i - 1) == '1')
