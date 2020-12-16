@@ -19,6 +19,8 @@ public class ClientHandler extends Thread {
     private DataInputStream inputStream;
     private DataOutputStream outputStream;
     private GameController controller;
+    private Player player;
+    private GameRoom gameRoom;
 
     protected ClientHandler(Socket newConnection, DataInputStream inputStream, DataOutputStream outputStream,
             GameController controller) {
@@ -31,12 +33,8 @@ public class ClientHandler extends Thread {
 
     @Override
     public void run() {
-        Player player;
-        GameRoom gameRoom;
         String input;
         String information;
-        String tmp;
-        InformationsTypes typ;
         boolean connected;
 
         connected = true;
@@ -60,16 +58,8 @@ public class ClientHandler extends Thread {
                                 break;
                             case GAMEBOARD:
                                 if(gameRoom != null){
-                                    tmp = gameRoom.setInput(information);
-                                    typ = StringConverter.getInformationType(tmp);
-                                    if(typ.equals(InformationsTypes.ERROR)){
-                                        outputStream.writeUTF(tmp);
-                                    } else if (typ.equals(InformationsTypes.PROMOTION)){
-
-                                    } else {  //TODO(Alex) Informationstype Win or Lose
-                                        outputStream.writeUTF("<Sucess>");  
-                                        System.out.println("<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard)gameRoom.getGameBoard()));
-                                        gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard)gameRoom.getGameBoard()) + ">");
+                                    if(this.gameRoom.getGame() instanceof ChessGame){
+                                        handleChessgame(information);
                                     }
                                 }
                                     
@@ -112,5 +102,21 @@ public class ClientHandler extends Thread {
 
         public void sendMessage(String message) throws IOException {
             outputStream.writeUTF(message);
+        }
+
+        private void handleChessgame(String information) throws WrongInformationFormatException, IOException {
+            String tmp;
+            InformationsTypes typ;
+
+            tmp = gameRoom.setInput(information);
+            typ = StringConverter.getInformationType(tmp);
+            if(typ.equals(InformationsTypes.ERROR)){
+                outputStream.writeUTF(tmp);
+            } else if (typ.equals(InformationsTypes.PROMOTION)){
+
+            } else {  //TODO(Alex) Informationstype Win or Lose
+                outputStream.writeUTF("<Sucess>");  
+                gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard)gameRoom.getGameBoard()) + ">");
+            }
         }
 }
