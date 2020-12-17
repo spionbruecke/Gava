@@ -109,13 +109,14 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 	}
 	
 	
-public ImageIcon getImageIcon(String name, String color) {
+	public ImageIcon getImageIcon(String name, String color) {
 		
 		ImageIcon icon = null;
 		
 		if (color.equals("black")) {
 			
-			switch (name) {		
+			switch (name) {
+			
 			case "pawn":
 				icon = new ImageIcon("resources/chess/black_pawn.png");
 				break;

@@ -63,6 +63,7 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 	
 	protected String color = null;
 	protected boolean myTurn = false;
+	protected String result = " ";
 	
 	protected String newState = " ";	
 	protected String oldState = "<rook,black,0=A8><knight,black,0=B8><bishop,black,0=C8><queen,black,0=D8><king,black,0=E8><bishop,black,0=F8><knight,black,0=G8><rook,black,0=H8><pawn,black,0=A7><pawn,black,0=B7><pawn,black,0=C7><pawn,black,0=D7><pawn,black,0=E7><pawn,black,0=F7><pawn,black,0=G7><pawn,black,0=H7><rook,white,0=A1><knight,white,0=B1><bishop,white,0=C1><queen,white,0=D1><king,white,0=E1><bishop,white,0=F1><knight,white,0=G1><rook,white,0=H1><pawn,white,0=A2><pawn,white,0=B2><pawn,white,0=C2><pawn,white,0=D2><pawn,white,0=E2><pawn,white,0=F2><pawn,white,0=G2><pawn,white,0=H2>";
@@ -149,6 +150,14 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 					break;
 					
 				case GAMEBOARD:
+					if (result.equals("loss")) {
+						board.dispose();
+						myTurn = false;
+						setupGameBoard(information);
+						JOptionPane.showMessageDialog(null, "you lost", "Loss", JOptionPane.INFORMATION_MESSAGE);
+						isPlaying = false;
+						break;
+					}
 					board.dispose();					
 					myTurn = true;
 					System.out.println("gameboard   " + information);
@@ -172,7 +181,7 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 					myTurn = true;
 					System.out.println("error  " + information);
 					setupGameBoard(oldState);
-					JOptionPane.showMessageDialog(null, information, "Error", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, information, "Error", JOptionPane.INFORMATION_MESSAGE); //TODO error meldung
 					while(newState == " ") {
 						newState = ((ChessBoard) board).getNewState();
 					}	
@@ -186,6 +195,16 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 				case SUCESS:
 					oldState = currentSate;
 					System.out.println("success");
+					break;
+				case WIN:
+					result = "win";
+					System.out.println(result);
+					JOptionPane.showMessageDialog(null, "you won", "winner", JOptionPane.INFORMATION_MESSAGE);
+					isPlaying = false;
+					break;
+				
+				case LOSS:
+					result = "loss";
 					break;
 					
 				default:
