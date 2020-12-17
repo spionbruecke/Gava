@@ -118,7 +118,7 @@ public class GameRoom{
             message = rule.isMoveAllowed(gameBoard, ChessMoveConverter.getBoardFromString(information));
 
             if(message == Messages.MOVE_ALLOWED){
-                typ = rule.isGameFinished(gameBoard, getTheOtherPlayer(turnOfPlayer).getColour());
+                /*typ = rule.isGameFinished(gameBoard, getTheOtherPlayer(turnOfPlayer).getColour());
 
                 if(typ == Messages.DEFEATED){
                     getTheOtherPlayer(turnOfPlayer).getClientHandler().sendMessage("<Loss>");
@@ -126,16 +126,24 @@ public class GameRoom{
                 } else if (typ == message.DRAW){
                     getTheOtherPlayer(turnOfPlayer).getClientHandler().sendMessage("<Draw>");
                     return "<Draw>";
+                }*/
+
+                gameBoard.setNewBoard(information);
+
+                if(ChessRules.isKingDead(gameBoard,getTheOtherPlayer(turnOfPlayer))){
+                    System.out.println(ChessRules.isKingDead(gameBoard,getTheOtherPlayer(turnOfPlayer)));
+                    getTheOtherPlayer(turnOfPlayer).getClientHandler().sendMessage("<Loss>");
+                    return "<Win>";
                 }
 
             }
+
             switch(message){
                 case VICTORY:
                     return "<Gameend=Victory>";
                 case DEFEATED:
                     return "<Gameend=Defeated>";
                 case MOVE_ALLOWED:
-                    gameBoard.setNewBoard(information);
                     this.turnOfPlayer = getTheOtherPlayer(turnOfPlayer);
                     return "<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard) this.gameBoard) + ">";
                 case ERROR_WRONGMOVEMENT_DIRECTION_BISHOP:

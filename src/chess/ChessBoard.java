@@ -166,7 +166,7 @@ public class ChessBoard extends GameBoard {
         return initialState;
     }
     
-    protected PlayingPiece[] getPlayingPieces(){
+    public PlayingPiece[] getPlayingPieces(){
         return playingPieces;
     }
 

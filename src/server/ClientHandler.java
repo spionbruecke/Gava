@@ -23,6 +23,7 @@ public class ClientHandler extends Thread {
     private GameController controller;
     private Player player;
     private GameRoom gameRoom;
+    private boolean connected;
 
     protected ClientHandler(Socket newConnection, DataInputStream inputStream, DataOutputStream outputStream,
             GameController controller) {
@@ -37,7 +38,7 @@ public class ClientHandler extends Thread {
     public void run() {
         String input;
         String information;
-        boolean connected;
+        
 
         connected = true;
             try {
@@ -117,6 +118,10 @@ public class ClientHandler extends Thread {
                 outputStream.writeUTF(tmp);
             } else if (typ.equals(InformationsTypes.PROMOTION)){
 
+            } else if( typ.equals(InformationsTypes.WIN)){
+                outputStream.writeUTF("<Win>"); 
+                gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard)gameRoom.getGameBoard()) + ">");
+                connected = false; 
             } else {  //TODO(Alex) Informationstype Win or Lose
                 outputStream.writeUTF("<Sucess>");  
                 gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard)gameRoom.getGameBoard()) + ">");

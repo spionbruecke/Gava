@@ -75,6 +75,8 @@ public abstract class GameBoard {
         prevState = new Cache(state);
     }
     
+    public abstract PlayingPiece[] getPlayingPieces();
+
     public abstract void setNewBoard(String input) throws WrongFormatException;
     
     protected abstract PlayingPiece[][] setUpPlayingPieces();

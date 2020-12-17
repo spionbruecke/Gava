@@ -69,7 +69,7 @@ public class StringConverter{
         if(currentChar == '<'){
             currentChar = input.charAt(1);
 
-            while(currentChar != '=' && i < input.length()){
+            while(currentChar != '=' && i < input.length() && currentChar != '>'){
                 if (currentChar != ' ')   
                     keywort.append(currentChar);
                 i ++;

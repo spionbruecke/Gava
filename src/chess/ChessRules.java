@@ -2,6 +2,7 @@ package src.chess;
 
 import java.util.ArrayList;
 import src.games.*;
+import src.organisation.Player;
 
 
 /**
@@ -11,6 +12,19 @@ import src.games.*;
  */
 public class ChessRules implements Rules {
     private static ChessMoveConverter converter = new ChessMoveConverter();
+
+    //Notlösung
+    public static boolean isKingDead(GameBoard gameboard, Player player){
+
+        for(int i = 0; i < gameboard.getPlayingPieces().length; i++ ){
+            System.out.println(gameboard.getPlayingPieces()[i].getName()  + " | "  + gameboard.getPlayingPieces()[i].getPosition() + " | "  + gameboard.getPlayingPieces()[i].getColour() + " | P: " + player.getColour());
+            if(gameboard.getPlayingPieces()[i].getName().equals("king") 
+            && gameboard.getPlayingPieces()[i].getColour().equals(player.getColour()) 
+            && gameboard.getPlayingPieces()[i].getPosition().equals("null"))
+                return true;
+        }
+        return false;
+    }
 
     /**
      * Checks if the target square/field of the given move is occupied by ones own playing piece.
