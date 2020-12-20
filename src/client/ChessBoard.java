@@ -8,13 +8,14 @@ import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 
 public class ChessBoard extends JFrame implements MouseListener, MouseMotionListener {
 	
 	protected JLayeredPane layeredPane;
 	protected JPanel chessBoard;
 	protected JLabel chessPiece;
-	protected Dimension boardSize = new Dimension(600,600);
+	protected Dimension boardSize = new Dimension(670,670);
 	
 	protected Color dark = new Color(255,235,205);
 	protected Color light = new Color(160,82,45);
@@ -37,9 +38,10 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 	protected boolean myTurn;
 	protected boolean movePerformed = false;
 	
-
 	
-		
+	private JLabel l;
+	
+	
 	public ChessBoard(String color, String currentState, boolean myTurn) {	
 		this.currentState = currentState;
 		this.oldState = currentState;
@@ -109,7 +111,7 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 	}
 	
 	
-	public ImageIcon getImageIcon(String name, String color) {
+public ImageIcon getImageIcon(String name, String color) {
 		
 		ImageIcon icon = null;
 		
@@ -160,6 +162,7 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 		}	
 		return icon;
 	}
+
 	
 	
 	public void createString() {
@@ -190,35 +193,86 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 	
 	public void setupBoard() {
 		layeredPane = new JLayeredPane();
-		getContentPane().add(layeredPane);
+		getContentPane().add(layeredPane, BorderLayout.NORTH);
 		layeredPane.setPreferredSize(boardSize);
-		layeredPane.addMouseListener(this);
-		layeredPane.addMouseMotionListener(this);
+
 		
 		chessBoard = new JPanel();
 		layeredPane.add(chessBoard, JLayeredPane.DEFAULT_LAYER);
 		chessBoard.setLayout(new GridLayout(8,8));
+		chessBoard.setBorder(new LineBorder(new Color(0, 0, 0), 2));
 		chessBoard.setPreferredSize(boardSize);
-		chessBoard.setBounds(0, 0, boardSize.width, boardSize.height);
+		chessBoard.setBounds(35, 35, 600, 600);
+		chessBoard.addMouseListener(this);
+		chessBoard.addMouseMotionListener(this);
+		
 		
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
 				JPanel square = new JPanel(new BorderLayout());
+				square.setBorder(new LineBorder(new Color(0, 0, 0), 1));
 				chessBoard.add(square); //TODO
 				
-					if (i%2 == 0) {
-						if (j%2 == 0)
-							square.setBackground(dark);
-						else
-							square.setBackground(light);
-					} else {
-						if (j%2 == 0)
-							square.setBackground(light);
-						else
-							square.setBackground(dark);
-					}
+				if (i%2 == 0) {
+					if (j%2 == 0)
+						square.setBackground(dark);
+					else
+						square.setBackground(light);
+				} else {
+					if (j%2 == 0)
+						square.setBackground(light);
+					else
+						square.setBackground(dark);
+				}
 			}	
 		}
+		setUpFrameLetters(35,640,75,35);
+		setUpFrameLetters(35,5,75,35);		  
+		  
+		setUpFrameNumbers(635,35,35,75);
+		setUpFrameNumbers(0, 35, 35, 75);
+	}
+	
+	public void setUpFrameNumbers(int x, int y, int w, int h) {
+		String[] lettersW = {"A", "B", "C", "D", "E", "F", "G", "H"};
+		String[] lettersB = {"H", "G", "F", "E", "D", "C", "B", "A"};
+		String[] tmp;
+		
+		if (this.color.equals("white"))
+			tmp = lettersW;
+		else
+			tmp = lettersB;
+		
+		for (int i = 7; i >= 0; i--) {
+			l = new JLabel(tmp[i]);
+			l.setHorizontalTextPosition(SwingConstants.CENTER);
+			l.setHorizontalAlignment(SwingConstants.CENTER);
+			l.setFont(new Font("C059", Font.PLAIN, 25));
+			l.setBounds(x, y, w, h);
+			layeredPane.add(l);
+			y += 75;
+		  }			
+	}
+	
+	public void setUpFrameLetters(int x, int y, int w, int h) {
+		String[] numbersW = {"1", "2", "3", "4", "5", "6", "7", "8"};
+		String[] numbersB = {"8", "7", "6", "5", "4", "3", "2", "1"};
+		String[] tmp;
+		
+		if (this.color.equals("white"))
+			tmp = numbersW;
+		else
+			tmp = numbersB;
+		
+		for (int i = 0; i < 8; i++) {
+			l = new JLabel(tmp[i]);
+			l.setHorizontalTextPosition(SwingConstants.CENTER);
+			l.setHorizontalAlignment(SwingConstants.CENTER);
+			l.setFont(new Font("C059", Font.PLAIN, 25));
+			l.setBounds(x, y, w, h);
+			layeredPane.add(l);
+			x += 75;
+		  }			
 	}
 	
 	
@@ -301,8 +355,8 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 //		moveFrom[1] = col;
 			
 		Point parentLocation = c.getParent().getLocation();
-		x = parentLocation.x - me.getX();
-		y = parentLocation.y - me.getY();
+		x = parentLocation.x - me.getX() +35;
+		y = parentLocation.y - me.getY() +35; //+35 wegen frame
 	
 		chessPiece = (JLabel)c;
 		
