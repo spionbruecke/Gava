@@ -61,11 +61,8 @@ public class ClientHandler extends Thread {
                                 break;
                             case GAMEBOARD:
                                 if(gameRoom != null){
-                                    if(this.gameRoom.getGame() instanceof ChessGame){
-                                        handleChessgame(information);
-                                    }
+                                        handleGame(information);
                                 }
-                                    
                                 break;
                             case LOGIN:
                             	if (information.equals("tobi,123")){
@@ -107,7 +104,7 @@ public class ClientHandler extends Thread {
             outputStream.writeUTF(message);
         }
 
-        private void handleChessgame(String information) throws WrongInformationFormatException, IOException {
+        private void handleGame(String information) throws WrongInformationFormatException, IOException {
             String tmp;
             InformationsTypes typ;
             Messages finished;
@@ -120,25 +117,15 @@ public class ClientHandler extends Thread {
 
             } else if( typ.equals(InformationsTypes.WIN)){
                 outputStream.writeUTF("<Win>"); 
-                gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard)gameRoom.getGameBoard()) + ">");
+                if(this.gameRoom.getGame() instanceof ChessGame){
+                    gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard)gameRoom.getGameBoard()) + ">");
+                }
                 connected = false; 
             } else {  //TODO(Alex) Informationstype Win or Lose
-                outputStream.writeUTF("<Sucess>");  
-                gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard)gameRoom.getGameBoard()) + ">");
-                /*finished = gameRoom.getRules().isGameFinished(gameRoom.getGameBoard(),gameRoom.getTheOtherPlayer(player).getColour());
-                switch (finished){
-                    case DEFEATED:
-                        gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Loss>");
-                        outputStream.writeUTF("<Win>");
-                        break;
-                    case DRAW:
-                        gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Draw>");
-                        outputStream.writeUTF("<Draw>");
-                        break;
-                    default:
-                        System.out.println("Some mistake");
-
-                }*/
+                outputStream.writeUTF("<Sucess>"); 
+                if(this.gameRoom.getGame() instanceof ChessGame){ 
+                    gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard)gameRoom.getGameBoard()) + ">");
+                }
             }
         }
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import src.chess.*;
 import src.games.*;
+import src.mill.*;
 
 /**
  * @author Alexander Posch
@@ -97,7 +98,8 @@ public class GameRoom{
     public String setInput(String information){
         if(this.currentGame instanceof ChessGame){
             return setChessInput(information);
-        }
+        } else if (this.currentGame instanceof MillGame)
+            return "";
         return "<Error=Error while processing the Movement: Programming Error>";
 
     }
