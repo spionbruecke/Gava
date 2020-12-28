@@ -99,7 +99,7 @@ public class GameRoom{
         if(this.currentGame instanceof ChessGame){
             return setChessInput(information);
         } else if (this.currentGame instanceof MillGame)
-            return "";
+            return setMillInput(information);
         return "<Error=Error while processing the Movement: Programming Error>";
 
     }
@@ -120,26 +120,13 @@ public class GameRoom{
             message = rule.isMoveAllowed(gameBoard, ChessMoveConverter.getBoardFromString(information));
 
             if(message == Messages.MOVE_ALLOWED){
-                /*typ = rule.isGameFinished(gameBoard, getTheOtherPlayer(turnOfPlayer).getColour());
-
-                if(typ == Messages.DEFEATED){
-                    getTheOtherPlayer(turnOfPlayer).getClientHandler().sendMessage("<Loss>");
-                    return "<Win>";
-                } else if (typ == message.DRAW){
-                    getTheOtherPlayer(turnOfPlayer).getClientHandler().sendMessage("<Draw>");
-                    return "<Draw>";
-                }*/
-
                 gameBoard.setNewBoard(information);
-
                 if(ChessRules.isKingDead(gameBoard,getTheOtherPlayer(turnOfPlayer))){
                     System.out.println(ChessRules.isKingDead(gameBoard,getTheOtherPlayer(turnOfPlayer)));
                     getTheOtherPlayer(turnOfPlayer).getClientHandler().sendMessage("<Loss>");
                     return "<Win>";
                 }
-
             }
-
             switch(message){
                 case VICTORY:
                     return "<Gameend=Victory>";
@@ -161,10 +148,15 @@ public class GameRoom{
                 case ERROR_WRONGMOVEMENT_DIRECTION_ROOK:
                     return "<Error=Rook is only allowed to move straight in the x- or y-axis>";
                 case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_BISHOP:
+                    return pieceintheWay;
                 case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_KING:
+                    return pieceintheWay;
                 case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_KNIGHT:
+                    return pieceintheWay;
                 case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_PAWN:
+                    return pieceintheWay;
                 case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_QUEEN:
+                    return pieceintheWay;
                 case ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_ROOK:
                     return pieceintheWay;
                 case ERROR_NO_SUCH_PLAYINGPIECE:
@@ -172,11 +164,18 @@ public class GameRoom{
                 default:
                     System.out.println("Big ERROR: " + message);
             }
-    }catch (Exception e){
-        System.err.println(e);
-    }
+        }catch (Exception e){
+            System.err.println(e);
+        }
         return null;
     }
+
+    private String setMillInput(String information){
+        return null;
+    }
+
+
+
     /**
      * Returns the other player of the gameroom.
      * 
