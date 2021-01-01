@@ -3,16 +3,16 @@ package src.mill;
 import src.games.Game;
 
 public class MillGame extends Game {
+    MillBoard board;
 
     public MillGame(String gameName) {
         super(gameName);
-        // TODO Auto-generated constructor stub
+        initialize();
     }
 
     @Override
     public void initialize() {
-        // TODO Auto-generated method stub
-
+        board = new MillBoard();
     }
     
 }

@@ -79,5 +79,5 @@ public abstract class GameBoard {
 
     public abstract void setNewBoard(String input) throws WrongFormatException;
     
-    protected abstract PlayingPiece[][] setUpPlayingPieces();
+    protected abstract PlayingPiece[][] setUpBoard();
 }

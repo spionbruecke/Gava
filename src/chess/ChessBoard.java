@@ -105,15 +105,15 @@ public class ChessBoard extends GameBoard {
             playingPieces[x].setPosition(ChessMoveConverter.convertArrayCoordinateIntoPosColumn(x - 24)+"2");
         }
 
-        super.setState(setUpPlayingPieces());
+        super.setState(setUpBoard());
     }
 
     /**
-     * The method setUpPlayingPieces() returns a chess board with an initial setup.
+     * The method setUpBoard() returns a chess board with an initial setup.
      * @return ChessPlayingPiece[][]
      */
     @Override
-    protected PlayingPiece[][] setUpPlayingPieces(){
+    protected PlayingPiece[][] setUpBoard(){
         PlayingPiece[][] initialState = new PlayingPiece[8][8];
         for(int k = 0 ; k < 8; k ++) {
             for (int j = 0; j < 8; j ++){

@@ -11,7 +11,7 @@ import src.organisation.Player;
  * @author Begüm Tosun
  */
 public class ChessRules implements Rules {
-    private static ChessMoveConverter converter = new ChessMoveConverter();
+    private static final ChessMoveConverter converter = new ChessMoveConverter();
 
     //Notlösung
     public static boolean isKingDead(GameBoard gameboard, Player player){
@@ -38,7 +38,7 @@ public class ChessRules implements Rules {
 
         String ownColour = board.getState()[converter.convertPosIntoArrayCoordinate(move.charAt(1))][converter.convertPosIntoArrayCoordinate(move.charAt(0))].getColour();
     
-        if(board.getState()[row][column].getName()=="null"){
+        if(board.getState()[row][column].getName().equals("null")){
             return false;
         }else
             return board.getState()[row][column].getColour().equals(ownColour);
@@ -99,6 +99,51 @@ public class ChessRules implements Rules {
                 return Messages.ERROR_NO_SUCH_PLAYINGPIECE;
         }
         
+    }
+
+    private static Messages checkEachPossibleAttack(GameBoard gameBoard, String move){
+
+        int row = converter.convertPosIntoArrayCoordinate(move.charAt(1));
+        int column = converter.convertPosIntoArrayCoordinate(move.charAt(0));
+
+        switch(gameBoard.getState()[row][column].getName()){
+            case "rook":
+                if((checkRookMoves(move) == Messages.MOVE_ALLOWED) && isRookPathFree(gameBoard, move) )
+                    return Messages.MOVE_ALLOWED;
+                else
+                    return Messages.ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_ROOK;
+
+            case "knight":
+                if((checkKnightMoves(move) == Messages.MOVE_ALLOWED) && isKnightTargetFree(gameBoard, move))
+                    return Messages.MOVE_ALLOWED;
+                else
+                    return Messages.ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_KNIGHT;
+
+            case "bishop":
+                if((checkBishopMoves(move) == Messages.MOVE_ALLOWED) && isBishopPathFree(gameBoard, move))
+                    return Messages.MOVE_ALLOWED;
+                else
+                    return Messages.ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_BISHOP;
+
+            case "queen":
+                if((checkQueenMoves(move) == Messages.MOVE_ALLOWED) && isQueenPathFree(gameBoard, move))
+                    return Messages.MOVE_ALLOWED;
+                else
+                    return Messages.ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_QUEEN;
+
+            case "king":
+                if((attackFromOpponentKing(gameBoard, move) == Messages.MOVE_ALLOWED) && isKingTargetFree(gameBoard, move))
+                    return Messages.MOVE_ALLOWED;
+                else
+                    return Messages.ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_KING;
+
+            case "pawn":
+                return checkPawnMoves(gameBoard, move);
+
+            default:
+                return Messages.ERROR_NO_SUCH_PLAYINGPIECE;
+        }
+
     }
 
     //public for test purposes
@@ -206,6 +251,53 @@ public class ChessRules implements Rules {
                 && board.getState()[start.getRow()][target.getColumn()].getName() != "null"
                 && !board.getState()[start.getRow()][target.getColumn()].getColour()
                         .equals(board.getState()[start.getRow()][start.getColumn()].getColour());
+    }
+
+    private static Messages attackFromOpponentKing(GameBoard board, String move){
+        ArrayList<Field> possibleLocations = new ArrayList<Field>();
+
+        Field target = converter.getChessTargetField(move);
+        Field start = converter.getChessStartField(move);
+
+        if( (start.getRow()-1 >= 0) && (start.getColumn()-1 >= 0) ){
+            possibleLocations.add(new Field(start.getRow()-1, start.getColumn()-1));
+        }
+
+        if(start.getRow()-1 >= 0){
+            possibleLocations.add(new Field(start.getRow()-1, start.getColumn()));
+        }
+
+        if( (start.getRow()-1 >= 0) && (start.getColumn()+1 <= 7) ){
+            possibleLocations.add(new Field(start.getRow()-1, start.getColumn()+1));
+        }
+
+        if(start.getColumn()+1 <= 7){
+            possibleLocations.add(new Field(start.getRow(), start.getColumn()+1));
+        }
+
+        if( (start.getRow()+1 <= 7) && (start.getColumn()+1 <= 7) ){
+            possibleLocations.add(new Field(start.getRow()+1, start.getColumn()+1));
+        }
+
+        if(start.getRow()+1 <= 7){
+            possibleLocations.add(new Field(start.getRow()+1, start.getColumn()));
+        }
+
+        if( (start.getRow()+1 <= 7) && (start.getColumn()-1 >= 0) ){
+            possibleLocations.add(new Field(start.getRow()+1, start.getColumn()-1));
+        }
+
+        if(start.getColumn()-1 >= 0){
+            possibleLocations.add(new Field(start.getRow(), start.getColumn()-1));
+        }
+
+        for (Field possibleLocation : possibleLocations) {
+            if (possibleLocation.equals(target)) {
+                return Messages.MOVE_ALLOWED;
+            }
+        }
+
+        return Messages.ERROR_WRONGMOVEMENT_DIRECTION_KING;
     }
 
     private static Messages checkKingMoves(GameBoard board, String move){
@@ -452,7 +544,7 @@ public class ChessRules implements Rules {
 
                 move = stringB.toString();
 
-                if(checkEachPossibleMove(board, move) == Messages.MOVE_ALLOWED)
+                if(checkEachPossibleAttack(board, move) == Messages.MOVE_ALLOWED)
                     return true;
             }
         }
