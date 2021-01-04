@@ -209,33 +209,27 @@ public class ChessRules implements Rules {
         return Messages.ERROR_WRONGMOVEMENT_DIRECTION_PAWN;
     }
 
-    public boolean isPromotion(GameBoard gameBoard, PlayingPiece[][] stateToCheck){
+    public String isPromotion(GameBoard gameBoard, PlayingPiece[][] stateToCheck){
         Field target = converter.getChessTargetField(converter.stateToString(gameBoard.getState(), stateToCheck));
         Field start = converter.getChessStartField(converter.stateToString(gameBoard.getState(), stateToCheck));
 
-        int counter = 0;
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if(!gameBoard.getState()[i][j].equals(stateToCheck[i][j]))
-                    counter++;
-            }
-        }
+        String stringTarget = converter.convertArrayCoordinateIntoPosColumn(target.getColumn()) + " "
+                                + converter.convertArrayCoordinateIntoPosRow(target.getRow());
 
-        //more than one piece has been moved
-        if(counter > 2){
-            return false;
-        }
+        if(!gameBoard.getState()[start.getRow()][start.getColumn()].getName().equals("pawn") ||
+                checkPawnMoves(gameBoard, converter.stateToString(gameBoard.getState(), stateToCheck)) != Messages.MOVE_ALLOWED)
+            return "false";
 
         //promotion
         if(gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("white")
                 && target.getRow() == 0){
-            return true;
+            return stringTarget;
         }else if(gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("black")
                 && target.getRow() == 7){
-            return true;
+            return stringTarget;
         }
 
-        return false;
+        return "false";
     }
 
     private static boolean isPawnPathFree(GameBoard board, Field start){

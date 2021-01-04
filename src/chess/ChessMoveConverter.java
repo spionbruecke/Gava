@@ -17,7 +17,6 @@ public class ChessMoveConverter implements MoveConverter {
      * @return String
      */
     public String stateToString(PlayingPiece[][] currentState, PlayingPiece[][] stateToCheck){
-        // Voraussetzung move != castling
         StringBuilder move = new StringBuilder();
         Field start = new Field();
         Field target = new Field();
