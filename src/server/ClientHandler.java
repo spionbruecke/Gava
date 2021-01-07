@@ -74,10 +74,18 @@ public class ClientHandler extends Thread {
                                 break;
                             case CREATEACCOUNT:
                                 //dummyfunctionLogin(Name, pW)
-                            	break;
+                                break;
+                            case PROMOTION:
+                                gameRoom.setPromotion(information);
+                                break;
                             case CONNECTIONSTATUS:
                                 if(information.equals("Exit"))
                                     connected = false;
+                                break;
+                            case TIMEOUT:
+                                gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Win>");
+                                outputStream.writeUTF("<Loss>");
+                                connected = false; 
                                 break;
                             case MESSAGE:
 
@@ -107,21 +115,18 @@ public class ClientHandler extends Thread {
         private void handleGame(String information) throws WrongInformationFormatException, IOException {
             String tmp;
             InformationsTypes typ;
-            Messages finished;
 
             tmp = gameRoom.setInput(information);
             typ = StringConverter.getInformationType(tmp);
             if(typ.equals(InformationsTypes.ERROR)){
                 outputStream.writeUTF(tmp);
-            } else if (typ.equals(InformationsTypes.PROMOTION)){
-
             } else if( typ.equals(InformationsTypes.WIN)){
                 outputStream.writeUTF("<Win>"); 
                 if(this.gameRoom.getGame() instanceof ChessGame){
                     gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard)gameRoom.getGameBoard()) + ">");
                 }
                 connected = false; 
-            } else {  //TODO(Alex) Informationstype Win or Lose
+            } else {
                 outputStream.writeUTF("<Sucess>"); 
                 if(this.gameRoom.getGame() instanceof ChessGame){ 
                     gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard)gameRoom.getGameBoard()) + ">");

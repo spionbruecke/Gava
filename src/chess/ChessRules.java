@@ -209,7 +209,7 @@ public class ChessRules implements Rules {
         return Messages.ERROR_WRONGMOVEMENT_DIRECTION_PAWN;
     }
 
-    public String isPromotion(GameBoard gameBoard, PlayingPiece[][] stateToCheck){
+    public static String isPromotion(GameBoard gameBoard, PlayingPiece[][] stateToCheck){
         Field target = converter.getChessTargetField(converter.stateToString(gameBoard.getState(), stateToCheck));
         Field start = converter.getChessStartField(converter.stateToString(gameBoard.getState(), stateToCheck));
 
@@ -230,6 +230,17 @@ public class ChessRules implements Rules {
         }
 
         return "false";
+    }
+
+    public static void setPromotion(GameBoard gameBoard, String information, String position){
+        PlayingPiece[] list = gameBoard.getPlayingPieces();
+        for(int i = 0; i < list.length; i ++){
+            if(list[i].getPosition().equals(position)){
+                list[i].setName(information);
+                break;
+            }
+        }
+
     }
 
     private static boolean isPawnPathFree(GameBoard board, Field start){

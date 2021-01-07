@@ -46,6 +46,10 @@ public class StringConverter{
                 return InformationsTypes.LOSS;
             case "Win":
                 return InformationsTypes.WIN;
+            case "Promotion":
+                return InformationsTypes.PROMOTION;
+            case "Timeout":
+                return InformationsTypes.TIMEOUT;
             default:
                 throw new WrongInformationFormatException();
         }

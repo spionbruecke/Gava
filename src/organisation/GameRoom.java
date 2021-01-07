@@ -25,6 +25,7 @@ public class GameRoom{
     private GameBoard gameBoard;
     private Rules rule;
     private String game;
+    private String promotionPosition;
 
     public GameRoom(Game gamemode){
         currentGame = gamemode;
@@ -116,8 +117,10 @@ public class GameRoom{
         String pieceintheWay = "<Error=There is some piece in the way>";
         try{
             Messages message;
-            Messages typ;
+            String promotion;
+
             message = rule.isMoveAllowed(gameBoard, ChessMoveConverter.getBoardFromString(information));
+            promotion = ChessRules.isPromotion(gameBoard, ChessMoveConverter.getBoardFromString(information));
 
             if(message == Messages.MOVE_ALLOWED){
                 gameBoard.setNewBoard(information);
@@ -125,6 +128,11 @@ public class GameRoom{
                     System.out.println(ChessRules.isKingDead(gameBoard,getTheOtherPlayer(turnOfPlayer)));
                     getTheOtherPlayer(turnOfPlayer).getClientHandler().sendMessage("<Loss>");
                     return "<Win>";
+                }
+
+                if(!promotion.equals("")){
+                    promotionPosition = promotion;
+                    return "<Promotion>";
                 }
             }
             switch(message){
@@ -172,6 +180,10 @@ public class GameRoom{
 
     private String setMillInput(String information){
         return null;
+    }
+
+    public void setPromotion(String information){
+        ChessRules.setPromotion(gameBoard, information, promotionPosition);
     }
 
 
