@@ -71,7 +71,7 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 
 	
 	
-	protected String currentSate = "";
+	protected String currentState = "";
 	
     /**
      * This method is called when user starts the application
@@ -121,7 +121,6 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 				switch(StringConverter.getInformationType(input)){
 				
 				case START:
-					//board.dispose();
 					if (information.equals("1")) {
 						System.out.println("start  " + information);
 						color = "white";
@@ -131,14 +130,16 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 						while(newState.equals(" ")) {
 							newState = ((ChessBoard) board).getNewState();
 						}					
-						currentSate = newState;
-						
-						//System.out.println("newstate " + currentSate);
-						
-						try {
-							dos.writeUTF("<Gameboard=" + newState + ">");
-						} catch (IOException e) {	
-						}
+						if (newState.equals("timeout")) {
+							try {
+								dos.writeUTF("<Timeout>");
+							} catch (IOException e) {	}		
+						} else {
+							currentState = newState;	
+							try {
+								dos.writeUTF("<Gameboard=" + newState + ">");
+							} catch (IOException e) {	}	
+						}		
 						newState = " ";
 					}
 					else {
@@ -158,21 +159,26 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 						isPlaying = false;
 						break;
 					}
+					
 					board.dispose();					
 					myTurn = true;
-					System.out.println("gameboard   " + information);
 					setupGameBoard(information);
 					JOptionPane.showMessageDialog(null, "Its your turn", "Your Turn", JOptionPane.INFORMATION_MESSAGE);	
 					oldState = information;
 					while(newState == " ") {
 						newState = ((ChessBoard) board).getNewState();
 					}
-					currentSate = newState;	
-					System.out.println("gameboard new state  " + currentSate);
-					try {
-						dos.writeUTF("<Gameboard=" + newState + ">");
-					} catch (IOException e) {	
-					}
+					
+					if (newState.equals("timeout")) {
+						try {
+							dos.writeUTF("<Timeout>");
+						} catch (IOException e) {	}		
+					} else {
+						currentState = newState;	
+						try {
+							dos.writeUTF("<Gameboard=" + newState + ">");
+						} catch (IOException e) {	}	
+					}		
 					newState = " ";
 					break;
 					
@@ -184,26 +190,34 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 					JOptionPane.showMessageDialog(null, information, "Error", JOptionPane.INFORMATION_MESSAGE); //TODO error meldung
 					while(newState == " ") {
 						newState = ((ChessBoard) board).getNewState();
+					}
+					
+					if (newState.equals("timeout")) {
+						try {
+							dos.writeUTF("<Timeout>");
+						} catch (IOException e) {	}		
+					} else {
+						try {
+							dos.writeUTF("<Gameboard=" + newState + ">");
+						} catch (IOException e) {	}	
 					}	
-					try {
-						dos.writeUTF("<Gameboard=" + newState + ">");
-					} catch (IOException e) {	
-					}		
 					newState = " ";
 					break;
 				
 				case SUCESS:
-					oldState = currentSate;
+					oldState = currentState;
 					System.out.println("success");
 					break;
+					
 				case WIN:
 					result = "win";
-					System.out.println(result);
-					JOptionPane.showMessageDialog(null, "you won", "winner", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "you won the game", "Win", JOptionPane.INFORMATION_MESSAGE);
 					isPlaying = false;
 					break;
 				
 				case LOSS:
+					JOptionPane.showMessageDialog(null, "you lost the game", "Loss", JOptionPane.INFORMATION_MESSAGE);
+					isPlaying = false;
 					result = "loss";
 					break;
 					

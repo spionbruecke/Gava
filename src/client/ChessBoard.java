@@ -2,6 +2,8 @@ package src.client;
 
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -10,12 +12,14 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
+import src.client.ChessBoard.TimeClass;
+
 public class ChessBoard extends JFrame implements MouseListener, MouseMotionListener {
 	
 	protected JLayeredPane layeredPane;
 	protected JPanel chessBoard;
 	protected JLabel chessPiece;
-	protected Dimension boardSize = new Dimension(670,670);
+	protected Dimension boardSize = new Dimension(670,700);
 	
 	protected Color dark = new Color(255,235,205);
 	protected Color light = new Color(160,82,45);
@@ -40,6 +44,10 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 	
 	
 	private JLabel l;
+	
+	protected JLabel timerLabel;
+	protected Timer timer;
+	protected int count = 15;
 	
 	
 	public ChessBoard(String color, String currentState, boolean myTurn) {	
@@ -110,8 +118,7 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 		}
 	}
 	
-	
-public ImageIcon getImageIcon(String name, String color) {
+	public ImageIcon getImageIcon(String name, String color) {
 		
 		ImageIcon icon = null;
 		
@@ -163,6 +170,7 @@ public ImageIcon getImageIcon(String name, String color) {
 		return icon;
 	}
 
+
 	
 	
 	public void createString() {
@@ -181,8 +189,10 @@ public ImageIcon getImageIcon(String name, String color) {
 		
 		if(helper.equals(oldState))
 			movePerformed = false;
-		else
+		else {
 			newState =  builder.toString();
+			timer.stop();
+		}
 	}
 	
 	
@@ -231,17 +241,49 @@ public ImageIcon getImageIcon(String name, String color) {
 		  
 		setUpFrameNumbers(635,35,35,75);
 		setUpFrameNumbers(0, 35, 35, 75);
+		
+		timerLabel = new JLabel("Time left: ", SwingConstants.CENTER);
+		timerLabel.setText("Time left: " + count);
+		timerLabel.setBounds(0, 670, 670, 50);
+		timerLabel.setHorizontalTextPosition(SwingConstants.CENTER);
+		timerLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		timerLabel.setFont(new Font("C059", Font.PLAIN, 20));
+		layeredPane.add(timerLabel);
+		
+		TimeClass tc = new TimeClass(count);
+		timer = new Timer(1000, tc);
+		if (myTurn == true)
+			timer.start();
+	}
+	
+	public class TimeClass implements ActionListener {
+		int counter;
+		public TimeClass(int counter) {
+			this.counter = counter;
+		}
+		
+		public void actionPerformed(ActionEvent tc) {
+			counter--;
+			
+			if (counter >= 1) {
+				timerLabel.setText("Time left: " + counter);
+			} else {
+				timer.stop();
+				timerLabel.setText("Out of time");
+				newState = "timeout";
+			}
+		}
 	}
 	
 	public void setUpFrameNumbers(int x, int y, int w, int h) {
-		String[] lettersW = {"A", "B", "C", "D", "E", "F", "G", "H"};
-		String[] lettersB = {"H", "G", "F", "E", "D", "C", "B", "A"};
+		String[] numbersW = {"1", "2", "3", "4", "5", "6", "7", "8"};
+		String[] numbersB = {"8", "7", "6", "5", "4", "3", "2", "1"};
 		String[] tmp;
 		
 		if (this.color.equals("white"))
-			tmp = lettersW;
+			tmp = numbersW;
 		else
-			tmp = lettersB;
+			tmp = numbersB;
 		
 		for (int i = 7; i >= 0; i--) {
 			l = new JLabel(tmp[i]);
@@ -255,14 +297,14 @@ public ImageIcon getImageIcon(String name, String color) {
 	}
 	
 	public void setUpFrameLetters(int x, int y, int w, int h) {
-		String[] numbersW = {"1", "2", "3", "4", "5", "6", "7", "8"};
-		String[] numbersB = {"8", "7", "6", "5", "4", "3", "2", "1"};
+		String[] lettersW = {"A", "B", "C", "D", "E", "F", "G", "H"};
+		String[] lettersB = {"H", "G", "F", "E", "D", "C", "B", "A"};
 		String[] tmp;
 		
 		if (this.color.equals("white"))
-			tmp = numbersW;
+			tmp = lettersW;
 		else
-			tmp = numbersB;
+			tmp = lettersB;
 		
 		for (int i = 0; i < 8; i++) {
 			l = new JLabel(tmp[i]);
