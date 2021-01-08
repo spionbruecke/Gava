@@ -15,5 +15,11 @@ public class MillMoveConverter implements MoveConverter {
         // TODO Auto-generated method stub
         return null;
     }
+
+    //TODO(Alex) Umwandlung des Spielbretts in einen String 
+    public static String convertPiecesToString(MillBoard board) {
+
+        return null;
+    }
     
 }
