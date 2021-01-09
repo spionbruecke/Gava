@@ -116,7 +116,7 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 				input = dis.readUTF();
 				information = StringConverter.getInformation(input);
 				
-				//System.out.println("receive  " + information);
+				System.out.println("receive  " + information);
 				
 				switch(StringConverter.getInformationType(input)){
 				
@@ -219,6 +219,30 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 					JOptionPane.showMessageDialog(null, "you lost the game", "Loss", JOptionPane.INFORMATION_MESSAGE);
 					isPlaying = false;
 					result = "loss";
+					break;
+					
+				case PROMOTION:
+					//System.out.println("promotion");
+					String s = "nope";
+					
+					String incomingDialog = JOptionPane.showInputDialog("0=Queen ; 1=Rook ; 2=Knight ; 3=Bishop");
+					int choice = Integer.parseInt(incomingDialog);
+					
+					//System.out.println("choice: " + choice);
+					
+					if (choice == 1)
+						s = "Rook";
+					else if (choice == 2)
+						s = "Knight";
+					else if (choice == 3) 
+						s = "Bishop";
+					else
+						s = "Queen";
+					
+					try {
+						dos.writeUTF("<Promotion=" + s + ">");
+					} catch (IOException e) {	}		
+									
 					break;
 					
 				default:
