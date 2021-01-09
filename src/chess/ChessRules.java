@@ -501,21 +501,6 @@ public class ChessRules implements Rules {
         return false;
     }
 
-    private static boolean arePieceRookAndKingFromSameColour(ArrayList<Field> f, PlayingPiece[][] board){
-
-        if( (board[f.get(0).getRow()][f.get(0).getColumn()].getName().equals("rook")
-                && board[f.get(1).getRow()][f.get(1).getColumn()].getName().equals("king"))
-                ||
-                (board[f.get(0).getRow()][f.get(0).getColumn()].getName().equals("king")
-                && board[f.get(1).getRow()][f.get(1).getColumn()].getName().equals("rook")) ){
-
-            return board[f.get(0).getRow()][f.get(0).getColumn()].getColour()
-                    .equals(board[f.get(1).getRow()][f.get(1).getColumn()].getColour());
-        }
-
-        return false;
-    }
-
     private static boolean isCastlingPathFree(GameBoard board, Field rook){
         if(rook.getRow()==0 && rook.getColumn()==0){
             for (int i = 1; i < 4; i++) {
@@ -562,52 +547,124 @@ public class ChessRules implements Rules {
 
                 if(checkEachPossibleAttack(board, move) == Messages.MOVE_ALLOWED)
                     return true;
+
+                stringB = new StringBuilder();
             }
         }
         return false;
     }
 
     private static boolean kingCannotEscape(GameBoard board, int row, int column){
+        StringBuilder stBuilder = new StringBuilder();
+        stBuilder.append(ChessMoveConverter.convertArrayCoordinateIntoPosColumn(column));
+        stBuilder.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(row) + " ");
+
+        String move = "";
+
         //check whether there is a field where king could escape
         if( (row-1 >= 0) && (column-1 >= 0) ){
-            if(!isFieldAttacked(board, row-1, column-1))
+            stBuilder.append(ChessMoveConverter.convertArrayCoordinateIntoPosColumn(column-1));
+            stBuilder.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(row-1));
+            move = stBuilder.toString();
+
+            if(!isFieldAttacked(board, row-1, column-1) && !isFieldOccupiedByOwnPlayingP(board, move))
                 return false;
+
+            stBuilder.deleteCharAt(4);
+            stBuilder.deleteCharAt(3);
         }
+
 
         if(row-1 >= 0){
-            if(!isFieldAttacked(board, row-1, column))
+            stBuilder.append(ChessMoveConverter.convertArrayCoordinateIntoPosColumn(column));
+            stBuilder.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(row-1));
+            move = stBuilder.toString();
+
+            if(!isFieldAttacked(board, row-1, column) && !isFieldOccupiedByOwnPlayingP(board, move))
                 return false;
+
+            stBuilder.deleteCharAt(4);
+            stBuilder.deleteCharAt(3);
         }
+
 
         if( (row-1 >= 0) && (column+1 <= 7) ){
-            if(!isFieldAttacked(board, row-1, column+1))
+            stBuilder.append(ChessMoveConverter.convertArrayCoordinateIntoPosColumn(column+1));
+            stBuilder.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(row-1));
+            move = stBuilder.toString();
+
+            if(!isFieldAttacked(board, row-1, column+1) && !isFieldOccupiedByOwnPlayingP(board, move))
                 return false;
+
+            stBuilder.deleteCharAt(4);
+            stBuilder.deleteCharAt(3);
         }
+
 
         if(column+1 <= 7){
-            if(!isFieldAttacked(board, row, column+1))
+            stBuilder.append(ChessMoveConverter.convertArrayCoordinateIntoPosColumn(column+1));
+            stBuilder.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(row));
+            move = stBuilder.toString();
+
+            if(!isFieldAttacked(board, row, column+1) && !isFieldOccupiedByOwnPlayingP(board, move))
                 return false;
+
+            stBuilder.deleteCharAt(4);
+            stBuilder.deleteCharAt(3);
         }
+
 
         if( (row+1 <= 7) && (column+1 <= 7) ){
-            if(!isFieldAttacked(board, row+1, column+1))
+            stBuilder.append(ChessMoveConverter.convertArrayCoordinateIntoPosColumn(column+1));
+            stBuilder.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(row+1));
+            move = stBuilder.toString();
+
+            if(!isFieldAttacked(board, row+1, column+1) && !isFieldOccupiedByOwnPlayingP(board, move))
                 return false;
+
+            stBuilder.deleteCharAt(4);
+            stBuilder.deleteCharAt(3);
         }
+
 
         if(row+1 <= 7){
-            if(!isFieldAttacked(board, row+1, column))
+            stBuilder.append(ChessMoveConverter.convertArrayCoordinateIntoPosColumn(column));
+            stBuilder.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(row+1));
+            move = stBuilder.toString();
+
+            if(!isFieldAttacked(board, row+1, column) && !isFieldOccupiedByOwnPlayingP(board, move))
                 return false;
+
+            stBuilder.deleteCharAt(4);
+            stBuilder.deleteCharAt(3);
         }
+
 
         if( (row+1 <= 7) && (column-1 >= 0) ){
-            if(!isFieldAttacked(board, row+1, column-1))
+            stBuilder.append(ChessMoveConverter.convertArrayCoordinateIntoPosColumn(column-1));
+            stBuilder.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(row+1));
+            move = stBuilder.toString();
+
+            if(!isFieldAttacked(board, row+1, column-1) && !isFieldOccupiedByOwnPlayingP(board, move))
                 return false;
+
+            stBuilder.deleteCharAt(4);
+            stBuilder.deleteCharAt(3);
         }
 
+
         if(column-1 >= 0){
-            if(!isFieldAttacked(board, row, column-1))
+            stBuilder.append(ChessMoveConverter.convertArrayCoordinateIntoPosColumn(column-1));
+            stBuilder.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(row));
+            move = stBuilder.toString();
+
+            if(!isFieldAttacked(board, row, column-1) && !isFieldOccupiedByOwnPlayingP(board, move))
                 return false;
+
+            stBuilder.deleteCharAt(4);
+            stBuilder.deleteCharAt(3);
         }
+
 
         String colour = board.getState()[row][column].getColour();
 
@@ -839,7 +896,8 @@ public class ChessRules implements Rules {
         return true;
     }
 
-    private static boolean checkmate(GameBoard gameBoard, String colour){
+    //private
+    public static boolean checkmate(GameBoard gameBoard, String colour){
         int row = -1;
         int column = -1;
 
@@ -848,7 +906,7 @@ public class ChessRules implements Rules {
                 if(gameBoard.getState()[i][j].getColour().equals(colour)
                         && gameBoard.getState()[i][j].getName().equals("king")) {
                     row = i;
-                    column = i;
+                    column = j;
                 }
             }
         }
