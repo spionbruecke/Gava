@@ -125,7 +125,6 @@ public class GameRoom{
             if(message == Messages.MOVE_ALLOWED){
                 gameBoard.setNewBoard(information);
                 if(ChessRules.isKingDead(gameBoard,getTheOtherPlayer(turnOfPlayer))){
-                    System.out.println(ChessRules.isKingDead(gameBoard,getTheOtherPlayer(turnOfPlayer)));
                     getTheOtherPlayer(turnOfPlayer).getClientHandler().sendMessage("<Loss>");
                     return "<Win>";
                 }
@@ -186,7 +185,9 @@ public class GameRoom{
         ChessRules.setPromotion(gameBoard, information, promotionPosition);
     }
 
-
+    public void setTurn(Player player){
+        this.turnOfPlayer = player;
+    }
 
     /**
      * Returns the other player of the gameroom.

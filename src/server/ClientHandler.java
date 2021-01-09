@@ -77,6 +77,7 @@ public class ClientHandler extends Thread {
                             case PROMOTION:
                                 gameRoom.setPromotion(information);
                                 gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard)gameRoom.getGameBoard()) + ">");
+                                gameRoom.setTurn(gameRoom.getTheOtherPlayer(player));
                                 break;
                             case CONNECTIONSTATUS:
                                 if(information.equals("Exit"))
@@ -122,7 +123,6 @@ public class ClientHandler extends Thread {
                 outputStream.writeUTF(tmp);
             } else if( typ.equals(InformationsTypes.WIN)){
                 outputStream.writeUTF("<Win>"); 
-                System.out.println("Win2");
                 if(this.gameRoom.getGame() instanceof ChessGame){
                     gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard)gameRoom.getGameBoard()) + ">");
                 }

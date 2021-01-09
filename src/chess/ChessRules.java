@@ -223,7 +223,6 @@ public class ChessRules implements Rules {
         //promotion
         if(gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("white")
                 && target.getRow() == 0){
-            System.out.println(stringTarget);
             return stringTarget;
         }else if(gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("black")
                 && target.getRow() == 7){
@@ -240,7 +239,6 @@ public class ChessRules implements Rules {
         for(int i = 0; i < list.length; i ++){
             if(list[i].getPosition().equals(position)){
                 list[i].setName(information);
-                System.out.println(information);
                 break;
             }
         }
@@ -251,7 +249,6 @@ public class ChessRules implements Rules {
             output.append(">");
         }
         
-        System.out.println(output.toString());
 
         gameBoard.setNewBoard(output.toString());
 
