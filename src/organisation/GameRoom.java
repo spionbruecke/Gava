@@ -130,7 +130,7 @@ public class GameRoom{
                     return "<Win>";
                 }
 
-                if(!promotion.equals("")){
+                if(!promotion.equals("false")){
                     promotionPosition = promotion;
                     return "<Promotion>";
                 }
@@ -144,7 +144,7 @@ public class GameRoom{
                     this.turnOfPlayer = getTheOtherPlayer(turnOfPlayer);
                     return "<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard) this.gameBoard) + ">";
                 case ERROR_WRONGMOVEMENT_DIRECTION_BISHOP:
-                    return "<Error=Bishop is only allowed to move directional>"; //TODO(Alex) Write some good Error Descrition for the player
+                    return "<Error=Bishop is only allowed to move directional>"; //TODO(Alex) Write some good Error Description for the player
                 case ERROR_WRONGMOVEMENT_DIRECTION_KING:
                     return "<Error=King is only allowed to move one Step>";
                 case ERROR_WRONGMOVEMENT_DIRECTION_KNIGHT:
