@@ -6,13 +6,11 @@ public class MillMoveConverter implements MoveConverter {
 
     @Override
     public PlayingPiece[][] convertStringToState(GameBoard gameBoard, String move) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public String stateToString(PlayingPiece[][] currentState, PlayingPiece[][] stateToCheck) {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -25,14 +23,12 @@ public class MillMoveConverter implements MoveConverter {
             mill.setNewBoard(convertPiecesToString(newMill));
         
         } catch (WrongFormatException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
         System.out.println(convertPiecesToString(mill));
     }
-
-    //TODO(Alex) Umwandlung der Spielfiguren in einen String 
+ 
     public static String convertPiecesToString(MillBoard board) {
         StringBuilder output = new StringBuilder();
         PlayingPiece[] playingPieces = board.getPlayingPieces();

@@ -213,7 +213,7 @@ public class ChessRules implements Rules {
         Field target = converter.getChessTargetField(converter.stateToString(gameBoard.getState(), stateToCheck));
         Field start = converter.getChessStartField(converter.stateToString(gameBoard.getState(), stateToCheck));
 
-        String stringTarget = converter.convertArrayCoordinateIntoPosColumn(target.getColumn()) + " "
+        String stringTarget = converter.convertArrayCoordinateIntoPosColumn(target.getColumn())
                                 + converter.convertArrayCoordinateIntoPosRow(target.getRow());
 
         if(!gameBoard.getState()[start.getRow()][start.getColumn()].getName().equals("pawn") ||
@@ -223,6 +223,7 @@ public class ChessRules implements Rules {
         //promotion
         if(gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("white")
                 && target.getRow() == 0){
+            System.out.println(stringTarget);
             return stringTarget;
         }else if(gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("black")
                 && target.getRow() == 7){
@@ -232,14 +233,27 @@ public class ChessRules implements Rules {
         return "false";
     }
 
-    public static void setPromotion(GameBoard gameBoard, String information, String position){
+    public static void setPromotion(GameBoard gameBoard, String information, String position)
+            throws WrongFormatException {
         PlayingPiece[] list = gameBoard.getPlayingPieces();
+        StringBuilder output = new StringBuilder();
         for(int i = 0; i < list.length; i ++){
             if(list[i].getPosition().equals(position)){
                 list[i].setName(information);
+                System.out.println(information);
                 break;
             }
         }
+
+        for(int i = 0; i < 32; i++){
+            output.append("<");
+            output.append(list[i]);
+            output.append(">");
+        }
+        
+        System.out.println(output.toString());
+
+        gameBoard.setNewBoard(output.toString());
 
     }
 

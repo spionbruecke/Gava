@@ -2,8 +2,6 @@ package src.server;
 
 import java.io.*;
 import java.net.*;
-
-import src.games.*;
 import src.chess.*;
 import src.organisation.*;
 
@@ -124,6 +122,7 @@ public class ClientHandler extends Thread {
                 outputStream.writeUTF(tmp);
             } else if( typ.equals(InformationsTypes.WIN)){
                 outputStream.writeUTF("<Win>"); 
+                System.out.println("Win2");
                 if(this.gameRoom.getGame() instanceof ChessGame){
                     gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard)gameRoom.getGameBoard()) + ">");
                 }

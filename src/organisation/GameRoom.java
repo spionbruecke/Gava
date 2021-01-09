@@ -182,7 +182,7 @@ public class GameRoom{
         return null;
     }
 
-    public void setPromotion(String information){
+    public void setPromotion(String information) throws WrongFormatException {
         ChessRules.setPromotion(gameBoard, information, promotionPosition);
     }
 

@@ -231,13 +231,13 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 					//System.out.println("choice: " + choice);
 					
 					if (choice == 1)
-						s = "Rook";
+						s = "rook";
 					else if (choice == 2)
-						s = "Knight";
+						s = "knight";
 					else if (choice == 3) 
-						s = "Bishop";
+						s = "bishop";
 					else
-						s = "Queen";
+						s = "queen";
 					
 					try {
 						dos.writeUTF("<Promotion=" + s + ">");

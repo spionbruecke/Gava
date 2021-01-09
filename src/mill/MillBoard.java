@@ -26,7 +26,6 @@ public class MillBoard extends GameBoard {
 
     @Override
     public PlayingPiece[] getPlayingPieces() {
-        // TODO Auto-generated method stub
         return playingPieces;
     }
 
