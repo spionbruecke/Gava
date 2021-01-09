@@ -912,7 +912,7 @@ public class ChessRules implements Rules {
         }
 
         //king is not in the game anymore or can not escape
-        if((row == -1) || kingCannotEscape(gameBoard, row, column))
+        if((row == -1) || (kingCannotEscape(gameBoard, row, column) && isFieldAttacked(gameBoard, row, column)))
             return true;
 
         return false;
