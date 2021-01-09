@@ -22,7 +22,6 @@ public class StringConverter{
      * @throws WrongInformationFormatException
      */
     public static InformationsTypes getInformationType(String input)throws WrongInformationFormatException{
-
         switch(getKeyword(input)){
             case "Gamemode":
                 return InformationsTypes.GAMEMODE;
@@ -66,7 +65,6 @@ public class StringConverter{
         char currentChar;
         int i;
         StringBuilder keywort = new StringBuilder();
-
         i = 1;
         currentChar = input.charAt(0);
 

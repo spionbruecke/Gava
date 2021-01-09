@@ -103,7 +103,7 @@ public class ChessMoveConverter implements MoveConverter {
             case 'u':
                 return -2;
             default:
-                System.out.println("WrongFormatException: -1 returned");
+                System.out.println("WrongFormatException: -1 returned for: " + c);
                 return -1;
         }
     }
@@ -177,6 +177,7 @@ public class ChessMoveConverter implements MoveConverter {
                 return "H";
 
             default:
+                System.out.println("Error convert into PosCol: " + i);
                 return "";
         }
     }

@@ -127,6 +127,12 @@ public class ClientHandler extends Thread {
                     gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard)gameRoom.getGameBoard()) + ">");
                 }
                 connected = false; 
+            } else if(typ.equals(InformationsTypes.LOSS)){
+                outputStream.writeUTF("<Loss>"); 
+                if(this.gameRoom.getGame() instanceof ChessGame){
+                    gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard)gameRoom.getGameBoard()) + ">");
+                }
+                connected = false; 
             } else if(typ.equals(InformationsTypes.PROMOTION)){
                 outputStream.writeUTF("<Promotion>"); 
             } else {

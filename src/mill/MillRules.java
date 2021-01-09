@@ -4,16 +4,13 @@ import src.games.*;
 
 public class MillRules implements Rules {
 
-    @Override
-    public Messages isMoveAllowed(GameBoard gameBoard, PlayingPiece[][] stateToCheck) {
-
+    public static Messages isMoveAllowed(GameBoard gameBoard, PlayingPiece[][] stateToCheck) {
         return null;
     }
 
-    @Override
-    public Messages isGameFinished(GameBoard board, String colour) {
+    static Messages isGameFinished(GameBoard board, String colour) {
         
-        return null;
+        return Messages.DEFEATED;
     }
     
 }

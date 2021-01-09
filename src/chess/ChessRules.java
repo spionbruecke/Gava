@@ -50,7 +50,7 @@ public class ChessRules implements Rules {
      * @param stateToCheck ChessPlayingPiece[][]
      * @return boolean
      */
-    public Messages isMoveAllowed(GameBoard gameBoard, PlayingPiece[][] stateToCheck) {
+    public static Messages isMoveAllowed(GameBoard gameBoard, PlayingPiece[][] stateToCheck) {
         String move = converter.stateToString(gameBoard.getState(), stateToCheck);
 
         return checkEachPossibleMove(gameBoard, move);
@@ -567,7 +567,7 @@ public class ChessRules implements Rules {
         return false;
     }
 
-    private boolean kingCannotEscape(GameBoard board, int row, int column){
+    private static boolean kingCannotEscape(GameBoard board, int row, int column){
         //check whether there is a field where king could escape
         if( (row-1 >= 0) && (column-1 >= 0) ){
             if(!isFieldAttacked(board, row-1, column-1))
@@ -839,7 +839,7 @@ public class ChessRules implements Rules {
         return true;
     }
 
-    private boolean checkmate(GameBoard gameBoard, String colour){
+    private static boolean checkmate(GameBoard gameBoard, String colour){
         int row = -1;
         int column = -1;
 
@@ -860,7 +860,7 @@ public class ChessRules implements Rules {
         return false;
     }
 
-    private boolean isStalemate(GameBoard board, String colour){
+    private static boolean isStalemate(GameBoard board, String colour){
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if(board.getState()[i][j].getColour().equals(colour)
@@ -873,26 +873,28 @@ public class ChessRules implements Rules {
         return true;
     }
 
-    private boolean possibleMoveExists(GameBoard board, Field start){
+    private static boolean possibleMoveExists(GameBoard board, Field start){
         StringBuilder move = new StringBuilder();
-        move.append(start.getColumn());
-        move.append(start.getRow() + " ");
+        move.append(ChessMoveConverter.convertArrayCoordinateIntoPosColumn(start.getColumn()));
+        move.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(start.getRow()) + " ");
 
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                move.append(converter.convertArrayCoordinateIntoPosColumn(j));
-                move.append(converter.convertArrayCoordinateIntoPosRow(i));
+                move.append(ChessMoveConverter.convertArrayCoordinateIntoPosColumn(j));
+                move.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(i));
 
                 if(checkEachPossibleMove(board, move.toString()) == Messages.MOVE_ALLOWED){
                     return true;
                 }
+                move.deleteCharAt(4);
+                move.deleteCharAt(3);
             }
         }
 
         return false;
     }
 
-    private boolean deadPosition(GameBoard board){
+    private static boolean deadPosition(GameBoard board){
         int black_counter = 0;
         int white_counter = 0;
 
@@ -914,16 +916,23 @@ public class ChessRules implements Rules {
 
 
     //String colour: colour of player whose turn it is to move
-    public Messages isGameFinished(GameBoard board, String colour){
+    public static Messages isGameFinished(GameBoard board, String colour){
+        String othercolour = "white";
+
+        if(colour.equals("white"))
+            othercolour = "black";
+
         if(checkmate(board, colour))
             return Messages.DEFEATED;
+        else if (checkmate(board, othercolour))
+            return Messages.VICTORY;
         else if(isStalemate(board, colour) || deadPosition(board))
             return Messages.DRAW;
         else
-            return Messages.GO_ON;
+            return Messages.GO_ON;            
     }
 
-    public Messages executeMove(GameBoard board, String colour, PlayingPiece[][] stateToCheck){
+    public static Messages executeMove(GameBoard board, String colour, PlayingPiece[][] stateToCheck){
         Messages message;
 
         message = isMoveAllowed(board, stateToCheck);
