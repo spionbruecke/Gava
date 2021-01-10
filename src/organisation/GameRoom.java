@@ -183,6 +183,38 @@ public class GameRoom{
     }
 
     private String setMillInput(String information){
+        try{
+            Messages message;
+
+            message = MillRules.executeMove(gameBoard, turnOfPlayer.getColour(), ChessMoveConverter.getBoardFromString(information));
+            
+            if(message == Messages.GO_ON){
+                gameBoard.setNewBoard(information);
+                if(ChessRules.isKingDead(gameBoard,getTheOtherPlayer(turnOfPlayer))){
+                    //TODO Ersatzcheck falls #token < 3
+                }
+            }
+            switch(message){
+                case VICTORY:
+                    getTheOtherPlayer(turnOfPlayer).getClientHandler().sendMessage("<Loss>");
+                    return "<Win>";
+                case DEFEATED:
+                    getTheOtherPlayer(turnOfPlayer).getClientHandler().sendMessage("<Win>");
+                    return "<Loss>";
+                case DRAW:
+                    return "<Gameend=Draw>";
+                case MOVE_ALLOWED:
+                case GO_ON:
+                    this.turnOfPlayer = getTheOtherPlayer(turnOfPlayer);
+                    return "<Gameboard=" + MillMoveConverter.convertPiecesToString((MillBoard) this.gameBoard) + ">";
+                case ERROR_WRONGMOVEMENT_DIRECTION_BISHOP:
+                    return "<Error=Wrong Movement>";
+                default:
+                    return null;
+            }
+        }catch (Exception e){
+            System.err.println(e);
+        }
         return null;
     }
 
