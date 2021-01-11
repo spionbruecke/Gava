@@ -59,7 +59,6 @@ public class GameRoom{
         }
 
         if(game.equals("Chess")){
-            rule = new ChessRules();
             gameBoard = new ChessBoard();
         }
 

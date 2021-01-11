@@ -12,5 +12,10 @@ public class MillRules implements Rules {
         
         return Messages.DEFEATED;
     }
+
+    public static Messages executeMove(GameBoard board, String colour, PlayingPiece[][] stateToCheck){
+
+        return null;
+    }
     
 }
