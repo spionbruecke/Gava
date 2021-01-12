@@ -11,8 +11,5 @@ public class test1 {
 
     public static void main(String[] args) {
 
-        String move = "7A 6A";
-
-        System.out.println(MillRules.isTargetValid(move));
     }
 }

@@ -15,24 +15,24 @@ public class MillRules implements Rules {
             case "white":
                 if(MillBoard.getNumOfPieces(gameBoard.getState(), "white") > 3){
                     if(isTargetValid(move) && !Rules.isFieldOccupied(gameBoard, row, column))
-                        return Messages.MOVE_ALLOWED;
+                        return removePiece(gameBoard.getState(), "white");
                     else
                         return Messages.INVALID_TARGET;
                 }else {
                     if(!Rules.isFieldOccupied(gameBoard, row, column))
-                        return Messages.MOVE_ALLOWED;
+                        return removePiece(gameBoard.getState(), "white");
                     else
                         return Messages.INVALID_TARGET;
                 }
             case "black":
                 if(MillBoard.getNumOfPieces(gameBoard.getState(), "black") > 3){
                     if(isTargetValid(move) && !Rules.isFieldOccupied(gameBoard, row, column))
-                        return Messages.MOVE_ALLOWED;
+                        return removePiece(gameBoard.getState(), "black");
                     else
                         return Messages.INVALID_TARGET;
                 }else {
                     if(!Rules.isFieldOccupied(gameBoard, row, column))
-                        return Messages.MOVE_ALLOWED;
+                        return removePiece(gameBoard.getState(), "black");
                     else
                         return Messages.INVALID_TARGET;
                 }
@@ -66,7 +66,88 @@ public class MillRules implements Rules {
         return message;
     }
 
-    public static boolean isTargetValid(String move){
+    //method should only be called if the move was checked to be true
+    private static Messages removePiece(PlayingPiece[][] state, String colour){
+        if(threeInARow(state, colour)){
+            return Messages.MOVE_ALLOWED_REMOVE_PIECE;
+        }else
+            return Messages.MOVE_ALLOWED;
+    }
+
+    private static boolean threeInARow(PlayingPiece[][] stateToCheck, String colour){
+        //check rows
+        if(stateToCheck[0][0].getColour().equals(colour)
+                && stateToCheck[0][0].getColour().equals(stateToCheck[0][1].getColour())
+                && stateToCheck[0][0].getColour().equals(stateToCheck[0][2].getColour())){
+            return true;
+        }else if(stateToCheck[1][0].getColour().equals(colour)
+                && stateToCheck[1][0].getColour().equals(stateToCheck[1][1].getColour())
+                && stateToCheck[1][0].getColour().equals(stateToCheck[1][2].getColour())){
+            return true;
+        }else if(stateToCheck[2][0].getColour().equals(colour)
+                && stateToCheck[2][0].getColour().equals(stateToCheck[2][1].getColour())
+                && stateToCheck[2][0].getColour().equals(stateToCheck[2][2].getColour())){
+            return true;
+        }else if(stateToCheck[3][0].getColour().equals(colour)
+                && stateToCheck[3][0].getColour().equals(stateToCheck[3][1].getColour())
+                && stateToCheck[3][0].getColour().equals(stateToCheck[3][2].getColour())){
+            return true;
+        }else if(stateToCheck[3][3].getColour().equals(colour)
+                && stateToCheck[3][3].getColour().equals(stateToCheck[3][4].getColour())
+                && stateToCheck[3][3].getColour().equals(stateToCheck[3][5].getColour())){
+            return true;
+        }else if(stateToCheck[4][0].getColour().equals(colour)
+                && stateToCheck[4][0].getColour().equals(stateToCheck[4][1].getColour())
+                && stateToCheck[4][0].getColour().equals(stateToCheck[4][2].getColour())){
+            return true;
+        }else if(stateToCheck[5][0].getColour().equals(colour)
+                && stateToCheck[5][0].getColour().equals(stateToCheck[5][1].getColour())
+                && stateToCheck[5][0].getColour().equals(stateToCheck[5][2].getColour())){
+            return true;
+        }else if(stateToCheck[6][0].getColour().equals(colour)
+                && stateToCheck[6][0].getColour().equals(stateToCheck[6][1].getColour())
+                && stateToCheck[6][0].getColour().equals(stateToCheck[6][2].getColour())){
+            return true;
+        }
+
+        //check columns
+        if(stateToCheck[0][0].getColour().equals(colour)
+                && stateToCheck[0][0].getColour().equals(stateToCheck[3][0].getColour())
+                && stateToCheck[0][0].getColour().equals(stateToCheck[6][0].getColour())){
+            return true;
+        }else if(stateToCheck[1][0].getColour().equals(colour)
+                && stateToCheck[1][0].getColour().equals(stateToCheck[3][1].getColour())
+                && stateToCheck[1][0].getColour().equals(stateToCheck[5][0].getColour())){
+            return true;
+        }else if(stateToCheck[2][0].getColour().equals(colour)
+                && stateToCheck[2][0].getColour().equals(stateToCheck[3][2].getColour())
+                && stateToCheck[2][0].getColour().equals(stateToCheck[4][0].getColour())){
+            return true;
+        }else if(stateToCheck[0][1].getColour().equals(colour)
+                && stateToCheck[0][1].getColour().equals(stateToCheck[1][1].getColour())
+                && stateToCheck[0][1].getColour().equals(stateToCheck[2][1].getColour())){
+            return true;
+        }else if(stateToCheck[4][1].getColour().equals(colour)
+                && stateToCheck[4][1].getColour().equals(stateToCheck[5][1].getColour())
+                && stateToCheck[4][1].getColour().equals(stateToCheck[6][1].getColour())){
+            return true;
+        }else if(stateToCheck[2][2].getColour().equals(colour)
+                && stateToCheck[2][2].getColour().equals(stateToCheck[3][3].getColour())
+                && stateToCheck[2][2].getColour().equals(stateToCheck[4][2].getColour())){
+            return true;
+        }else if(stateToCheck[1][2].getColour().equals(colour)
+                && stateToCheck[1][2].getColour().equals(stateToCheck[3][4].getColour())
+                && stateToCheck[1][2].getColour().equals(stateToCheck[5][2].getColour())){
+            return true;
+        }else if(stateToCheck[0][2].getColour().equals(colour)
+                && stateToCheck[0][2].getColour().equals(stateToCheck[3][5].getColour())
+                && stateToCheck[0][2].getColour().equals(stateToCheck[6][2].getColour())){
+            return true;
+        }else
+            return false;
+    }
+
+    private static boolean isTargetValid(String move){
         String start = move.substring(0, 2);
         String target = move.substring(3, 5);
         System.out.println(target);
