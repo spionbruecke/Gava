@@ -150,7 +150,6 @@ public class MillRules implements Rules {
     private static boolean isTargetValid(String move){
         String start = move.substring(0, 2);
         String target = move.substring(3, 5);
-        System.out.println(target);
 
         switch (start){
             case "1A":
