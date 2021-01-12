@@ -20,6 +20,8 @@ public class ChessMoveConverter implements MoveConverter {
         StringBuilder move = new StringBuilder();
         Field start = new Field();
         Field target = new Field();
+
+
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (!currentState[i][j].getName().equals("null") && stateToCheck[i][j].getName().equals("null")){
@@ -59,7 +61,7 @@ public class ChessMoveConverter implements MoveConverter {
 
         if(newPosColumn != -2 && newPosRow != -2)
             currentState[newPosRow][newPosColumn] = currentState[oldPosRow][oldPosColumn];
-        currentState[oldPosRow][oldPosColumn] = new PlayingPiece();
+
         currentState[oldPosRow][oldPosColumn].setName("null");
         currentState[oldPosRow][oldPosColumn].setColour("null");
 

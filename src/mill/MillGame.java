@@ -5,8 +5,8 @@ import src.games.Game;
 public class MillGame extends Game {
     MillBoard board;
 
-    public MillGame(String gameName) {
-        super(gameName);
+    public MillGame() {
+        super("mill");
         initialize();
     }
 

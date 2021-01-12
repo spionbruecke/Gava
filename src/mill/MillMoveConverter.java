@@ -6,12 +6,54 @@ public class MillMoveConverter implements MoveConverter {
 
     @Override
     public PlayingPiece[][] convertStringToState(GameBoard gameBoard, String move) {
-        return null;
+        PlayingPiece[][] currentState = gameBoard.getState();
+
+        int newPosRow = convertPosIntoArrayCoordinate(move.charAt(4));
+        int newPosColumn = convertPosIntoArrayCoordinate(move.charAt(3));
+        int oldPosRow = convertPosIntoArrayCoordinate(move.charAt(1));
+        int oldPosColumn = convertPosIntoArrayCoordinate(move.charAt(0));
+
+        if(newPosColumn != -2 && newPosRow != -2)
+            currentState[newPosRow][newPosColumn] = currentState[oldPosRow][oldPosColumn];
+
+        currentState[oldPosRow][oldPosColumn].setColour("null");
+
+        return currentState;
     }
 
     @Override
     public String stateToString(PlayingPiece[][] currentState, PlayingPiece[][] stateToCheck) {
-        return null;
+        StringBuilder move = new StringBuilder();
+        Field start = new Field();
+        Field target = new Field();
+
+        for(int k = 0 ; k < 7; k ++) {
+            if(k == 3)
+                for (int j = 0; j < 6; j ++){
+                    if (!currentState[k][j].getName().equals("null") && stateToCheck[k][j].getName().equals("null")){
+                        start = new Field(k, j);
+                    }else if(currentState[k][j].getName().equals("null") && !stateToCheck[k][j].getName().equals("null")){
+                        target = new Field(k, j);
+                    }
+                }
+            else
+                for (int j = 0; j < 3; j ++){
+                    if (!currentState[k][j].getName().equals("null") && stateToCheck[k][j].getName().equals("null")){
+                        start = new Field(k, j);
+                    }else if(currentState[k][j].getName().equals("null") && !stateToCheck[k][j].getName().equals("null")){
+                        target = new Field(k, j);
+                    }
+                }
+        }
+
+        move.append(convertArrayCoordinateIntoPosRow(start.getRow()));
+        move.append(convertArrayCoordinateIntoPosColumn(start.getColumn()));
+        move.append(" ");
+        move.append(convertArrayCoordinateIntoPosRow(target.getRow()));
+        move.append(convertArrayCoordinateIntoPosColumn(target.getColumn()));
+
+
+        return move.toString();
     }
 
     public static void main(String[] args) {
@@ -100,9 +142,6 @@ public class MillMoveConverter implements MoveConverter {
 
             case 5:
                 return "F";
-
-            case 6:
-                return "G";
 
             default:
                 return "";

@@ -6,8 +6,6 @@ import src.games.WrongFormatException;
 
 public class MillBoard extends GameBoard {
 
-    private int counterBlack = 9;
-    private int counterWhite = 9;
     private PlayingPiece[] playingPieces = new PlayingPiece[18];
 
     public MillBoard(){
@@ -97,4 +95,24 @@ public class MillBoard extends GameBoard {
 
         this.setState(newBoard);
     }
+
+    public static int getNumOfPieces(PlayingPiece[][] state, String colour){
+        int counter = 0;
+
+        for(int k = 0 ; k < 7; k ++) {
+            if(k == 3)
+                for (int j = 0; j < 6; j ++){
+                    if(state[k][j].getColour().equals(colour))
+                        counter++;
+                }
+            else
+                for (int j = 0; j < 3; j ++){
+                    if(state[k][j].getColour().equals(colour))
+                        counter++;
+                }
+        }
+
+        return counter;
+    }
+
 }

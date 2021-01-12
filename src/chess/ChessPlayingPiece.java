@@ -8,7 +8,6 @@ import src.games.*;
  * @author Begüm Tosun
  */
 public class ChessPlayingPiece {
-    private static ChessMoveConverter converter = new ChessMoveConverter();
 
     /**
      * Executes the move "promotion" from pawn.
