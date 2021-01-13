@@ -19,23 +19,24 @@ public class MillRules implements Rules {
                                         + MillBoard.getNumOfPieces(stateToCheck, "black");
 
                                         System.out.println("totalNumOfPiecesToCheck: " + totalNumOfPiecesToCheck);
-        //startingPhase
 
+        int row = converter.convertPosIntoArrayCoordinate(move.charAt(0));
+        int column = converter.convertPosIntoArrayCoordinate(move.charAt(1));
+        String colour = gameBoard.getState()[row][column].getColour();
+
+        //startingPhase
         if((totalNumOfPiecesPrevious < totalNumOfPiecesToCheck) && !finishedStartingPhase(stateToCheck)){
             int targetRow = converter.convertPosIntoArrayCoordinate(move.charAt(3));
             int targetColumn = converter.convertPosIntoArrayCoordinate(move.charAt(4));
 
             if(!Rules.isFieldOccupied(gameBoard, targetRow, targetColumn))
-                return Messages.MOVE_ALLOWED;
+                return removePiece(stateToCheck, colour);
             else
                 return Messages.ERROR_WRONGMOVEMENT;
 
         }else {
         //startingPhase over
-            int row = converter.convertPosIntoArrayCoordinate(move.charAt(0));
-            int column = converter.convertPosIntoArrayCoordinate(move.charAt(1));
             System.out.println(row + " | " + column);
-            String colour = gameBoard.getState()[row][column].getColour();
             System.out.println("after colour: " + colour);
 
             switch (colour) {
