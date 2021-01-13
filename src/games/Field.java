@@ -15,7 +15,10 @@ public class Field {
     /**
      * Default Constructor
      */
-    public Field(){}
+    public Field(){
+        this.row = -1;
+        this.column = -1;
+    }
 
     /**
      * Constructs a Field with the given values.

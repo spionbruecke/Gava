@@ -130,6 +130,7 @@ public class ClientHandler extends Thread {
             InformationsTypes typ;
 
             tmp = gameRoom.setInput(information);
+            System.out.println(tmp);
             typ = StringConverter.getInformationType(tmp);
             if(typ.equals(InformationsTypes.ERROR)){
                 outputStream.writeUTF(tmp);

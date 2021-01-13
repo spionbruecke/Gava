@@ -46,16 +46,13 @@ public class MillMoveConverter implements MoveConverter {
                 }
         }
 
-        if(start.equals(null)){
-            start = new Field(-1,-1);
-        }
-
         move.append(convertArrayCoordinateIntoPosRow(start.getRow()));
         move.append(convertArrayCoordinateIntoPosColumn(start.getColumn()));
         move.append(" ");
         move.append(convertArrayCoordinateIntoPosRow(target.getRow()));
         move.append(convertArrayCoordinateIntoPosColumn(target.getColumn()));
 
+        System.out.println(move);
 
         return move.toString();
     }

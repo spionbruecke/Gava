@@ -102,8 +102,10 @@ public class GameRoom{
     public String setInput(String information){
         if(this.currentGame instanceof ChessGame){
             return setChessInput(information);
-        } else if (this.currentGame instanceof MillGame)
+        } else if (this.currentGame instanceof MillGame){
+            System.out.println("setInput");
             return setMillInput(information);
+        }
         return "<Error=Error while processing the Movement: Programming Error>";
 
     }
@@ -189,8 +191,10 @@ public class GameRoom{
         try{
             Messages message;
 
+            System.out.println("Before execute");
             message = MillRules.executeMove(gameBoard, turnOfPlayer.getColour(), MillMoveConverter.getBoardFromString(information));
 
+            System.out.println(message);
             if(message == Messages.GO_ON){
                 gameBoard.setNewBoard(information);
             }
@@ -213,6 +217,7 @@ public class GameRoom{
                 case MOVE_ALLOWED_REMOVE_PIECE:
                     return "<Remove>";
                 default:
+                    System.out.println("Set Input for Mill Error");
                     return null;
             }
         }catch (Exception e){

@@ -7,18 +7,21 @@ public class MillRules implements Rules {
     
 
     public static Messages isMoveAllowed(GameBoard gameBoard, PlayingPiece[][] stateToCheck) {
+        System.out.println("before state to string");
         String move = converter.stateToString(gameBoard.getState(), stateToCheck);
-        int row = converter.convertPosIntoArrayCoordinate(move.charAt(0));
-        int column = converter.convertPosIntoArrayCoordinate(move.charAt(1));
-        String colour = gameBoard.getState()[row][column].getColour();
+        System.out.println("after state to string");
+    
 
         int totalNumOfPiecesPrevious = MillBoard.getNumOfPieces(gameBoard.getState(), "white")
                                         + MillBoard.getNumOfPieces(gameBoard.getState(), "black");
 
+                                        System.out.println("totalNumOfPiecesPrevious");
         int totalNumOfPiecesToCheck = MillBoard.getNumOfPieces(stateToCheck, "white")
                                         + MillBoard.getNumOfPieces(stateToCheck, "black");
 
+                                        System.out.println("totalNumOfPiecesToCheck");
         //startingPhase
+
         if((totalNumOfPiecesPrevious < totalNumOfPiecesToCheck) && checkStartingPhase(stateToCheck)){
             int targetRow = converter.convertPosIntoArrayCoordinate(move.charAt(3));
             int targetColumn = converter.convertPosIntoArrayCoordinate(move.charAt(4));
@@ -30,6 +33,11 @@ public class MillRules implements Rules {
 
         }else {
         //startingPhase over
+            int row = converter.convertPosIntoArrayCoordinate(move.charAt(0));
+            int column = converter.convertPosIntoArrayCoordinate(move.charAt(1));
+            System.out.println(row + " | " + column);
+            String colour = gameBoard.getState()[row][column].getColour();
+            System.out.println("after colour: " + colour);
 
             switch (colour) {
                 case "white":
@@ -111,7 +119,9 @@ public class MillRules implements Rules {
     public static Messages executeMove(GameBoard board, String colour, PlayingPiece[][] stateToCheck){
         Messages message;
 
+        System.out.println("Before Move allowed");
         message = isMoveAllowed(board, stateToCheck);
+        System.out.println("Nach Move allowed");
         if(message == Messages.MOVE_ALLOWED)
             return isGameFinished(board, colour);
 
