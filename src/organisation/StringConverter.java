@@ -49,6 +49,8 @@ public class StringConverter{
                 return InformationsTypes.PROMOTION;
             case "Timeout":
                 return InformationsTypes.TIMEOUT;
+            case "Remove":
+                return InformationsTypes.REMOVE;
             default:
                 throw new WrongInformationFormatException();
         }
