@@ -152,6 +152,8 @@ public class ClientHandler extends Thread {
                 outputStream.writeUTF("<Sucess>"); 
                 if(this.gameRoom.getGame() instanceof ChessGame){ 
                     gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard)gameRoom.getGameBoard()) + ">");
+                } else if (this.gameRoom.getGame() instanceof MillGame){ 
+                    gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Gameboard=" + MillMoveConverter.convertPiecesToString((MillBoard)gameRoom.getGameBoard()) + ">");
                 }
             }
         }

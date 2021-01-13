@@ -109,7 +109,7 @@ public class MillRules implements Rules {
         else if(colour.equals("black"))
             opponentColour = "white";
 
-        if(MillBoard.getNumOfPieces(board.getState(), opponentColour) < 3)
+        if(MillBoard.getNumOfPieces(board.getState(), opponentColour) < 3 && finishedStartingPhase(board.getState()))
             return Messages.VICTORY;
 
         return Messages.GO_ON;
