@@ -101,7 +101,7 @@ public class MillRules implements Rules {
     }
 
     //colour of player who made the last move
-    static Messages isGameFinished(GameBoard board, String colour) {
+    static Messages isGameFinished(PlayingPiece[][] stateToCheck, String colour) {
         String opponentColour = "";
 
         if(colour.equals("white"))
@@ -109,7 +109,7 @@ public class MillRules implements Rules {
         else if(colour.equals("black"))
             opponentColour = "white";
 
-        if(MillBoard.getNumOfPieces(board.getState(), opponentColour) < 3 && finishedStartingPhase(board.getState()))
+        if(MillBoard.getNumOfPieces(stateToCheck, opponentColour) < 3 && finishedStartingPhase(stateToCheck))
             return Messages.VICTORY;
 
         return Messages.GO_ON;
@@ -122,7 +122,7 @@ public class MillRules implements Rules {
         message = isMoveAllowed(board, stateToCheck);
         System.out.println("Nach Move allowed");
         if(message == Messages.MOVE_ALLOWED)
-            return isGameFinished(board, colour);
+            return isGameFinished(stateToCheck, colour);
 
         return message;
     }
