@@ -10,19 +10,18 @@ public class MillRules implements Rules {
         System.out.println("before state to string");
         String move = converter.stateToString(gameBoard.getState(), stateToCheck);
         System.out.println("after state to string");
-    
 
         int totalNumOfPiecesPrevious = MillBoard.getNumOfPieces(gameBoard.getState(), "white")
                                         + MillBoard.getNumOfPieces(gameBoard.getState(), "black");
 
-                                        System.out.println("totalNumOfPiecesPrevious");
+                                        System.out.println("totalNumOfPiecesPrevious: " + totalNumOfPiecesPrevious);
         int totalNumOfPiecesToCheck = MillBoard.getNumOfPieces(stateToCheck, "white")
                                         + MillBoard.getNumOfPieces(stateToCheck, "black");
 
-                                        System.out.println("totalNumOfPiecesToCheck");
+                                        System.out.println("totalNumOfPiecesToCheck: " + totalNumOfPiecesToCheck);
         //startingPhase
 
-        if((totalNumOfPiecesPrevious < totalNumOfPiecesToCheck) && checkStartingPhase(stateToCheck)){
+        if((totalNumOfPiecesPrevious < totalNumOfPiecesToCheck) && !finishedStartingPhase(stateToCheck)){
             int targetRow = converter.convertPosIntoArrayCoordinate(move.charAt(3));
             int targetColumn = converter.convertPosIntoArrayCoordinate(move.charAt(4));
 
@@ -134,7 +133,7 @@ public class MillRules implements Rules {
        return null;
     }
 
-    public static boolean checkStartingPhase( PlayingPiece[][] stateToCheck){
+    public static boolean finishedStartingPhase( PlayingPiece[][] stateToCheck){
         MillBoard newBoard = new MillBoard();
 
         newBoard.setState(stateToCheck);

@@ -81,3 +81,20 @@
 [ 13/01/2021 23:43:55 ] Client Socket[addr=/127.0.0.1,port=58979,localport=1515] connected
 [ 13/01/2021 23:43:55 ] The Player anonymus7521choosed the Gamemode: Mill
 [ 13/01/2021 23:43:55 ] Player anonymus7521 is in a Room with ID: d2049f3f-8c47-4208-b1fd-4ad7cf7d86e8 | Name: anonymus9483 with the mode src.mill.MillGame@59ab3474
+[ 13/01/2021 23:48:04 ] New Client connectet
+[ 13/01/2021 23:48:04 ] Client Socket[addr=/127.0.0.1,port=59037,localport=1515] connected
+[ 13/01/2021 23:48:04 ] The Player anonymus8603choosed the Gamemode: Mill
+[ 13/01/2021 23:48:04 ] Player anonymus8603 is in a Room with null with the mode src.mill.MillGame@3fdc043f
+[ 13/01/2021 23:48:06 ] New Client connectet
+[ 13/01/2021 23:48:06 ] Client Socket[addr=/127.0.0.1,port=59040,localport=1515] connected
+[ 13/01/2021 23:48:06 ] The Player anonymus5952choosed the Gamemode: Mill
+[ 13/01/2021 23:48:06 ] Player anonymus5952 is in a Room with ID: d0413754-0bd2-414d-82eb-739ed55558a9 | Name: anonymus8603 with the mode src.mill.MillGame@3fdc043f
+[ 13/01/2021 23:49:44 ] New Client connectet
+[ 13/01/2021 23:49:44 ] Client Socket[addr=/127.0.0.1,port=59073,localport=1515] connected
+[ 13/01/2021 23:49:44 ] The Player anonymus1701choosed the Gamemode: Mill
+[ 13/01/2021 23:49:44 ] Player anonymus1701 is in a Room with null with the mode src.mill.MillGame@157cb518
+[ 13/01/2021 23:49:47 ] New Client connectet
+[ 13/01/2021 23:49:47 ] Client Socket[addr=/127.0.0.1,port=59081,localport=1515] connected
+[ 13/01/2021 23:49:47 ] The Player anonymus9161choosed the Gamemode: Mill
+[ 13/01/2021 23:49:47 ] Player anonymus9161 is in a Room with ID: f54abcea-ff53-4dcd-ad5c-e5e2254ae8e9 | Name: anonymus1701 with the mode src.mill.MillGame@157cb518
+[ 13/01/2021 23:49:48 ] Player anonymus9161 disconnectet.
