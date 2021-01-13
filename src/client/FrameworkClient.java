@@ -672,7 +672,7 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 		if (color == null)
 			board = new MillGui();
 		else
-			board = new MillGui(s, color);
+			board = new MillGui(s, color, myTurn);
 		
 		board.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		board.pack();
