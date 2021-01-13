@@ -3,6 +3,8 @@ package src.server;
 import java.io.*;
 import java.net.*;
 import src.chess.*;
+import src.games.*;
+import src.mill.*;
 import src.organisation.*;
 
 /**
@@ -78,6 +80,16 @@ public class ClientHandler extends Thread {
                                 gameRoom.setPromotion(information);
                                 gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard)gameRoom.getGameBoard()) + ">");
                                 gameRoom.setTurn(gameRoom.getTheOtherPlayer(player));
+                                break;
+                            case REMOVE:
+                                if(MillRules.checkRemovedPiece(gameRoom.getGameBoard(),  MillMoveConverter.getBoardFromString(information), player.getColour()).equals(Messages.MOVE_ALLOWED)){
+                                    gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Gameboard=" + MillMoveConverter.convertPiecesToString((MillBoard) gameRoom.getGameBoard()) + ">");
+                                    gameRoom.setTurn(gameRoom.getTheOtherPlayer(player));
+                                    outputStream.writeUTF("<Sucess>");
+                                } else {
+                                    outputStream.writeUTF("<Error=You aren't allowed to remove from a mill>");
+                                }
+
                                 break;
                             case CONNECTIONSTATUS:
                                 if(information.equals("Exit"))

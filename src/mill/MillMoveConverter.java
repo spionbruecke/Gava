@@ -75,9 +75,9 @@ public class MillMoveConverter implements MoveConverter {
         System.out.println(convertPiecesToString(mill));
     }
  
-    public static String convertPiecesToString(MillBoard board) {
+    public static String convertPiecesToString(MillBoard millBoard) {
         StringBuilder output = new StringBuilder();
-        PlayingPiece[] playingPieces = board.getPlayingPieces();
+        PlayingPiece[] playingPieces = millBoard.getPlayingPieces();
 
 
         for(int i = 0 ; i < 18; i ++) {

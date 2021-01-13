@@ -64,7 +64,7 @@ public class MillRules implements Rules {
     }
 
     //colour of piece which has been removed
-    public Messages checkRemovedPiece(GameBoard board, PlayingPiece[][] stateToCheck, String colour){
+    public static Messages checkRemovedPiece(GameBoard board, PlayingPiece[][] stateToCheck, String colour){
         int totalNumOfPiecesPrevious = MillBoard.getNumOfPieces(board.getState(), "white")
                 + MillBoard.getNumOfPieces(board.getState(), "black");
 
