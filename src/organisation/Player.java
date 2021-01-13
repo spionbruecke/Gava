@@ -5,6 +5,7 @@ import java.util.*;
 import src.chess.*;
 import src.games.*;
 import src.server.ClientHandler;
+import src.mill.*;
 
 
 /**
@@ -86,7 +87,7 @@ public class Player {
                 this.chosedGame = new ChessGame();
                 break;
             case "Mill":
-                //this.chosedGame = new MillGame(); <- this is for later
+                this.chosedGame = new MillGame(); 
                 break;
             default:
                 System.out.println(input);
