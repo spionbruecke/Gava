@@ -159,6 +159,7 @@ public class MillRules implements Rules {
 
     private static boolean threeInARow(PlayingPiece[][] stateToCheck, String colour){
         //check rows
+        System.out.println(colour);
         if(stateToCheck[0][0].getColour().equals(colour)
                 && stateToCheck[0][0].getColour().equals(stateToCheck[0][1].getColour())
                 && stateToCheck[0][0].getColour().equals(stateToCheck[0][2].getColour())){
