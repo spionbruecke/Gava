@@ -35,13 +35,12 @@ public class MillGui extends JFrame{
 	
 	protected boolean movePerformed = false;
 	protected String newState = " ";
-	protected boolean myTurn;
+	protected boolean myTurn = false;
 	
 
-	public MillGui (String currentState, String color, boolean myTurn) {
+	public MillGui (String currentState, String color) {
 		this.currentState = currentState;
 		this.color = color;
-		this.myTurn = myTurn;
 		
 		this.setPreferredSize(boardSize);
 		this.getContentPane().setLayout(null);
