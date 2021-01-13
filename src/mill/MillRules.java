@@ -6,7 +6,7 @@ public class MillRules implements Rules {
     private static MillMoveConverter converter = new MillMoveConverter();
     
 
-    public static Messages isMoveAllowed(GameBoard gameBoard, PlayingPiece[][] stateToCheck) {
+    public static Messages isMoveAllowed(GameBoard gameBoard, PlayingPiece[][] stateToCheck, String colour) {
         System.out.println("before state to string");
         String move = converter.stateToString(gameBoard.getState(), stateToCheck);
         System.out.println("after state to string");
@@ -20,9 +20,8 @@ public class MillRules implements Rules {
 
                                         System.out.println("totalNumOfPiecesToCheck: " + totalNumOfPiecesToCheck);
 
-        int row = converter.convertPosIntoArrayCoordinate(move.charAt(0));
-        int column = converter.convertPosIntoArrayCoordinate(move.charAt(1));
-        String colour = gameBoard.getState()[row][column].getColour();
+        
+        //String colour = gameBoard.getState()[row][column].getColour();
 
         //startingPhase
         if((totalNumOfPiecesPrevious < totalNumOfPiecesToCheck) && !finishedStartingPhase(stateToCheck)){
@@ -36,6 +35,8 @@ public class MillRules implements Rules {
 
         }else {
         //startingPhase over
+            int row = converter.convertPosIntoArrayCoordinate(move.charAt(0));
+            int column = converter.convertPosIntoArrayCoordinate(move.charAt(1));
             System.out.println(row + " | " + column);
             System.out.println("after colour: " + colour);
 
@@ -120,7 +121,7 @@ public class MillRules implements Rules {
         Messages message;
 
         System.out.println("Before Move allowed");
-        message = isMoveAllowed(board, stateToCheck);
+        message = isMoveAllowed(board, stateToCheck,colour);
         System.out.println("Nach Move allowed");
         if(message == Messages.MOVE_ALLOWED)
             return isGameFinished(stateToCheck, colour);
