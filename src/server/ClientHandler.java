@@ -148,6 +148,8 @@ public class ClientHandler extends Thread {
                 connected = false; 
             } else if(typ.equals(InformationsTypes.PROMOTION)){
                 outputStream.writeUTF("<Promotion>"); 
+            } else if(typ.equals(InformationsTypes.REMOVE){
+                outputStream.writeUTF("<Remove>"); 
             } else {
                 outputStream.writeUTF("<Sucess>"); 
                 if(this.gameRoom.getGame() instanceof ChessGame){ 
