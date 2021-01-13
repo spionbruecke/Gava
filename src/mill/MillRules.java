@@ -38,6 +38,7 @@ public class MillRules implements Rules {
             int row = converter.convertPosIntoArrayCoordinate(move.charAt(0));
             int column = converter.convertPosIntoArrayCoordinate(move.charAt(1));
             String colour = gameBoard.getState()[row][column].getColour();
+
             System.out.println(row + " | " + column);
             System.out.println("after colour: " + colour);
 
