@@ -30,9 +30,10 @@ public class GameRoom{
 
     public GameRoom(Game gamemode){
         currentGame = gamemode;
-
         if(gamemode instanceof ChessGame){
             game = "Chess";
+        } else if(gamemode instanceof MillGame){
+            game = "Mill";
         }
     }
     
@@ -65,7 +66,6 @@ public class GameRoom{
         } else if(game.equals("Mill")){
             gameBoard = new MillBoard();
         }
-
     }
     
 
