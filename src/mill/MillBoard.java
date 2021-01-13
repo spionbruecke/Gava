@@ -70,7 +70,7 @@ public class MillBoard extends GameBoard {
 
                 if(input.charAt(i+1) != 'n')
                     position.append(input.charAt(i + 1)).append(input.charAt(i + 2));
-                else    
+                else   
                     position.append("null");
 
                 if(!this.getPlayingPieces()[counter].getPosition().equals(position.toString()))

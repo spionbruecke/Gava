@@ -26,6 +26,7 @@ public class GameRoom{
     private Rules rule;
     private String game;
     private String promotionPosition;
+    private boolean startingphase;
 
     public GameRoom(Game gamemode){
         currentGame = gamemode;
@@ -43,6 +44,7 @@ public class GameRoom{
      * @throws IOException
      */
     private void getStart() throws IOException{
+        startingphase = true;
         //Decides Randomly who is allowed to start
         if ((int) ( Math.random() * 2 + 1) == 1){
             turnOfPlayer = player1;
@@ -60,6 +62,8 @@ public class GameRoom{
 
         if(game.equals("Chess")){
             gameBoard = new ChessBoard();
+        } else if(game.equals("Mill")){
+            gameBoard = new MillBoard();
         }
 
     }
@@ -185,14 +189,12 @@ public class GameRoom{
         try{
             Messages message;
 
-            message = MillRules.executeMove(gameBoard, turnOfPlayer.getColour(), ChessMoveConverter.getBoardFromString(information));
-            
+            message = MillRules.executeMove(gameBoard, turnOfPlayer.getColour(), MillMoveConverter.getBoardFromString(information));
+
             if(message == Messages.GO_ON){
                 gameBoard.setNewBoard(information);
-                if(ChessRules.isKingDead(gameBoard,getTheOtherPlayer(turnOfPlayer))){
-                    //TODO Ersatzcheck falls #token < 3
-                }
             }
+
             switch(message){
                 case VICTORY:
                     getTheOtherPlayer(turnOfPlayer).getClientHandler().sendMessage("<Loss>");
@@ -206,8 +208,10 @@ public class GameRoom{
                 case GO_ON:
                     this.turnOfPlayer = getTheOtherPlayer(turnOfPlayer);
                     return "<Gameboard=" + MillMoveConverter.convertPiecesToString((MillBoard) this.gameBoard) + ">";
-                case ERROR_WRONGMOVEMENT_DIRECTION_BISHOP:
+                case ERROR_WRONGMOVEMENT:
                     return "<Error=Wrong Movement>";
+                case MOVE_ALLOWED_REMOVE_PIECE:
+                    return "<Remove>";
                 default:
                     return null;
             }

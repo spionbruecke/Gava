@@ -31,7 +31,7 @@ public class MillMoveConverter implements MoveConverter {
             if(k == 3)
                 for (int j = 0; j < 6; j ++){
                     if (!currentState[k][j].getName().equals("null") && stateToCheck[k][j].getName().equals("null")){
-                        start = new Field(k, j);
+                        start = new Field(k, j);                  
                     }else if(currentState[k][j].getName().equals("null") && !stateToCheck[k][j].getName().equals("null")){
                         target = new Field(k, j);
                     }
@@ -44,6 +44,10 @@ public class MillMoveConverter implements MoveConverter {
                         target = new Field(k, j);
                     }
                 }
+        }
+
+        if(start.equals(null)){
+            start = new Field(-1,-1);
         }
 
         move.append(convertArrayCoordinateIntoPosRow(start.getRow()));
@@ -112,6 +116,8 @@ public class MillMoveConverter implements MoveConverter {
             case 6:
                 return "1";
 
+            case -1:
+                return "n";
             default:
                 System.out.println("Error convert into PosRow: " + i);
                 return "";
@@ -142,6 +148,9 @@ public class MillMoveConverter implements MoveConverter {
 
             case 5:
                 return "F";
+
+            case -1:
+                return "n";
 
             default:
                 return "";
