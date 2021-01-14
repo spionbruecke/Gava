@@ -159,71 +159,86 @@ public class MillRules implements Rules {
 
     private static boolean threeInARow(PlayingPiece[][] stateToCheck, String colour){
         //check rows
-        System.out.println(colour);
-        if(stateToCheck[0][0].getColour().equals(colour)
+        if(!stateToCheck[0][0].getColour().equals("null") 
+                && stateToCheck[0][0].getColour().equals(colour)
                 && stateToCheck[0][0].getColour().equals(stateToCheck[0][1].getColour())
                 && stateToCheck[0][0].getColour().equals(stateToCheck[0][2].getColour())){
             return true;
-        }else if(stateToCheck[1][0].getColour().equals(colour)
+        }else if(!stateToCheck[1][0].getColour().equals("null") 
+                && stateToCheck[1][0].getColour().equals(colour)
                 && stateToCheck[1][0].getColour().equals(stateToCheck[1][1].getColour())
                 && stateToCheck[1][0].getColour().equals(stateToCheck[1][2].getColour())){
             return true;
-        }else if(stateToCheck[2][0].getColour().equals(colour)
+        }else if(!stateToCheck[2][0].getColour().equals("null") 
+                && stateToCheck[2][0].getColour().equals(colour)
                 && stateToCheck[2][0].getColour().equals(stateToCheck[2][1].getColour())
                 && stateToCheck[2][0].getColour().equals(stateToCheck[2][2].getColour())){
             return true;
-        }else if(stateToCheck[3][0].getColour().equals(colour)
+        }else if(!stateToCheck[3][0].getColour().equals("null") 
+                && stateToCheck[3][0].getColour().equals(colour)
                 && stateToCheck[3][0].getColour().equals(stateToCheck[3][1].getColour())
                 && stateToCheck[3][0].getColour().equals(stateToCheck[3][2].getColour())){
             return true;
-        }else if(stateToCheck[3][3].getColour().equals(colour)
+        }else if(!stateToCheck[3][3].getColour().equals("null") 
+                && stateToCheck[3][3].getColour().equals(colour)
                 && stateToCheck[3][3].getColour().equals(stateToCheck[3][4].getColour())
                 && stateToCheck[3][3].getColour().equals(stateToCheck[3][5].getColour())){
             return true;
-        }else if(stateToCheck[4][0].getColour().equals(colour)
+        }else if(!stateToCheck[4][0].getColour().equals("null") 
+                && stateToCheck[4][0].getColour().equals(colour)
                 && stateToCheck[4][0].getColour().equals(stateToCheck[4][1].getColour())
                 && stateToCheck[4][0].getColour().equals(stateToCheck[4][2].getColour())){
             return true;
-        }else if(stateToCheck[5][0].getColour().equals(colour)
+        }else if(!stateToCheck[5][0].getColour().equals("null") 
+                && stateToCheck[5][0].getColour().equals(colour)
                 && stateToCheck[5][0].getColour().equals(stateToCheck[5][1].getColour())
                 && stateToCheck[5][0].getColour().equals(stateToCheck[5][2].getColour())){
             return true;
-        }else if(stateToCheck[6][0].getColour().equals(colour)
+        }else if(!stateToCheck[6][0].getColour().equals("null") 
+                && stateToCheck[6][0].getColour().equals(colour)
                 && stateToCheck[6][0].getColour().equals(stateToCheck[6][1].getColour())
                 && stateToCheck[6][0].getColour().equals(stateToCheck[6][2].getColour())){
             return true;
         }
 
         //check columns
-        if(stateToCheck[0][0].getColour().equals(colour)
+        if(!stateToCheck[0][0].getColour().equals("null") 
+                && stateToCheck[0][0].getColour().equals(colour)
                 && stateToCheck[0][0].getColour().equals(stateToCheck[3][0].getColour())
                 && stateToCheck[0][0].getColour().equals(stateToCheck[6][0].getColour())){
             return true;
-        }else if(stateToCheck[1][0].getColour().equals(colour)
+        }else if(!stateToCheck[1][0].getColour().equals("null") 
+                && stateToCheck[1][0].getColour().equals(colour)
                 && stateToCheck[1][0].getColour().equals(stateToCheck[3][1].getColour())
                 && stateToCheck[1][0].getColour().equals(stateToCheck[5][0].getColour())){
             return true;
-        }else if(stateToCheck[2][0].getColour().equals(colour)
+        }else if(!stateToCheck[2][0].getColour().equals("null") 
+                && stateToCheck[2][0].getColour().equals(colour)
                 && stateToCheck[2][0].getColour().equals(stateToCheck[3][2].getColour())
                 && stateToCheck[2][0].getColour().equals(stateToCheck[4][0].getColour())){
             return true;
-        }else if(stateToCheck[0][1].getColour().equals(colour)
+        }else if(!stateToCheck[0][1].getColour().equals("null") 
+                && stateToCheck[0][1].getColour().equals(colour)
                 && stateToCheck[0][1].getColour().equals(stateToCheck[1][1].getColour())
                 && stateToCheck[0][1].getColour().equals(stateToCheck[2][1].getColour())){
             return true;
-        }else if(stateToCheck[4][1].getColour().equals(colour)
+        }else if(!stateToCheck[4][1].getColour().equals("null") 
+                && stateToCheck[4][1].getColour().equals(colour)
                 && stateToCheck[4][1].getColour().equals(stateToCheck[5][1].getColour())
                 && stateToCheck[4][1].getColour().equals(stateToCheck[6][1].getColour())){
             return true;
-        }else if(stateToCheck[2][2].getColour().equals(colour)
+        }else if(!stateToCheck[2][2].getColour().equals("null") 
+                && stateToCheck[2][2].getColour().equals(colour)
                 && stateToCheck[2][2].getColour().equals(stateToCheck[3][3].getColour())
                 && stateToCheck[2][2].getColour().equals(stateToCheck[4][2].getColour())){
             return true;
-        }else if(stateToCheck[1][2].getColour().equals(colour)
+        }else if(!stateToCheck[1][2].getColour().equals("null") 
+                && stateToCheck[1][2].getColour().equals(colour)
                 && stateToCheck[1][2].getColour().equals(stateToCheck[3][4].getColour())
                 && stateToCheck[1][2].getColour().equals(stateToCheck[5][2].getColour())){
             return true;
-        }else if(stateToCheck[0][2].getColour().equals(colour)
+        }else if(!stateToCheck[0][2].getColour().equals("null") 
+                && stateToCheck[0][2].getColour().equals(colour)
                 && stateToCheck[0][2].getColour().equals(stateToCheck[3][5].getColour())
                 && stateToCheck[0][2].getColour().equals(stateToCheck[6][2].getColour())){
             return true;
