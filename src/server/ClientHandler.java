@@ -82,7 +82,7 @@ public class ClientHandler extends Thread {
                                 gameRoom.setTurn(gameRoom.getTheOtherPlayer(player));
                                 break;
                             case REMOVE:
-                                if(MillRules.checkRemovedPiece(gameRoom.getGameBoard(),  MillMoveConverter.getBoardFromString(information), player.getColour()).equals(Messages.MOVE_ALLOWED)){
+                                if(MillRules.checkRemovedPiece(gameRoom.getGameBoard(),  MillMoveConverter.getBoardFromString(information), gameRoom.getTheOtherPlayer(player).getColour()).equals(Messages.MOVE_ALLOWED)){
                                     gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Gameboard=" + MillMoveConverter.convertPiecesToString((MillBoard) gameRoom.getGameBoard()) + ">");
                                     gameRoom.setTurn(gameRoom.getTheOtherPlayer(player));
                                     outputStream.writeUTF("<Sucess>");
