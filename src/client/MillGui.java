@@ -36,12 +36,21 @@ public class MillGui extends JFrame{
 	protected boolean movePerformed = false;
 	protected String newState = " ";
 	protected boolean myTurn;
+	protected boolean remove;
+	
+	protected int tokencounter;
+	
+	protected boolean fly = false;
 	
 
-	public MillGui (String currentState, String color, boolean myTurn) {
+	public MillGui (String currentState, String color, boolean myTurn, boolean remove, int counter) {
 		this.currentState = currentState;
 		this.color = color;
 		this.myTurn = myTurn;
+		this.remove = remove;
+		
+		if (counter > 9)
+			fly = true;
 		
 		this.setPreferredSize(boardSize);
 		this.getContentPane().setLayout(null);
@@ -450,6 +459,22 @@ public class MillGui extends JFrame{
 	    
 
 	    public void mouseClicked(MouseEvent entered) {
+	    	
+	    	if (fly == true) {
+	    		
+	    	}
+	    	
+	    	
+	    	if (remove == true && iconset == true && movePerformed == false && myTurn == true) {
+	    		if (color.equals(playercolor) == false) {
+	    			label.setIcon(null);
+	    			remove = false;
+	    			movePerformed = true;
+	    			this.iconset = false;
+	    			this.color = null;
+	    			createString();
+	    		}
+	    	}
 	    	if (movePerformed == false && myTurn == true) {
 	    	
 	    		if (iconset == false) {
