@@ -27,7 +27,7 @@ public class MillRules implements Rules {
         //startingPhase
         if((totalNumOfPiecesPrevious < totalNumOfPiecesToCheck) && !finishedStartingPhase(stateToCheck)){
             
-            String colour = gameBoard.getState()[targetRow][targetColumn].getColour();
+            String colour = stateToCheck[targetRow][targetColumn].getColour();
             if(!Rules.isFieldOccupied(gameBoard, targetRow, targetColumn))
                 return removePiece(stateToCheck, colour);
             else
