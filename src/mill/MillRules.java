@@ -25,7 +25,7 @@ public class MillRules implements Rules {
             
             String colour = stateToCheck[targetRow][targetColumn].getColour();
             if(!Rules.isFieldOccupied(gameBoard, targetRow, targetColumn))
-                return removePiece(stateToCheck, colour);
+                return removePiece(gameBoard.getState(), stateToCheck, colour);
             else
                 return Messages.ERROR_WRONGMOVEMENT;
 
@@ -40,24 +40,24 @@ public class MillRules implements Rules {
                 case "white":
                     if (MillBoard.getNumOfPieces(gameBoard.getState(), "white") > 3) {
                         if (isTargetValid(move) && !Rules.isFieldOccupied(gameBoard, row, column))
-                            return removePiece(gameBoard.getState(), "white");
+                            return removePiece(gameBoard.getState(), stateToCheck, "white");
                         else
                             return Messages.ERROR_WRONGMOVEMENT;
                     } else {
                         if (!Rules.isFieldOccupied(gameBoard, row, column))
-                            return removePiece(gameBoard.getState(), "white");
+                            return removePiece(gameBoard.getState(), stateToCheck, "white");
                         else
                             return Messages.ERROR_WRONGMOVEMENT;
                     }
                 case "black":
                     if (MillBoard.getNumOfPieces(gameBoard.getState(), "black") > 3) {
                         if (isTargetValid(move) && !Rules.isFieldOccupied(gameBoard, row, column))
-                            return removePiece(gameBoard.getState(), "black");
+                            return removePiece(gameBoard.getState(), stateToCheck, "black");
                         else
                             return Messages.ERROR_WRONGMOVEMENT;
                     } else {
                         if (!Rules.isFieldOccupied(gameBoard, row, column))
-                            return removePiece(gameBoard.getState(), "black");
+                            return removePiece(gameBoard.getState(), stateToCheck, "black");
                         else
                             return Messages.ERROR_WRONGMOVEMENT;
                     }
@@ -130,7 +130,7 @@ public class MillRules implements Rules {
        return null;
     }
 
-    public static boolean finishedStartingPhase( PlayingPiece[][] stateToCheck){
+    public static boolean finishedStartingPhase(PlayingPiece[][] stateToCheck){
         MillBoard newBoard = new MillBoard();
 
         newBoard.setState(stateToCheck);
@@ -144,100 +144,101 @@ public class MillRules implements Rules {
     }
 
     //method should only be called if the move was checked to be true
-    private static Messages removePiece(PlayingPiece[][] state, String colour){
-        if(threeInARow(state, colour)){
+    private static Messages removePiece(PlayingPiece[][] currentState, PlayingPiece[][] stateToCheck, String colour){
+        boolean[] currentMills = threeInARow(currentState, colour);
+        boolean[] millsToBeChecked = threeInARow(stateToCheck, colour);
+
+        int countCurrentMills = 0;
+        int countMillsToBeChecked = 0;
+
+        for (int i = 0; i < currentMills.length; i++) {
+            if(currentMills[i])
+                countCurrentMills++;
+
+            if(millsToBeChecked[i])
+                countMillsToBeChecked++;
+        }
+
+        if(countCurrentMills < countMillsToBeChecked) {
+            System.out.println(countCurrentMills + ", " + countMillsToBeChecked);
             return Messages.MOVE_ALLOWED_REMOVE_PIECE;
         }else
             return Messages.MOVE_ALLOWED;
     }
 
-    private static boolean threeInARow(PlayingPiece[][] stateToCheck, String colour){
+    private static boolean[] threeInARow(PlayingPiece[][] stateToCheck, String colour){
+        boolean[] millsList = new boolean[16];
+
         //check rows
-        if(!stateToCheck[0][0].getColour().equals("null") 
-                && stateToCheck[0][0].getColour().equals(colour)
+        if(stateToCheck[0][0].getColour().equals(colour)
                 && stateToCheck[0][0].getColour().equals(stateToCheck[0][1].getColour())
                 && stateToCheck[0][0].getColour().equals(stateToCheck[0][2].getColour())){
-            return true;
-        }else if(!stateToCheck[1][0].getColour().equals("null") 
-                && stateToCheck[1][0].getColour().equals(colour)
+            millsList[0] = true;
+        }else if(stateToCheck[1][0].getColour().equals(colour)
                 && stateToCheck[1][0].getColour().equals(stateToCheck[1][1].getColour())
                 && stateToCheck[1][0].getColour().equals(stateToCheck[1][2].getColour())){
-            return true;
-        }else if(!stateToCheck[2][0].getColour().equals("null") 
-                && stateToCheck[2][0].getColour().equals(colour)
+            millsList[1] = true;
+        }else if(stateToCheck[2][0].getColour().equals(colour)
                 && stateToCheck[2][0].getColour().equals(stateToCheck[2][1].getColour())
                 && stateToCheck[2][0].getColour().equals(stateToCheck[2][2].getColour())){
-            return true;
-        }else if(!stateToCheck[3][0].getColour().equals("null") 
-                && stateToCheck[3][0].getColour().equals(colour)
+            millsList[2] = true;
+        }else if(stateToCheck[3][0].getColour().equals(colour)
                 && stateToCheck[3][0].getColour().equals(stateToCheck[3][1].getColour())
                 && stateToCheck[3][0].getColour().equals(stateToCheck[3][2].getColour())){
-            return true;
-        }else if(!stateToCheck[3][3].getColour().equals("null") 
-                && stateToCheck[3][3].getColour().equals(colour)
+            millsList[3] = true;
+        }else if(stateToCheck[3][3].getColour().equals(colour)
                 && stateToCheck[3][3].getColour().equals(stateToCheck[3][4].getColour())
                 && stateToCheck[3][3].getColour().equals(stateToCheck[3][5].getColour())){
-            return true;
-        }else if(!stateToCheck[4][0].getColour().equals("null") 
-                && stateToCheck[4][0].getColour().equals(colour)
+            millsList[4] = true;
+        }else if(stateToCheck[4][0].getColour().equals(colour)
                 && stateToCheck[4][0].getColour().equals(stateToCheck[4][1].getColour())
                 && stateToCheck[4][0].getColour().equals(stateToCheck[4][2].getColour())){
-            return true;
-        }else if(!stateToCheck[5][0].getColour().equals("null") 
-                && stateToCheck[5][0].getColour().equals(colour)
+            millsList[5] = true;
+        }else if(stateToCheck[5][0].getColour().equals(colour)
                 && stateToCheck[5][0].getColour().equals(stateToCheck[5][1].getColour())
                 && stateToCheck[5][0].getColour().equals(stateToCheck[5][2].getColour())){
-            return true;
-        }else if(!stateToCheck[6][0].getColour().equals("null") 
-                && stateToCheck[6][0].getColour().equals(colour)
+            millsList[6] = true;
+        }else if(stateToCheck[6][0].getColour().equals(colour)
                 && stateToCheck[6][0].getColour().equals(stateToCheck[6][1].getColour())
                 && stateToCheck[6][0].getColour().equals(stateToCheck[6][2].getColour())){
-            return true;
+            millsList[7] = true;
         }
 
         //check columns
-        if(!stateToCheck[0][0].getColour().equals("null") 
-                && stateToCheck[0][0].getColour().equals(colour)
+        if(stateToCheck[0][0].getColour().equals(colour)
                 && stateToCheck[0][0].getColour().equals(stateToCheck[3][0].getColour())
                 && stateToCheck[0][0].getColour().equals(stateToCheck[6][0].getColour())){
-            return true;
-        }else if(!stateToCheck[1][0].getColour().equals("null") 
-                && stateToCheck[1][0].getColour().equals(colour)
+            millsList[8] = true;
+        }else if(stateToCheck[1][0].getColour().equals(colour)
                 && stateToCheck[1][0].getColour().equals(stateToCheck[3][1].getColour())
                 && stateToCheck[1][0].getColour().equals(stateToCheck[5][0].getColour())){
-            return true;
-        }else if(!stateToCheck[2][0].getColour().equals("null") 
-                && stateToCheck[2][0].getColour().equals(colour)
+            millsList[9] = true;
+        }else if(stateToCheck[2][0].getColour().equals(colour)
                 && stateToCheck[2][0].getColour().equals(stateToCheck[3][2].getColour())
                 && stateToCheck[2][0].getColour().equals(stateToCheck[4][0].getColour())){
-            return true;
-        }else if(!stateToCheck[0][1].getColour().equals("null") 
-                && stateToCheck[0][1].getColour().equals(colour)
+            millsList[10] = true;
+        }else if(stateToCheck[0][1].getColour().equals(colour)
                 && stateToCheck[0][1].getColour().equals(stateToCheck[1][1].getColour())
                 && stateToCheck[0][1].getColour().equals(stateToCheck[2][1].getColour())){
-            return true;
-        }else if(!stateToCheck[4][1].getColour().equals("null") 
-                && stateToCheck[4][1].getColour().equals(colour)
+            millsList[11] = true;
+        }else if(stateToCheck[4][1].getColour().equals(colour)
                 && stateToCheck[4][1].getColour().equals(stateToCheck[5][1].getColour())
                 && stateToCheck[4][1].getColour().equals(stateToCheck[6][1].getColour())){
-            return true;
-        }else if(!stateToCheck[2][2].getColour().equals("null") 
-                && stateToCheck[2][2].getColour().equals(colour)
+            millsList[12] = true;
+        }else if(stateToCheck[2][2].getColour().equals(colour)
                 && stateToCheck[2][2].getColour().equals(stateToCheck[3][3].getColour())
                 && stateToCheck[2][2].getColour().equals(stateToCheck[4][2].getColour())){
-            return true;
-        }else if(!stateToCheck[1][2].getColour().equals("null") 
-                && stateToCheck[1][2].getColour().equals(colour)
+            millsList[13] = true;
+        }else if(stateToCheck[1][2].getColour().equals(colour)
                 && stateToCheck[1][2].getColour().equals(stateToCheck[3][4].getColour())
                 && stateToCheck[1][2].getColour().equals(stateToCheck[5][2].getColour())){
-            return true;
-        }else if(!stateToCheck[0][2].getColour().equals("null") 
-                && stateToCheck[0][2].getColour().equals(colour)
+            millsList[14] = true;
+        }else if(stateToCheck[0][2].getColour().equals(colour)
                 && stateToCheck[0][2].getColour().equals(stateToCheck[3][5].getColour())
-                && stateToCheck[0][2].getColour().equals(stateToCheck[6][2].getColour())){
-            return true;
-        }else
-            return false;
+                && stateToCheck[0][2].getColour().equals(stateToCheck[6][2].getColour()))
+            millsList[15] = true;
+
+        return millsList;
     }
 
     private static boolean isTargetValid(String move){

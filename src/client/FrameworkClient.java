@@ -18,7 +18,6 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JSeparator;
 
-import src.organisation.InformationsTypes;
 import src.organisation.StringConverter;
 
 
