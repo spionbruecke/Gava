@@ -83,6 +83,7 @@ public class ClientHandler extends Thread {
                                 break;
                             case REMOVE:
                                 if(MillRules.checkRemovedPiece(gameRoom.getGameBoard(),  MillMoveConverter.getBoardFromString(information), gameRoom.getTheOtherPlayer(player).getColour()).equals(Messages.MOVE_ALLOWED)){
+                                    gameRoom.getGameBoard().setNewBoard(information);
                                     gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Gameboard=" + MillMoveConverter.convertPiecesToString((MillBoard) gameRoom.getGameBoard()) + ">");
                                     gameRoom.setTurn(gameRoom.getTheOtherPlayer(player));
                                     outputStream.writeUTF("<Sucess>");
@@ -130,7 +131,6 @@ public class ClientHandler extends Thread {
             InformationsTypes typ;
 
             tmp = gameRoom.setInput(information);
-            System.out.println(tmp);
             typ = StringConverter.getInformationType(tmp);
             if(typ.equals(InformationsTypes.ERROR)){
                 outputStream.writeUTF(tmp);

@@ -52,7 +52,7 @@ public class MillMoveConverter implements MoveConverter {
         move.append(convertArrayCoordinateIntoPosRow(target.getRow()));
         move.append(convertArrayCoordinateIntoPosColumn(target.getColumn()));
 
-        System.out.println(move);
+
 
         return move.toString();
     }
