@@ -74,8 +74,7 @@ public class ClientHandler extends Thread {
                                 break;
                             case CREATEACCOUNT:
                                 //dummyfunctionLogin(Name, pW)
-                                break;
-                            
+                                break;                           
                             case PROMOTION:
                                 gameRoom.setPromotion(information);
                                 gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard)gameRoom.getGameBoard()) + ">");
@@ -100,9 +99,6 @@ public class ClientHandler extends Thread {
                                 gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Win>");
                                 outputStream.writeUTF("<Loss>");
                                 connected = false; 
-                                break;
-                            case MESSAGE:
-
                                 break;
                             default:
 

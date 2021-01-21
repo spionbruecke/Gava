@@ -16,14 +16,14 @@ public class Server {
     public static void main(String[] args) {
         Socket newConnection = null;
         GameController controller = new GameController();
-        //TODO(Alex): Think about the Portnumber. There is mayby a better one 
+        
         try (ServerSocket newSocket = new ServerSocket(1515);){      
 
             while(true){  //it has to run until the server(or the programm) shutdown
                 newConnection = null;    
                 newConnection = newSocket.accept();
 
-                LogWriter.writeToLog("New Client connectet"); // Message for the Server -> Think about where to save and if we need to safe this.
+                LogWriter.writeToLog("New Client connectet"); // Message for the Server 
 
                 DataInputStream inputStream = new DataInputStream(newConnection.getInputStream());
                 DataOutputStream outputStream = new DataOutputStream(newConnection.getOutputStream());
