@@ -137,7 +137,7 @@ public class MillRules implements Rules {
         newBoard.setState(stateToCheck);
 
         for(int i = 0; i < 18; i++){
-            if(!newBoard.getPlayingPieces()[i].getHasMoved())
+            if(!newBoard.getPlayingPieces()[i].hasMoved())
                 return false;
         }
 

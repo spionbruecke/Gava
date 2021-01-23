@@ -78,10 +78,6 @@ public class PlayingPiece {
         hasMoved = true;
     }
 
-    public boolean getHasMoved(){
-        return hasMoved;
-    }
-
     public boolean equals(PlayingPiece p){
         return this.getName().equals(p.getName()) && this.getColour().equals(p.getColour());
     }
