@@ -192,10 +192,6 @@ public class GameRoom{
 
             message = MillRules.executeMove(gameBoard, turnOfPlayer.getColour(), MillMoveConverter.getBoardFromString(information));
 
-            if(message == Messages.GO_ON || message == Messages.MOVE_ALLOWED_REMOVE_PIECE){
-                gameBoard.setNewBoard(information);
-            }
-
             switch(message){
                 case VICTORY:
                     getTheOtherPlayer(turnOfPlayer).getClientHandler().sendMessage("<Loss>");
@@ -204,14 +200,17 @@ public class GameRoom{
                     getTheOtherPlayer(turnOfPlayer).getClientHandler().sendMessage("<Win>");
                     return "<Loss>";
                 case DRAW:
-                    return "<Gameend=Draw>";
+                    getTheOtherPlayer(turnOfPlayer).getClientHandler().sendMessage("<Draw>");
+                    return "<Draw>";
                 case MOVE_ALLOWED:
                 case GO_ON:
+                    gameBoard.setNewBoard(information);
                     this.turnOfPlayer = getTheOtherPlayer(turnOfPlayer);
                     return "<Gameboard=" + MillMoveConverter.convertPiecesToString((MillBoard) this.gameBoard) + ">";
                 case ERROR_WRONGMOVEMENT:
                     return "<Error=Wrong Movement>";
                 case MOVE_ALLOWED_REMOVE_PIECE:
+                    gameBoard.setNewBoard(information);
                     return "<Remove>";
                 default:
                     System.out.println("Set Input for Mill Error");
