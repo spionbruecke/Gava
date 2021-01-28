@@ -57,7 +57,7 @@ public class ChessRules implements Rules {
     }
 
     private static Messages checkEachPossibleMove(GameBoard gameBoard, String move){
-     
+
         int row = converter.convertPosIntoArrayCoordinate(move.charAt(1));
         int column = converter.convertPosIntoArrayCoordinate(move.charAt(0));
 
@@ -952,6 +952,7 @@ public class ChessRules implements Rules {
         return false;
     }
 
+    //TODO BEGÜM
     private static boolean deadPosition(GameBoard board){
         int black_counter = 0;
         int white_counter = 0;

@@ -4,7 +4,8 @@ import src.games.*;
 
 public class MillRules implements Rules {
     private static MillMoveConverter converter = new MillMoveConverter();
-    
+
+    //TODO BEGÜM: kann Spieler keinen Stein mehr bewegen => DEFEAT
 
     public static Messages isMoveAllowed(GameBoard gameBoard, PlayingPiece[][] stateToCheck) {
         String move = converter.stateToString(gameBoard.getState(), stateToCheck);
