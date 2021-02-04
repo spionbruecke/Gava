@@ -196,13 +196,13 @@ public class ChessRules implements Rules {
                 && ((target.getColumn() == start.getColumn()+1 || target.getColumn() == start.getColumn()-1))
                 && gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("black")
                 && !isFieldOccupiedByOwnPlayingP(gameBoard, move)
-                && Rules.isFieldOccupied(gameBoard, target.getRow(), target.getColumn())){
+                && Rules.isFieldOccupied(gameBoard.getState(), target.getRow(), target.getColumn())){
             return Messages.MOVE_ALLOWED;
         }else if(target.getRow() == start.getRow()-1
                 && ((target.getColumn() == start.getColumn()+1 || target.getColumn() == start.getColumn()-1))
                 && gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("white")
                 && !isFieldOccupiedByOwnPlayingP(gameBoard, move)
-                && Rules.isFieldOccupied(gameBoard, target.getRow(), target.getColumn())){
+                && Rules.isFieldOccupied(gameBoard.getState(), target.getRow(), target.getColumn())){
             return Messages.MOVE_ALLOWED;
         }
 
@@ -256,9 +256,9 @@ public class ChessRules implements Rules {
 
     private static boolean isPawnPathFree(GameBoard board, Field start){
         if(board.getState()[start.getRow()][start.getColumn()].getColour().equals("black"))
-            return !Rules.isFieldOccupied(board, start.getRow()+1, start.getColumn());
+            return !Rules.isFieldOccupied(board.getState(), start.getRow()+1, start.getColumn());
         else
-            return !Rules.isFieldOccupied(board, start.getRow()-1, start.getColumn());
+            return !Rules.isFieldOccupied(board.getState(), start.getRow()-1, start.getColumn());
     }
 
     private static boolean isEnPassantAllowed(GameBoard board, Field start, Field target){
@@ -504,25 +504,25 @@ public class ChessRules implements Rules {
     private static boolean isCastlingPathFree(GameBoard board, Field rook){
         if(rook.getRow()==0 && rook.getColumn()==0){
             for (int i = 1; i < 4; i++) {
-                if(Rules.isFieldOccupied(board, 0, i) || isFieldAttacked(board, 0, i)){
+                if(Rules.isFieldOccupied(board.getState(), 0, i) || isFieldAttacked(board, 0, i)){
                     return false;
                 }
             }
         }else if(rook.getRow()==0 && rook.getColumn()==7){
             for (int i = 5; i < 7; i++) {
-                if(Rules.isFieldOccupied(board, 0, i) || isFieldAttacked(board, 0, i)){
+                if(Rules.isFieldOccupied(board.getState(), 0, i) || isFieldAttacked(board, 0, i)){
                     return false;
                 }
             }
         }else if(rook.getRow()==7 && rook.getColumn()==0){
             for (int i = 1; i < 4; i++) {
-                if(Rules.isFieldOccupied(board, 7, i) || isFieldAttacked(board, 7, i)){
+                if(Rules.isFieldOccupied(board.getState(), 7, i) || isFieldAttacked(board, 7, i)){
                     return false;
                 }
             }
         }else{
             for (int i = 5; i < 7; i++) {
-                if(Rules.isFieldOccupied(board, 7, i) || isFieldAttacked(board, 7, i)){
+                if(Rules.isFieldOccupied(board.getState(), 7, i) || isFieldAttacked(board, 7, i)){
                     return false;
                 }
             }
@@ -756,7 +756,7 @@ public class ChessRules implements Rules {
         if( (target.getRow() < start.getRow()) && (target.getColumn() < start.getColumn()) ){
 
             while( (row > target.getRow()) && (column > target.getColumn()) ){
-                if(Rules.isFieldOccupied(gameBoard, row, column)){
+                if(Rules.isFieldOccupied(gameBoard.getState(), row, column)){
                     return false;
                 }
                 row--;
@@ -769,7 +769,7 @@ public class ChessRules implements Rules {
             column = start.getColumn() + 1;
 
             while( (row > target.getRow()) && (column < target.getColumn()) ){
-                if(Rules.isFieldOccupied(gameBoard, row, column)){
+                if(Rules.isFieldOccupied(gameBoard.getState(), row, column)){
                     return false;
                 }
                 row--;
@@ -782,7 +782,7 @@ public class ChessRules implements Rules {
             column = start.getColumn() + 1;
 
             while( (row < target.getRow()) && (column < target.getColumn()) ){
-                if(Rules.isFieldOccupied(gameBoard, row, column)){
+                if(Rules.isFieldOccupied(gameBoard.getState(), row, column)){
                     return false;
                 }
                 row++;
@@ -795,7 +795,7 @@ public class ChessRules implements Rules {
             column = start.getColumn() - 1;
 
             while ( (row < target.getRow()) && (column > target.getColumn()) ){
-                if(Rules.isFieldOccupied(gameBoard, row, column)){
+                if(Rules.isFieldOccupied(gameBoard.getState(), row, column)){
                     return false;
                 }
                 row++;
@@ -861,14 +861,14 @@ public class ChessRules implements Rules {
             if(start.getColumn() < target.getColumn()){
                 //moved to the right side
                 for(int i = start.getColumn()+1; i < target.getColumn(); i++){
-                    if(Rules.isFieldOccupied(gameBoard, start.getRow(), i)){
+                    if(Rules.isFieldOccupied(gameBoard.getState(), start.getRow(), i)){
                         return false;
                     }
                 }
             } else{
                 //moved to the left side
                 for(int i = start.getColumn()-1; i > target.getColumn(); i--) {
-                    if (Rules.isFieldOccupied(gameBoard, start.getRow(), i)) {
+                    if (Rules.isFieldOccupied(gameBoard.getState(), start.getRow(), i)) {
                         return false;
                     }
                 }
@@ -879,14 +879,14 @@ public class ChessRules implements Rules {
             if(start.getRow()>target.getRow()){
                 //moved upwards
                 for (int i = start.getRow()-1; i > target.getRow() ; i--) {
-                    if(Rules.isFieldOccupied(gameBoard, i, start.getColumn())){
+                    if(Rules.isFieldOccupied(gameBoard.getState(), i, start.getColumn())){
                         return false;
                     }
                 }
             }else{
                 //moved downwards
                 for (int i = start.getRow()+1; i < target.getRow() ; i++) {
-                    if(Rules.isFieldOccupied(gameBoard, i, start.getColumn())){
+                    if(Rules.isFieldOccupied(gameBoard.getState(), i, start.getColumn())){
                         return false;
                     }
                 }

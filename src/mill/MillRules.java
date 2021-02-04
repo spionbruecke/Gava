@@ -3,12 +3,10 @@ package src.mill;
 import src.games.*;
 
 public class MillRules implements Rules {
-    private static MillMoveConverter converter = new MillMoveConverter();
-
-    //TODO BEGÜM: kann Spieler keinen Stein mehr bewegen => DEFEAT
 
     public static Messages isMoveAllowed(GameBoard gameBoard, PlayingPiece[][] stateToCheck) {
-        String move = converter.stateToString(gameBoard.getState(), stateToCheck);
+        final MillMoveConverter CONVERTER = new MillMoveConverter();
+        String move = CONVERTER.stateToString(gameBoard.getState(), stateToCheck);
 
         int totalNumOfPiecesPrevious = MillBoard.getNumOfPieces(gameBoard.getState(), "white")
                                         + MillBoard.getNumOfPieces(gameBoard.getState(), "black");
@@ -17,15 +15,15 @@ public class MillRules implements Rules {
                                         + MillBoard.getNumOfPieces(stateToCheck, "black");
 
 
-        int targetRow = converter.convertPosIntoArrayCoordinate(move.charAt(3));
-        int targetColumn = converter.convertPosIntoArrayCoordinate(move.charAt(4));
+        int targetRow = MillMoveConverter.convertPosIntoArrayCoordinate(move.charAt(3));
+        int targetColumn = MillMoveConverter.convertPosIntoArrayCoordinate(move.charAt(4));
         
 
         //startingPhase
         if((totalNumOfPiecesPrevious < totalNumOfPiecesToCheck) && !finishedStartingPhase(stateToCheck)){
             
             String colour = stateToCheck[targetRow][targetColumn].getColour();
-            if(!Rules.isFieldOccupied(gameBoard, targetRow, targetColumn)) {
+            if(!Rules.isFieldOccupied(gameBoard.getState(), targetRow, targetColumn)) {
             	System.out.print(removePiece(gameBoard.getState(), stateToCheck, colour));
                 return removePiece(gameBoard.getState(), stateToCheck, colour);
             }else
@@ -33,32 +31,32 @@ public class MillRules implements Rules {
 
         }else {
         //startingPhase over
-            int row = converter.convertPosIntoArrayCoordinate(move.charAt(0));
-            int column = converter.convertPosIntoArrayCoordinate(move.charAt(1));
+            int row = MillMoveConverter.convertPosIntoArrayCoordinate(move.charAt(0));
+            int column = MillMoveConverter.convertPosIntoArrayCoordinate(move.charAt(1));
             String colour = gameBoard.getState()[row][column].getColour();
 
 
             switch (colour) {
                 case "white":
                     if (MillBoard.getNumOfPieces(gameBoard.getState(), "white") > 3) {
-                        if (isTargetValid(move) && !Rules.isFieldOccupied(gameBoard, row, column))
+                        if (isTargetValid(move) && !Rules.isFieldOccupied(gameBoard.getState(), row, column))
                             return removePiece(gameBoard.getState(), stateToCheck, "white");
                         else
                             return Messages.ERROR_WRONGMOVEMENT;
                     } else {
-                        if (!Rules.isFieldOccupied(gameBoard, row, column))
+                        if (!Rules.isFieldOccupied(gameBoard.getState(), row, column))
                             return removePiece(gameBoard.getState(), stateToCheck, "white");
                         else
                             return Messages.ERROR_WRONGMOVEMENT;
                     }
                 case "black":
                     if (MillBoard.getNumOfPieces(gameBoard.getState(), "black") > 3) {
-                        if (isTargetValid(move) && !Rules.isFieldOccupied(gameBoard, row, column))
+                        if (isTargetValid(move) && !Rules.isFieldOccupied(gameBoard.getState(), row, column))
                             return removePiece(gameBoard.getState(), stateToCheck, "black");
                         else
                             return Messages.ERROR_WRONGMOVEMENT;
                     } else {
-                        if (!Rules.isFieldOccupied(gameBoard, row, column))
+                        if (!Rules.isFieldOccupied(gameBoard.getState(), row, column))
                             return removePiece(gameBoard.getState(), stateToCheck, "black");
                         else
                             return Messages.ERROR_WRONGMOVEMENT;
@@ -109,16 +107,15 @@ public class MillRules implements Rules {
         else if(colour.equals("black"))
             opponentColour = "white";
 
-        if(MillBoard.getNumOfPieces(stateToCheck, opponentColour) < 3 && finishedStartingPhase(stateToCheck))
+        if((MillBoard.getNumOfPieces(stateToCheck, opponentColour) < 3 && finishedStartingPhase(stateToCheck))
+            || !canPlayingPieceMove(stateToCheck, colour))
             return Messages.VICTORY;
 
         return Messages.GO_ON;
     }
 
     public static Messages executeMove(GameBoard board, String colour, PlayingPiece[][] stateToCheck){
-        Messages message;
-
-        message = isMoveAllowed(board, stateToCheck);
+        Messages message = isMoveAllowed(board, stateToCheck);
 
         if(message == Messages.MOVE_ALLOWED)
             return isGameFinished(stateToCheck, colour);
@@ -126,11 +123,7 @@ public class MillRules implements Rules {
         return message;
     }
 
-    public static Messages setToken(GameBoard board, String colour, PlayingPiece[][] stateToCheck){
-
-
-       return null;
-    }
+    //public static Messages setToken(GameBoard board, String colour, PlayingPiece[][] stateToCheck){ return null; }
 
     public static boolean finishedStartingPhase(PlayingPiece[][] stateToCheck){
         MillBoard newBoard = new MillBoard();
@@ -335,6 +328,145 @@ public class MillRules implements Rules {
             default:
                 return false;
         }
+    }
 
+    //opponentColour
+    private static boolean canPlayingPieceMove(PlayingPiece[][] stateToCheck ,String colour){
+        for(int k = 0 ; k < 7; k ++) {
+            if(k == 3)
+                for (int j = 0; j < 6; j ++){
+                    if(stateToCheck[k][j].getColour().equals(colour) && possibleTargetExists(stateToCheck, k, j))
+                        return true;
+                }
+            else
+                for (int j = 0; j < 3; j ++){
+                    if(stateToCheck[k][j].getColour().equals(colour) && possibleTargetExists(stateToCheck, k, j))
+                        return true;
+                }
+        }
+
+        return false;
+    }
+
+    private static boolean possibleTargetExists(PlayingPiece[][] stateToCheck, int row, int column){
+        String location = MillMoveConverter.convertArrayCoordinateIntoPosRow(row) +
+                MillMoveConverter.convertArrayCoordinateIntoPosColumn(column);
+
+        switch (location){
+            case "1A":
+                return !Rules.isFieldOccupied(stateToCheck, 3, 0)
+                        || !Rules.isFieldOccupied(stateToCheck, 6, 1);
+
+            case "1B":
+                return !Rules.isFieldOccupied(stateToCheck, 6, 0)
+                        || !Rules.isFieldOccupied(stateToCheck, 5, 1)
+                        || !Rules.isFieldOccupied(stateToCheck, 6, 2);
+
+            case "1C":
+                return !Rules.isFieldOccupied(stateToCheck, 6, 1)
+                        || !Rules.isFieldOccupied(stateToCheck, 3, 5);
+
+            case "2A":
+                return !Rules.isFieldOccupied(stateToCheck, 3, 1)
+                        || !Rules.isFieldOccupied(stateToCheck, 5, 1);
+
+            case "2B":
+                return !Rules.isFieldOccupied(stateToCheck, 5, 0)
+                        || !Rules.isFieldOccupied(stateToCheck, 4, 1)
+                        || !Rules.isFieldOccupied(stateToCheck, 5, 2)
+                        || !Rules.isFieldOccupied(stateToCheck, 6, 1);
+
+            case "2C":
+                return !Rules.isFieldOccupied(stateToCheck, 5, 1)
+                        || !Rules.isFieldOccupied(stateToCheck, 3, 4);
+
+            case "3A":
+                return !Rules.isFieldOccupied(stateToCheck, 3, 2)
+                        || !Rules.isFieldOccupied(stateToCheck, 4, 1);
+
+            case "3B":
+                return !Rules.isFieldOccupied(stateToCheck, 4, 0)
+                        || !Rules.isFieldOccupied(stateToCheck, 5, 1)
+                        || !Rules.isFieldOccupied(stateToCheck, 4, 2);
+
+            case "3C":
+                return !Rules.isFieldOccupied(stateToCheck, 4, 1)
+                        || !Rules.isFieldOccupied(stateToCheck, 3, 3);
+
+            case "4A":
+                return !Rules.isFieldOccupied(stateToCheck, 0, 0)
+                        || !Rules.isFieldOccupied(stateToCheck, 3, 1)
+                        || !Rules.isFieldOccupied(stateToCheck, 6, 0);
+
+            case "4B":
+                return !Rules.isFieldOccupied(stateToCheck, 1, 0)
+                        || !Rules.isFieldOccupied(stateToCheck, 3, 2)
+                        || !Rules.isFieldOccupied(stateToCheck, 5, 0)
+                        || !Rules.isFieldOccupied(stateToCheck, 3, 0);
+
+            case "4C":
+                return !Rules.isFieldOccupied(stateToCheck, 2, 0)
+                        || !Rules.isFieldOccupied(stateToCheck, 3, 1)
+                        || !Rules.isFieldOccupied(stateToCheck, 4, 0);
+
+            case "4D":
+                return !Rules.isFieldOccupied(stateToCheck, 2, 2)
+                        || !Rules.isFieldOccupied(stateToCheck, 3, 4)
+                        || !Rules.isFieldOccupied(stateToCheck, 4, 2);
+
+            case "4E":
+                return !Rules.isFieldOccupied(stateToCheck, 1, 2)
+                        || !Rules.isFieldOccupied(stateToCheck, 3, 5)
+                        || !Rules.isFieldOccupied(stateToCheck, 5, 2)
+                        || !Rules.isFieldOccupied(stateToCheck, 3, 3);
+
+            case "4F":
+                return !Rules.isFieldOccupied(stateToCheck, 0, 2)
+                        || !Rules.isFieldOccupied(stateToCheck, 6, 2)
+                        || !Rules.isFieldOccupied(stateToCheck, 3, 4);
+
+            case "5A":
+                return !Rules.isFieldOccupied(stateToCheck, 3, 2)
+                        || !Rules.isFieldOccupied(stateToCheck, 2, 1);
+
+            case "5B":
+                return !Rules.isFieldOccupied(stateToCheck, 2, 0)
+                        || !Rules.isFieldOccupied(stateToCheck, 1, 1)
+                        || !Rules.isFieldOccupied(stateToCheck, 2, 2);
+
+            case "5C":
+                return !Rules.isFieldOccupied(stateToCheck, 2, 1)
+                        || !Rules.isFieldOccupied(stateToCheck, 3, 3);
+
+            case "6A":
+                return !Rules.isFieldOccupied(stateToCheck, 3, 1)
+                        || !Rules.isFieldOccupied(stateToCheck, 1, 1);
+
+            case "6B":
+                return !Rules.isFieldOccupied(stateToCheck, 0, 1)
+                        || !Rules.isFieldOccupied(stateToCheck, 1, 2)
+                        || !Rules.isFieldOccupied(stateToCheck, 2, 1)
+                        || !Rules.isFieldOccupied(stateToCheck, 1, 0);
+
+            case "6C":
+                return !Rules.isFieldOccupied(stateToCheck, 1, 1)
+                        || !Rules.isFieldOccupied(stateToCheck, 3, 4);
+
+            case "7A":
+                return !Rules.isFieldOccupied(stateToCheck, 3, 0)
+                        || !Rules.isFieldOccupied(stateToCheck, 0, 1);
+
+            case "7B":
+                return !Rules.isFieldOccupied(stateToCheck, 0, 0)
+                        || !Rules.isFieldOccupied(stateToCheck, 1, 1)
+                        || !Rules.isFieldOccupied(stateToCheck, 0, 2);
+
+            case "7C":
+                return !Rules.isFieldOccupied(stateToCheck, 0, 1)
+                        || !Rules.isFieldOccupied(stateToCheck, 3, 5);
+
+            default:
+                return false;
+        }
     }
 }
