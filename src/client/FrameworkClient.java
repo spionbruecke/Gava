@@ -8,6 +8,8 @@ import java.net.Socket;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -38,6 +40,7 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 	private String playerName = null;
 	private String currentGame = null;
 	private boolean isLoggedIn = false;
+	private Object selection;
 	
 	// GUI elements
 	protected JFrame menuFrame = new JFrame();
@@ -71,9 +74,13 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 //	protected String oldState = "<rook,black,0=A8><knight,black,0=B8><bishop,black,0=C8><queen,black,0=D8><king,black,0=E8><bishop,black,0=F8><knight,black,0=G8><rook,black,0=H8><pawn,black,0=A7><pawn,black,0=B7><pawn,black,0=C7><pawn,black,0=D7><pawn,black,0=E7><pawn,black,0=F7><pawn,black,0=G7><pawn,black,0=H7><rook,white,0=A1><knight,white,0=B1><bishop,white,0=C1><queen,white,0=D1><king,white,0=E1><bishop,white,0=F1><knight,white,0=G1><rook,white,0=H1><pawn,white,0=A2><pawn,white,0=B2><pawn,white,0=C2><pawn,white,0=D2><pawn,white,0=E2><pawn,white,0=F2><pawn,white,0=G2><pawn,white,0=H2>";
 //	protected String defaultSetup = "<rook,black,0=A8><knight,black,0=B8><bishop,black,0=C8><queen,black,0=D8><king,black,0=E8><bishop,black,0=F8><knight,black,0=G8><rook,black,0=H8><pawn,black,0=A7><pawn,black,0=B7><pawn,black,0=C7><pawn,black,0=D7><pawn,black,0=E7><pawn,black,0=F7><pawn,black,0=G7><pawn,black,0=H7><rook,white,0=A1><knight,white,0=B1><bishop,white,0=C1><queen,white,0=D1><king,white,0=E1><bishop,white,0=F1><knight,white,0=G1><rook,white,0=H1><pawn,white,0=A2><pawn,white,0=B2><pawn,white,0=C2><pawn,white,0=D2><pawn,white,0=E2><pawn,white,0=F2><pawn,white,0=G2><pawn,white,0=H2>";
 
-	protected String newState = " ";
-	protected String oldState = "<token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null>";
-	protected String defaultSetup = "<token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null>";
+//	protected String newState = " ";
+//	protected String oldState = "<token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null>";
+//	protected String defaultSetup = "<token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null>";
+	
+	protected String newState;
+	protected String oldState;
+	protected String defaultSetup;
 	
 	protected String currentState = "";
 	
@@ -92,6 +99,17 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 			//setupGUI();
 			//String s = dis.readUTF();
 			
+			
+			JDialog.setDefaultLookAndFeelDecorated(true);
+		    Object[] selectionValues = { "Chess", "Mill"};
+		    String initialSelection = "Chess";
+		    selection = JOptionPane.showInputDialog(null, "What are your favorite animals?",
+		        "Select a game", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
+		    System.out.println(selection);
+
+		    setupStates();
+			
+			
 			this.start();
 			
 		} catch (IOException ieo) {
@@ -99,168 +117,25 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 		}
 	}
 	
+	public void setupStates() {
+		if (selection == "Mill") {
+			this.newState = " ";
+			this.oldState = "<token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null>";
+			this.defaultSetup = "<token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null>";
+		} else if (selection == "Chess") {
+			this.newState = " ";	
+			this.oldState = "<rook,black,0=A8><knight,black,0=B8><bishop,black,0=C8><queen,black,0=D8><king,black,0=E8><bishop,black,0=F8><knight,black,0=G8><rook,black,0=H8><pawn,black,0=A7><pawn,black,0=B7><pawn,black,0=C7><pawn,black,0=D7><pawn,black,0=E7><pawn,black,0=F7><pawn,black,0=G7><pawn,black,0=H7><rook,white,0=A1><knight,white,0=B1><bishop,white,0=C1><queen,white,0=D1><king,white,0=E1><bishop,white,0=F1><knight,white,0=G1><rook,white,0=H1><pawn,white,0=A2><pawn,white,0=B2><pawn,white,0=C2><pawn,white,0=D2><pawn,white,0=E2><pawn,white,0=F2><pawn,white,0=G2><pawn,white,0=H2>";
+			this.defaultSetup = "<rook,black,0=A8><knight,black,0=B8><bishop,black,0=C8><queen,black,0=D8><king,black,0=E8><bishop,black,0=F8><knight,black,0=G8><rook,black,0=H8><pawn,black,0=A7><pawn,black,0=B7><pawn,black,0=C7><pawn,black,0=D7><pawn,black,0=E7><pawn,black,0=F7><pawn,black,0=G7><pawn,black,0=H7><rook,white,0=A1><knight,white,0=B1><bishop,white,0=C1><queen,white,0=D1><king,white,0=E1><bishop,white,0=F1><knight,white,0=G1><rook,white,0=H1><pawn,white,0=A2><pawn,white,0=B2><pawn,white,0=C2><pawn,white,0=D2><pawn,white,0=E2><pawn,white,0=F2><pawn,white,0=G2><pawn,white,0=H2>";
+
+			
+		}
+			
+	}
 	
-//	//@Override
-//	public void run() {
-//		String input;
-//		String information;
-//		
-//		try {
-//			dos.writeUTF("<Gamemode=Chess>");
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		isPlaying = true;
-//		
-//		//setupGameBoard(defaultSetup);
-//		//JOptionPane.showMessageDialog(null, "Wait for second player", "Wait", JOptionPane.INFORMATION_MESSAGE);	
-//		
-//		while(isPlaying) {
-//			try {
-//				input = dis.readUTF();
-//				information = StringConverter.getInformation(input);
-//				
-//				System.out.println("receive  " + information);
-//				
-//				switch(StringConverter.getInformationType(input)){
-//				
-//				case START:
-//					if (information.equals("1")) {
-//						System.out.println("start  " + information);
-//						color = "white";
-//						myTurn = true;		
-//						setupGameBoard(defaultSetup);			
-//						JOptionPane.showMessageDialog(null, "Its your turn", "Your Turn", JOptionPane.INFORMATION_MESSAGE);	
-//						while(newState.equals(" ")) {
-//							newState = ((ChessBoard) board).getNewState();
-//						}					
-//						if (newState.equals("timeout")) {
-//							try {
-//								dos.writeUTF("<Timeout>");
-//							} catch (IOException e) {	}		
-//						} else {
-//							currentState = newState;	
-//							try {
-//								dos.writeUTF("<Gameboard=" + newState + ">");
-//							} catch (IOException e) {	}	
-//						}		
-//						newState = " ";
-//					}
-//					else {
-//						color = "black";
-//						myTurn = false;
-//						setupGameBoard(defaultSetup);
-//						JOptionPane.showMessageDialog(null, "You have to wait until the other player has done a move", "Wait", JOptionPane.INFORMATION_MESSAGE);
-//					}
-//					break;
-//					
-//				case GAMEBOARD:
-//					if (result.equals("loss")) {
-//						board.dispose();
-//						myTurn = false;
-//						setupGameBoard(information);
-//						JOptionPane.showMessageDialog(null, "you lost", "Loss", JOptionPane.INFORMATION_MESSAGE);
-//						isPlaying = false;
-//						break;
-//					}
-//					
-//					board.dispose();					
-//					myTurn = true;
-//					setupGameBoard(information);
-//					JOptionPane.showMessageDialog(null, "Its your turn", "Your Turn", JOptionPane.INFORMATION_MESSAGE);	
-//					oldState = information;
-//					while(newState == " ") {
-//						newState = ((ChessBoard) board).getNewState();
-//					}
-//					
-//					if (newState.equals("timeout")) {
-//						try {
-//							dos.writeUTF("<Timeout>");
-//						} catch (IOException e) {	}		
-//					} else {
-//						currentState = newState;	
-//						try {
-//							dos.writeUTF("<Gameboard=" + newState + ">");
-//						} catch (IOException e) {	}	
-//					}		
-//					newState = " ";
-//					break;
-//					
-//				case ERROR:
-//					board.dispose();
-//					myTurn = true;
-//					System.out.println("error  " + information);
-//					setupGameBoard(oldState);
-//					JOptionPane.showMessageDialog(null, information, "Error", JOptionPane.INFORMATION_MESSAGE); //TODO error meldung
-//					while(newState == " ") {
-//						newState = ((ChessBoard) board).getNewState();
-//					}
-//					
-//					if (newState.equals("timeout")) {
-//						try {
-//							dos.writeUTF("<Timeout>");
-//						} catch (IOException e) {	}		
-//					} else {
-//						try {
-//							dos.writeUTF("<Gameboard=" + newState + ">");
-//						} catch (IOException e) {	}	
-//					}	
-//					newState = " ";
-//					break;
-//				
-//				case SUCESS:
-//					oldState = currentState;
-//					System.out.println("success");
-//					break;
-//					
-//				case WIN:
-//					result = "win";
-//					JOptionPane.showMessageDialog(null, "you won the game", "Win", JOptionPane.INFORMATION_MESSAGE);
-//					isPlaying = false;
-//					break;
-//				
-//				case LOSS:
-//					JOptionPane.showMessageDialog(null, "you lost the game", "Loss", JOptionPane.INFORMATION_MESSAGE);
-//					isPlaying = false;
-//					result = "loss";
-//					break;
-//					
-//				case PROMOTION:
-//					//System.out.println("promotion");
-//					String s = "nope";
-//					
-//					String incomingDialog = JOptionPane.showInputDialog("0=Queen ; 1=Rook ; 2=Knight ; 3=Bishop");
-//					int choice = Integer.parseInt(incomingDialog);
-//					
-//					//System.out.println("choice: " + choice);
-//					
-//					if (choice == 1)
-//						s = "rook";
-//					else if (choice == 2)
-//						s = "knight";
-//					else if (choice == 3) 
-//						s = "bishop";
-//					else
-//						s = "queen";
-//					
-//					try {
-//						dos.writeUTF("<Promotion=" + s + ">");
-//					} catch (IOException e) {	}		
-//									
-//					break;
-//					
-//				default:
-//					break;			
-//			}
-//				
-//			} catch (Exception e) {
-//				// TODO: handle exception
-//			}
-//				
-//		}
-//	}	
 	
 	public void run() {
+		
+		if (selection == "Mill") {
 		String input;
 		String information;
 		
@@ -398,13 +273,172 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 			}
 				
 		}
-		
+		} else if (selection == "Chess") {
+			
+			String input;
+			String information;
+			
+			try {
+				dos.writeUTF("<Gamemode=Chess>");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			isPlaying = true;
+			
+			//setupGameBoard(defaultSetup);
+			//JOptionPane.showMessageDialog(null, "Wait for second player", "Wait", JOptionPane.INFORMATION_MESSAGE);	
+			
+			while(isPlaying) {
+				try {
+					input = dis.readUTF();
+					information = StringConverter.getInformation(input);
+					
+					System.out.println("receive  " + information);
+					
+					switch(StringConverter.getInformationType(input)){
+					
+					case START:
+						if (information.equals("1")) {
+							System.out.println("start  " + information);
+							color = "white";
+							myTurn = true;		
+							setupGameBoard(defaultSetup);			
+							JOptionPane.showMessageDialog(null, "Its your turn", "Your Turn", JOptionPane.INFORMATION_MESSAGE);	
+							while(newState.equals(" ")) {
+								newState = ((ChessBoard) board).getNewState();
+							}					
+							if (newState.equals("timeout")) {
+								try {
+									dos.writeUTF("<Timeout>");
+								} catch (IOException e) {	}		
+							} else {
+								currentState = newState;	
+								try {
+									dos.writeUTF("<Gameboard=" + newState + ">");
+								} catch (IOException e) {	}	
+							}		
+							newState = " ";
+						}
+						else {
+							color = "black";
+							myTurn = false;
+							setupGameBoard(defaultSetup);
+							JOptionPane.showMessageDialog(null, "You have to wait until the other player has done a move", "Wait", JOptionPane.INFORMATION_MESSAGE);
+						}
+						break;
+						
+					case GAMEBOARD:
+						if (result.equals("loss")) {
+							board.dispose();
+							myTurn = false;
+							setupGameBoard(information);
+							JOptionPane.showMessageDialog(null, "you lost", "Loss", JOptionPane.INFORMATION_MESSAGE);
+							isPlaying = false;
+							break;
+						}
+						
+						board.dispose();					
+						myTurn = true;
+						setupGameBoard(information);
+						JOptionPane.showMessageDialog(null, "Its your turn", "Your Turn", JOptionPane.INFORMATION_MESSAGE);	
+						oldState = information;
+						while(newState == " ") {
+							newState = ((ChessBoard) board).getNewState();
+						}
+						
+						if (newState.equals("timeout")) {
+							try {
+								dos.writeUTF("<Timeout>");
+							} catch (IOException e) {	}		
+						} else {
+							currentState = newState;	
+							try {
+								dos.writeUTF("<Gameboard=" + newState + ">");
+							} catch (IOException e) {	}	
+						}		
+						newState = " ";
+						break;
+						
+					case ERROR:
+						board.dispose();
+						myTurn = true;
+						System.out.println("error  " + information);
+						setupGameBoard(oldState);
+						JOptionPane.showMessageDialog(null, information, "Error", JOptionPane.INFORMATION_MESSAGE); //TODO error meldung
+						while(newState == " ") {
+							newState = ((ChessBoard) board).getNewState();
+						}
+						
+						if (newState.equals("timeout")) {
+							try {
+								dos.writeUTF("<Timeout>");
+							} catch (IOException e) {	}		
+						} else {
+							try {
+								dos.writeUTF("<Gameboard=" + newState + ">");
+							} catch (IOException e) {	}	
+						}	
+						newState = " ";
+						break;
+					
+					case SUCESS:
+						oldState = currentState;
+						System.out.println("success");
+						break;
+						
+					case WIN:
+						result = "win";
+						JOptionPane.showMessageDialog(null, "you won the game", "Win", JOptionPane.INFORMATION_MESSAGE);
+						isPlaying = false;
+						break;
+					
+					case LOSS:
+						JOptionPane.showMessageDialog(null, "you lost the game", "Loss", JOptionPane.INFORMATION_MESSAGE);
+						isPlaying = false;
+						result = "loss";
+						break;
+						
+					case PROMOTION:
+						//System.out.println("promotion");
+						String s = "nope";
+						
+						String incomingDialog = JOptionPane.showInputDialog("0=Queen ; 1=Rook ; 2=Knight ; 3=Bishop");
+						int choice = Integer.parseInt(incomingDialog);
+						
+						//System.out.println("choice: " + choice);
+						
+						if (choice == 1)
+							s = "rook";
+						else if (choice == 2)
+							s = "knight";
+						else if (choice == 3) 
+							s = "bishop";
+						else
+							s = "queen";
+						
+						try {
+							dos.writeUTF("<Promotion=" + s + ">");
+						} catch (IOException e) {	}		
+										
+						break;
+						
+					default:
+						break;			
+				}
+					
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+					
+			}
+		}
 	}
 	
 	public void start()
 	{
 		runner = new Thread(this);
 		runner.start();
+
 	}
 
 	
@@ -693,10 +727,17 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 	
 	public void setupGameBoard(String s) {
 		
-		if (color == null)
-			board = new MillGui();
-		else
-			board = new MillGui(s, color, myTurn, remove, tokencounter);
+		if (selection == "Mill") {
+			if (color == null)
+				board = new MillGui();
+			else
+				board = new MillGui(s, color, myTurn, remove, tokencounter);
+		} else if (selection == "Chess") {
+			if (color == null)
+				board = new ChessBoard();
+			else
+				board = new ChessBoard(color, s, myTurn);
+		}
 		
 		board.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		board.pack();
