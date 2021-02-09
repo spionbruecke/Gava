@@ -38,6 +38,7 @@ public class MillRules implements Rules {
             switch (colour) {
                 case "white":
                     if (MillBoard.getNumOfPieces(gameBoard.getState(), "white") > 3) {
+                        System.out.println("TargetValid"+isTargetValid(move));
                         if (isTargetValid(move) && !Rules.isFieldOccupied(gameBoard.getState(), targetRow, targetColumn))
                             return removePiece(gameBoard.getState(), stateToCheck, "white");
                         else
@@ -50,6 +51,7 @@ public class MillRules implements Rules {
                     }
                 case "black":
                     if (MillBoard.getNumOfPieces(gameBoard.getState(), "black") > 3) {
+                        System.out.println("TargetValid"+isTargetValid(move));
                         if (isTargetValid(move) && !Rules.isFieldOccupied(gameBoard.getState(), targetRow, targetColumn))
                             return removePiece(gameBoard.getState(), stateToCheck, "black");
                         else
@@ -91,6 +93,9 @@ public class MillRules implements Rules {
                             return Messages.MOVE_ALLOWED;
                     }
             }
+
+            
+
 
         }
 
@@ -142,21 +147,12 @@ public class MillRules implements Rules {
         boolean[] currentMills = threeInARow(currentState, colour);
         boolean[] millsToBeChecked = threeInARow(stateToCheck, colour);
 
-        int countCurrentMills = 0;
-        int countMillsToBeChecked = 0;
-
         for (int i = 0; i < currentMills.length; i++) {
-            if(currentMills[i])
-                countCurrentMills++;
-
-            if(millsToBeChecked[i])
-                countMillsToBeChecked++;
+            if (currentMills[i] != millsToBeChecked[i])
+                return Messages.MOVE_ALLOWED_REMOVE_PIECE;
         }
-        
-        if(countCurrentMills < countMillsToBeChecked) 
-            return Messages.MOVE_ALLOWED_REMOVE_PIECE;
-        else
-            return Messages.MOVE_ALLOWED;
+
+        return Messages.MOVE_ALLOWED;
     }
 
     private static boolean[] threeInARow(PlayingPiece[][] stateToCheck, String colour){
@@ -250,6 +246,8 @@ public class MillRules implements Rules {
     private static boolean isTargetValid(String move){
         String start = move.substring(0, 2);
         String target = move.substring(3, 5);
+
+        System.out.println(target);
 
         switch (start){
             case "1A":
