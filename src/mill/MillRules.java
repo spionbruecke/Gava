@@ -4,7 +4,7 @@ import src.games.*;
 
 public class MillRules implements Rules {
 
-    public static Messages isMoveAllowed(GameBoard gameBoard, PlayingPiece[][] stateToCheck) {
+    public static Messages isMoveAllowed(GameBoard gameBoard, PlayingPiece[][] stateToCheck,int roundnumber) {
         final MillMoveConverter CONVERTER = new MillMoveConverter();
         String move = CONVERTER.stateToString(gameBoard.getState(), stateToCheck);
 
@@ -20,8 +20,7 @@ public class MillRules implements Rules {
         
 
         //startingPhase
-        if(!finishedStartingPhase(stateToCheck)){
-            
+        if(roundnumber < 18){
             String colour = stateToCheck[targetRow][targetColumn].getColour();
             if((totalNumOfPiecesPrevious < totalNumOfPiecesToCheck) && !Rules.isFieldOccupied(gameBoard.getState(), targetRow, targetColumn)) {
                 return removePiece(gameBoard.getState(), stateToCheck, colour);
@@ -37,8 +36,8 @@ public class MillRules implements Rules {
 
             switch (colour) {
                 case "white":
+
                     if (MillBoard.getNumOfPieces(gameBoard.getState(), "white") > 3) {
-                        System.out.println("TargetValid"+isTargetValid(move));
                         if (isTargetValid(move) && !Rules.isFieldOccupied(gameBoard.getState(), targetRow, targetColumn))
                             return removePiece(gameBoard.getState(), stateToCheck, "white");
                         else
@@ -103,7 +102,7 @@ public class MillRules implements Rules {
     }
 
     //colour of player who made the last move
-    static Messages isGameFinished(PlayingPiece[][] stateToCheck, String colour) {
+    static Messages isGameFinished(PlayingPiece[][] stateToCheck, String colour,int roundnumber) {
         String opponentColour = "";
 
         if(colour.equals("white"))
@@ -111,18 +110,19 @@ public class MillRules implements Rules {
         else if(colour.equals("black"))
             opponentColour = "white";
 
-        if((MillBoard.getNumOfPieces(stateToCheck, opponentColour) < 3 && finishedStartingPhase(stateToCheck))
+        if((MillBoard.getNumOfPieces(stateToCheck, opponentColour) < 3 && roundnumber > 18)
             || !canPlayingPieceMove(stateToCheck, colour))
             return Messages.VICTORY;
 
         return Messages.GO_ON;
     }
 
-    public static Messages executeMove(GameBoard board, String colour, PlayingPiece[][] stateToCheck){
-        Messages message = isMoveAllowed(board, stateToCheck);
+    public static Messages executeMove(GameBoard board, String colour, PlayingPiece[][] stateToCheck, int roundnumber){
+        Messages message = isMoveAllowed(board, stateToCheck,roundnumber);
+
 
         if(message == Messages.MOVE_ALLOWED)
-            return isGameFinished(stateToCheck, colour);
+            return isGameFinished(stateToCheck, colour,roundnumber);
 
         return message;
     }

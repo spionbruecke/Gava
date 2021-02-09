@@ -20,7 +20,6 @@ public class LogWriter {
             writeLog.write("[ " + getTime() + " ] " + input + "\n");
             writeLog.close();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         

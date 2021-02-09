@@ -79,12 +79,14 @@ public class ClientHandler extends Thread {
                                 gameRoom.setPromotion(information);
                                 gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard)gameRoom.getGameBoard()) + ">");
                                 gameRoom.setTurn(gameRoom.getTheOtherPlayer(player));
+                                gameRoom.incrementRoundnumber();
                                 break;
                             case REMOVE:
                                 if(MillRules.checkRemovedPiece(gameRoom.getGameBoard(),  MillMoveConverter.getBoardFromString(information), gameRoom.getTheOtherPlayer(player).getColour()).equals(Messages.MOVE_ALLOWED)){
                                     gameRoom.getGameBoard().setNewBoard(information);
                                     gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Gameboard=" + MillMoveConverter.convertPiecesToString((MillBoard) gameRoom.getGameBoard()) + ">");
                                     gameRoom.setTurn(gameRoom.getTheOtherPlayer(player));
+                                    gameRoom.incrementRoundnumber();
                                     outputStream.writeUTF("<Sucess>");
                                 } else {
                                     outputStream.writeUTF("<Error=You aren't allowed to remove from a mill>");

@@ -26,9 +26,10 @@ public class GameRoom{
     private Rules rule;
     private String game;
     private String promotionPosition;
-    private boolean startingphase;
+    private int roundnumber;
 
     public GameRoom(Game gamemode){
+        roundnumber = 0;
         currentGame = gamemode;
         if(gamemode instanceof ChessGame){
             game = "Chess";
@@ -45,7 +46,7 @@ public class GameRoom{
      * @throws IOException
      */
     private void getStart() throws IOException{
-        startingphase = true;
+        //startingphase = true;
         //Decides Randomly who is allowed to start
         if ((int) ( Math.random() * 2 + 1) == 1){
             turnOfPlayer = player1;
@@ -150,9 +151,10 @@ public class GameRoom{
                 case MOVE_ALLOWED:
                 case GO_ON:
                     this.turnOfPlayer = getTheOtherPlayer(turnOfPlayer);
+                    roundnumber ++;
                     return "<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard) this.gameBoard) + ">";
                 case ERROR_WRONGMOVEMENT_DIRECTION_BISHOP:
-                    return "<Error=Bishop is only allowed to move directional>"; //TODO(Alex) Write some good Error Description for the player
+                    return "<Error=Bishop is only allowed to move directional>";
                 case ERROR_WRONGMOVEMENT_DIRECTION_KING:
                     return "<Error=King is only allowed to move one Step>";
                 case ERROR_WRONGMOVEMENT_DIRECTION_KNIGHT:
@@ -190,7 +192,7 @@ public class GameRoom{
         try{
             Messages message;
 
-            message = MillRules.executeMove(gameBoard, turnOfPlayer.getColour(), MillMoveConverter.getBoardFromString(information));
+            message = MillRules.executeMove(gameBoard, turnOfPlayer.getColour(), MillMoveConverter.getBoardFromString(information),roundnumber);
 
             switch(message){
                 case VICTORY:
@@ -204,6 +206,7 @@ public class GameRoom{
                     return "<Draw>";
                 case MOVE_ALLOWED:
                 case GO_ON:
+                    roundnumber ++;
                     gameBoard.setNewBoard(information);
                     this.turnOfPlayer = getTheOtherPlayer(turnOfPlayer);
                     return "<Gameboard=" + MillMoveConverter.convertPiecesToString((MillBoard) this.gameBoard) + ">";
@@ -230,6 +233,9 @@ public class GameRoom{
         this.turnOfPlayer = player;
     }
 
+    public void incrementRoundnumber(){
+        roundnumber ++;
+    }
     /**
      * Returns the other player of the gameroom.
      * 

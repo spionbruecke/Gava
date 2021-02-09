@@ -220,6 +220,7 @@ public class MillMoveConverter implements MoveConverter {
 
                 if(input.charAt(i - 1) == '1')
                     board.getPlayingPieces()[counter].setHasMoved();
+                    
 
                 board.getPlayingPieces()[counter].setPosition(position.toString());
                 row = convertPosIntoArrayCoordinate((input.charAt(i+2)));
