@@ -461,8 +461,9 @@ public class MillGui extends JFrame{
 	    
 
 	    public void mouseClicked(MouseEvent entered) {
+	    	
 	    	if (fly == true && movePerformed == false && myTurn == true) {
-	    		if (iconset = false)
+	    		if (iconset == false)
 	    			return;
 	    	}
 	    	
@@ -502,7 +503,7 @@ public class MillGui extends JFrame{
 	    	}
 	    		
 	    	
-	    	if (remove == true && iconset == true && movePerformed == false && myTurn == true) {
+	    	if (remove == true && iconset == true && movePerformed == false && myTurn == true && fly == false) {
 	    		if (color.equals(playercolor) == false && color != null) {
 	    			label.setIcon(null);
 	    			remove = false;
@@ -512,22 +513,27 @@ public class MillGui extends JFrame{
 	    			createString();
 	    		}
 	    	}
-	    	if (movePerformed == false && myTurn == true) {
 	    	
-	    		if (iconset == false) {
-	    			if (playercolor == "black")
-	    				label.setIcon(blue);
-	    			else
-	    				label.setIcon(orange);
+	    	if (movePerformed == false && myTurn == true && fly == false) {
+	    		setToken();
+	    	}
+	    }
+	    
+	    public void setToken() {
+	    	if (iconset == false) {
+	    		if (playercolor == "black")
+	    			label.setIcon(blue);
+	    		else
+	    			label.setIcon(orange);
 	    		
-	    			iconset = true;
-	    			this.color = playercolor;
-	    			this.moved = "1";
-	    			movePerformed = true;
-	    			createString();
-	    		}
+	    		iconset = true;
+	    		color = playercolor;
+	    		moved = "1";
+	    		movePerformed = true;
+	    		createString();
 	    	}
 	    }
 	}	
+	
 }
 
