@@ -469,7 +469,6 @@ public class MillGui extends JFrame{
 	    	
 
 	    	if (fly == true && movePerformed == false && myTurn == true) {
-	    		System.out.println("fly is true");
 	    		if (color.equals(playercolor)) {
 	    			label.setIcon(null);
 	    			remove = false;
@@ -485,7 +484,6 @@ public class MillGui extends JFrame{
 	    	}
 	    	
 	    	if (newTokenSet == true) {
-	    		System.out.println("you can set a new token");
 	    		if (iconset == false) {
 	    			if (playercolor == "black")
 	    				label.setIcon(blue);
@@ -503,7 +501,7 @@ public class MillGui extends JFrame{
 	    	}
 	    		
 	    	
-	    	if (remove == true && iconset == true && movePerformed == false && myTurn == true && fly == false) {
+	    	if (remove == true && iconset == true && movePerformed == false && myTurn == true) {
 	    		if (color.equals(playercolor) == false && color != null) {
 	    			label.setIcon(null);
 	    			remove = false;
