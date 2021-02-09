@@ -103,7 +103,7 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 			JDialog.setDefaultLookAndFeelDecorated(true);
 		    Object[] selectionValues = { "Chess", "Mill"};
 		    String initialSelection = "Chess";
-		    selection = JOptionPane.showInputDialog(null, "What are your favorite animals?",
+		    selection = JOptionPane.showInputDialog(null, "Select a Game",
 		        "Select a game", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
 		    System.out.println(selection);
 
@@ -229,6 +229,7 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 					oldState = currentState;
 					System.out.println("success");
 					tokencounter++;
+					System.out.println(tokencounter);
 					break;
 					
 				case WIN:
@@ -243,7 +244,7 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 					result = "loss";
 					break;
 				case REMOVE:
-					System.out.println("REMOVEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+					System.out.println("REMOVE");
 					board.dispose();
 					myTurn = true;
 					remove = true;

@@ -27,8 +27,8 @@ public class MillGui extends JFrame{
 	protected ArrayList<Field> fieldList = new ArrayList<Field>();
 	protected ArrayList<YourMouseListener> msList = new ArrayList<YourMouseListener>();
 	
-	ImageIcon blue = new ImageIcon("resources/mill/black.png"); //"/home/tobias/Downloads/circle.png"
-	ImageIcon orange = new ImageIcon("resources/mill/white.png"); //"/home/tobias/Downloads/circle2.png"
+	protected ImageIcon blue = new ImageIcon("resources/mill/black.png");
+	protected ImageIcon orange = new ImageIcon("resources/mill/white.png");
 	
 	protected String currentState;
 	protected String color;
@@ -37,6 +37,7 @@ public class MillGui extends JFrame{
 	protected String newState = " ";
 	protected boolean myTurn;
 	protected boolean remove;
+	protected boolean newTokenSet = false;
 	
 	protected int tokencounter;
 	
@@ -48,8 +49,9 @@ public class MillGui extends JFrame{
 		this.color = color;
 		this.myTurn = myTurn;
 		this.remove = remove;
+		this.tokencounter = counter;
 		
-		if (counter > 9)
+		if (counter > 8)  //9
 			fly = true;
 		
 		this.setPreferredSize(boardSize);
@@ -459,14 +461,49 @@ public class MillGui extends JFrame{
 	    
 
 	    public void mouseClicked(MouseEvent entered) {
-	    	
-	    	if (fly == true) {
-	    		
+	    	if (fly == true && movePerformed == false && myTurn == true) {
+	    		if (iconset = false)
+	    			return;
 	    	}
 	    	
+
+	    	if (fly == true && movePerformed == false && myTurn == true) {
+	    		System.out.println("fly is true");
+	    		if (color.equals(playercolor)) {
+	    			label.setIcon(null);
+	    			remove = false;
+	    			movePerformed = true;
+	    			this.iconset = false;
+	    			this.color = null;
+	    			
+	    			movePerformed = true;
+	    			newTokenSet = true;
+	    			
+	    			return;
+	    		}
+	    	}
+	    	
+	    	if (newTokenSet == true) {
+	    		System.out.println("you can set a new token");
+	    		if (iconset == false) {
+	    			if (playercolor == "black")
+	    				label.setIcon(blue);
+	    			else
+	    				label.setIcon(orange);
+	    		
+	    			iconset = true;
+	    			this.color = playercolor;
+	    			this.moved = "1";
+	    			movePerformed = true;
+	    			newTokenSet = false;
+	    			createString();
+	    		}
+	    		return;
+	    	}
+	    		
 	    	
 	    	if (remove == true && iconset == true && movePerformed == false && myTurn == true) {
-	    		if (color.equals(playercolor) == false) {
+	    		if (color.equals(playercolor) == false && color != null) {
 	    			label.setIcon(null);
 	    			remove = false;
 	    			movePerformed = true;
@@ -491,9 +528,6 @@ public class MillGui extends JFrame{
 	    		}
 	    	}
 	    }
-	}
-	
-	
-	
+	}	
 }
 
