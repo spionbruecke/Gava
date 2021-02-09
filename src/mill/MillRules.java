@@ -147,12 +147,34 @@ public class MillRules implements Rules {
         boolean[] currentMills = threeInARow(currentState, colour);
         boolean[] millsToBeChecked = threeInARow(stateToCheck, colour);
 
+        int countCurrentMills = 0;
+        int countMillsToBeChecked = 0;
+
         for (int i = 0; i < currentMills.length; i++) {
-            if (currentMills[i] != millsToBeChecked[i])
-                return Messages.MOVE_ALLOWED_REMOVE_PIECE;
+            if(currentMills[i])
+                countCurrentMills++;
+
+            if(millsToBeChecked[i])
+                countMillsToBeChecked++;
         }
 
+        if( ( (countCurrentMills == countMillsToBeChecked) && !areArraysIdentical(currentMills, millsToBeChecked) )
+            || (countCurrentMills < countMillsToBeChecked) )
+            return Messages.MOVE_ALLOWED_REMOVE_PIECE;
+
         return Messages.MOVE_ALLOWED;
+    }
+
+    private static boolean areArraysIdentical(boolean[] a, boolean[] b){
+        if(a.length != b.length)
+            return false;
+
+        for (int i = 0; i < a.length; i++) {
+            if (a[i] != b[i])
+                return false;
+        }
+
+        return true;
     }
 
     private static boolean[] threeInARow(PlayingPiece[][] stateToCheck, String colour){
