@@ -20,11 +20,10 @@ public class MillRules implements Rules {
         
 
         //startingPhase
-        if((totalNumOfPiecesPrevious < totalNumOfPiecesToCheck) && !finishedStartingPhase(stateToCheck)){
+        if(!finishedStartingPhase(stateToCheck)){
             
             String colour = stateToCheck[targetRow][targetColumn].getColour();
-            if(!Rules.isFieldOccupied(gameBoard.getState(), targetRow, targetColumn)) {
-            	System.out.print(removePiece(gameBoard.getState(), stateToCheck, colour));
+            if((totalNumOfPiecesPrevious < totalNumOfPiecesToCheck) && !Rules.isFieldOccupied(gameBoard.getState(), targetRow, targetColumn)) {
                 return removePiece(gameBoard.getState(), stateToCheck, colour);
             }else
                 return Messages.ERROR_WRONGMOVEMENT;
@@ -39,24 +38,24 @@ public class MillRules implements Rules {
             switch (colour) {
                 case "white":
                     if (MillBoard.getNumOfPieces(gameBoard.getState(), "white") > 3) {
-                        if (isTargetValid(move) && !Rules.isFieldOccupied(gameBoard.getState(), row, column))
+                        if (isTargetValid(move) && !Rules.isFieldOccupied(gameBoard.getState(), targetRow, targetColumn))
                             return removePiece(gameBoard.getState(), stateToCheck, "white");
                         else
                             return Messages.ERROR_WRONGMOVEMENT;
                     } else {
-                        if (!Rules.isFieldOccupied(gameBoard.getState(), row, column))
+                        if (!Rules.isFieldOccupied(gameBoard.getState(), targetRow, targetColumn))
                             return removePiece(gameBoard.getState(), stateToCheck, "white");
                         else
                             return Messages.ERROR_WRONGMOVEMENT;
                     }
                 case "black":
                     if (MillBoard.getNumOfPieces(gameBoard.getState(), "black") > 3) {
-                        if (isTargetValid(move) && !Rules.isFieldOccupied(gameBoard.getState(), row, column))
+                        if (isTargetValid(move) && !Rules.isFieldOccupied(gameBoard.getState(), targetRow, targetColumn))
                             return removePiece(gameBoard.getState(), stateToCheck, "black");
                         else
                             return Messages.ERROR_WRONGMOVEMENT;
                     } else {
-                        if (!Rules.isFieldOccupied(gameBoard.getState(), row, column))
+                        if (!Rules.isFieldOccupied(gameBoard.getState(), targetRow, targetColumn))
                             return removePiece(gameBoard.getState(), stateToCheck, "black");
                         else
                             return Messages.ERROR_WRONGMOVEMENT;

@@ -5,7 +5,7 @@ import src.games.PlayingPiece;
 
 public class MillPlayingPiece extends PlayingPiece {
 
-    //colour from player who set the playing piece
+    /*colour from player who set the playing piece
     public Messages setPlayingPiece(MillBoard board, String location, String colour){
         int row = MillMoveConverter.convertPosIntoArrayCoordinate(location.charAt(0));
         int column = MillMoveConverter.convertPosIntoArrayCoordinate(location.charAt(1));
@@ -16,5 +16,5 @@ public class MillPlayingPiece extends PlayingPiece {
         }else {
             return Messages.INVALID_TARGET;
         }
-    }
+    }*/
 }
