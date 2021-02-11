@@ -81,24 +81,88 @@ public class MillRules implements Rules {
             for(int k = 0 ; k < 7; k ++) {
                 if(k == 3)
                     for (int j = 0; j < 6; j ++){
-                        if(stateToCheck[k][j].getColour().equals("null") && !board.getState()[k][j].getColour().equals("null")
-                            && board.getState()[k][j].getColour().equals(colour))
+                        if(stateToCheck[k][j].getColour().equals("null")
+                            && !board.getState()[k][j].getColour().equals("null")
+                            && board.getState()[k][j].getColour().equals(colour)
+                            && !isPlayingPiecePartOfMill(board, k, j, colour))
                             return Messages.MOVE_ALLOWED;
                     }
                 else
                     for (int j = 0; j < 3; j ++){
-                        if(stateToCheck[k][j].getColour().equals("null") && !board.getState()[k][j].getColour().equals("null")
-                                && board.getState()[k][j].getColour().equals(colour))
+                        if(stateToCheck[k][j].getColour().equals("null")
+                            && !board.getState()[k][j].getColour().equals("null")
+                            && board.getState()[k][j].getColour().equals(colour)
+                            && !isPlayingPiecePartOfMill(board, k, j, colour))
                             return Messages.MOVE_ALLOWED;
                     }
             }
-
-            
-
-
         }
 
         return Messages.ERROR_WRONGMOVEMENT;
+    }
+
+    //colour of removed piece
+    private static boolean isPlayingPiecePartOfMill(GameBoard board, int row, int column, String colour){
+
+        if(row == 0 && column == 0)
+            return checkRowAndColumnForMill(board, 0, 8, colour);
+        else if(row == 0 && column == 1)
+            return checkRowAndColumnForMill(board, 0, 11, colour);
+        else if(row == 0 && column == 2)
+            return checkRowAndColumnForMill(board, 0, 15, colour);
+        else if(row == 1 && column == 0)
+            return checkRowAndColumnForMill(board, 1, 9, colour);
+        else if(row == 1 && column == 1)
+            return checkRowAndColumnForMill(board, 1, 11, colour);
+        else if(row == 1 && column == 2)
+            return checkRowAndColumnForMill(board, 1, 14, colour);
+        else if(row == 2 && column == 0)
+            return checkRowAndColumnForMill(board, 2, 10, colour);
+        else if(row == 2 && column == 1)
+            return checkRowAndColumnForMill(board, 2, 11, colour);
+        else if(row == 2 && column == 2)
+            return checkRowAndColumnForMill(board, 2, 13, colour);
+        else if(row == 3 && column == 0)
+            return checkRowAndColumnForMill(board, 3, 8, colour);
+        else if(row == 3 && column == 1)
+            return checkRowAndColumnForMill(board, 3, 9, colour);
+        else if(row == 3 && column == 2)
+            return checkRowAndColumnForMill(board, 3, 10, colour);
+        else if(row == 3 && column == 3)
+            return checkRowAndColumnForMill(board, 4, 13, colour);
+        else if(row == 3 && column == 4)
+            return checkRowAndColumnForMill(board, 4, 14, colour);
+        else if(row == 3 && column == 5)
+            return checkRowAndColumnForMill(board, 4, 15, colour);
+        else if(row == 4 && column == 0)
+            return checkRowAndColumnForMill(board, 5, 10, colour);
+        else if(row == 4 && column == 1)
+            return checkRowAndColumnForMill(board, 5, 12, colour);
+        else if(row == 4 && column == 2)
+            return checkRowAndColumnForMill(board, 5, 13, colour);
+        else if(row == 5 && column == 0)
+            return checkRowAndColumnForMill(board, 6, 9, colour);
+        else if(row == 5 && column == 1)
+            return checkRowAndColumnForMill(board, 6, 12, colour);
+        else if(row == 5 && column == 2)
+            return checkRowAndColumnForMill(board, 6, 14, colour);
+        else if(row == 6 && column == 0)
+            return checkRowAndColumnForMill(board, 7, 8, colour);
+        else if(row == 6 && column == 1)
+            return checkRowAndColumnForMill(board, 7, 12, colour);
+        else if(row == 6 && column == 2)
+            return checkRowAndColumnForMill(board, 7, 15, colour);
+
+        return false;
+    }
+
+    private static boolean checkRowAndColumnForMill(GameBoard board, int index1, int index2, String colour){
+        boolean[] mills = threeInARow(board.getState(), colour);
+
+        if( mills[index1] == true || mills[index2] == true)
+            return true;
+
+        return false;
     }
 
     //colour of player who made the last move
@@ -200,6 +264,7 @@ public class MillRules implements Rules {
                 && stateToCheck[3][0].getColour().equals(stateToCheck[3][1].getColour())
                 && stateToCheck[3][0].getColour().equals(stateToCheck[3][2].getColour()))
             millsList[3] = true;
+
         if(stateToCheck[3][3].getColour().equals(colour)
                 && stateToCheck[3][3].getColour().equals(stateToCheck[3][4].getColour())
                 && stateToCheck[3][3].getColour().equals(stateToCheck[3][5].getColour()))
