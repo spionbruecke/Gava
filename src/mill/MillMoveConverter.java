@@ -61,13 +61,9 @@ public class MillMoveConverter implements MoveConverter {
         MillBoard mill = new MillBoard();
         MillBoard newMill = new MillBoard();
 
-        try {
-            newMill.setNewBoard("<token,white,0=A7><token,white,0=C4><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null>");
-            mill.setNewBoard(convertPiecesToString(newMill));
-        
-        } catch (WrongFormatException e) {
-            e.printStackTrace();
-        }
+        newMill.setNewBoard("<token,white,0=A7><token,white,0=C4><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null>");
+        mill.setNewBoard(convertPiecesToString(newMill));
+
 
         System.out.println(convertPiecesToString(mill));
     }
@@ -201,9 +197,8 @@ public class MillMoveConverter implements MoveConverter {
      * Converts the String list into a two dim. PlayingPiece Array
      * @param input String
      * @return PlayingPiece[][]
-     * @throws WrongFormatException
      */
-    public static PlayingPiece[][] getBoardFromString(String input) throws WrongFormatException {
+    public static PlayingPiece[][] getBoardFromString(String input){
         MillBoard board = new MillBoard();
         PlayingPiece[][] newBoard = board.getState();
         StringBuilder position = new StringBuilder();

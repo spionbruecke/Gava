@@ -2,7 +2,6 @@ package src.mill;
 
 import src.games.GameBoard;
 import src.games.PlayingPiece;
-import src.games.WrongFormatException;
 
 public class MillBoard extends GameBoard {
 
@@ -32,7 +31,7 @@ public class MillBoard extends GameBoard {
         PlayingPiece[][] initialState = new PlayingPiece[7][];
 
         for(int k = 0 ; k < 7; k ++) {
-            if(k < 3 || k >3)
+            if(k != 3)
                 initialState[k] = new PlayingPiece[3];
             else
                 initialState[k] = new PlayingPiece[6];
@@ -57,7 +56,7 @@ public class MillBoard extends GameBoard {
     }
     
     @Override
-    public void setNewBoard(String input) throws WrongFormatException {
+    public void setNewBoard(String input){
         MillBoard board = new MillBoard();
         PlayingPiece[][] newBoard = board.getState();
         StringBuilder position = new StringBuilder();
