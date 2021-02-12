@@ -2,13 +2,15 @@ package src.organisation;
 
 import java.io.IOException;
 
+
+
 import src.chess.*;
 import src.games.*;
 import src.mill.*;
 
 /**
  * @author Alexander Posch
- * @version 0.2
+ * @version 4.0
  * 
  * The GameRoom organize and control the Game.
  * It checks for Rules and decides whos turn it is
@@ -39,13 +41,13 @@ public class GameRoom{
     }
     
     /**
-     * Init the GameBoard and the rules depending on the GameMode, when there a 2 Players in the Room.
-     * Randomly choosing a player to start.
+     * Init the GameBoard and the rules depending on the GameMode, when there a 2
+     * Players in the Room. Randomly choosing a player to start.
      * 
-     * @author Alexander Posch
      * @throws IOException
+     * @throws UnsupportedGameMode
      */
-    private void getStart() throws IOException{
+    private void getStart() throws IOException, UnsupportedGameMode {
         //startingphase = true;
         //Decides Randomly who is allowed to start
         if ((int) ( Math.random() * 2 + 1) == 1){
@@ -62,10 +64,15 @@ public class GameRoom{
             player2.getClientHandler().sendMessage("<Start=1>");
         }
 
-        if(game.equals("Chess")){
-            gameBoard = new ChessBoard();
-        } else if(game.equals("Mill")){
-            gameBoard = new MillBoard();
+        switch(game){
+            case "Chess":
+                gameBoard = new ChessBoard();
+                break;
+            case "Mill":
+                gameBoard = new MillBoard();
+                break;
+            default:    
+                throw new UnsupportedGameMode();
         }
     }
     
@@ -74,11 +81,12 @@ public class GameRoom{
      * Simply adds a Player an return a boolean, when it was sucessfull.
      * If the second player was added, the methode getStart will be called.
      * 
-     * @author Alexander Posch
      * @param player
+     * @throws IOException
+     * @throws UnsupportedGameMode
      * @return was it sucessfull
      */
-     protected boolean addPlayer(Player player) throws IOException{
+     protected boolean addPlayer(Player player) throws IOException, UnsupportedGameMode{
         if(numberOfPlayer == 0) {
             player1 = player;
             numberOfPlayer ++;
@@ -92,11 +100,116 @@ public class GameRoom{
         }
         return true;
     }
-    
+
     /**
+     * 
+     * @param information
+     * @return Connection-Status
+     * @throws WrongInformationFormatException
+     * @throws IOException
+     */
+
+    public  boolean handleGame(String information) throws WrongInformationFormatException, IOException {
+        String tmp;
+        InformationsTypes typ;
+
+        tmp = setInput(information);
+        typ = StringConverter.getInformationType(tmp);
+        switch(typ){
+            case ERROR:
+                turnOfPlayer.getClientHandler().sendMessage(tmp);
+                return true;
+            case WIN:
+                turnOfPlayer.getClientHandler().sendMessage("<Win>");
+                getTheOtherPlayer(turnOfPlayer).getClientHandler().sendMessage("<Loss>");
+                switch(game){
+                    case "Chess":
+                        getTheOtherPlayer(turnOfPlayer).getClientHandler().sendMessage("<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard) gameBoard) + ">");
+                        return false;
+                    case "Mill":
+                        getTheOtherPlayer(turnOfPlayer).getClientHandler().sendMessage("<Gameboard=" + MillMoveConverter.convertPiecesToString((MillBoard) gameBoard) + ">");
+                        return false;
+                    default:
+                        return false;
+                }
+            case LOSS:
+                turnOfPlayer.getClientHandler().sendMessage("<Loss>");
+                getTheOtherPlayer(turnOfPlayer).getClientHandler().sendMessage("<Win>");
+                switch(game){
+                    case "Chess":
+                        getTheOtherPlayer(turnOfPlayer).getClientHandler().sendMessage("<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard) gameBoard) + ">");
+                        return false;
+                    case "Mill":
+                        getTheOtherPlayer(turnOfPlayer).getClientHandler().sendMessage("<Gameboard=" + MillMoveConverter.convertPiecesToString((MillBoard) gameBoard) + ">");
+                        return false;
+                    default:
+                        return false;
+                }
+            case PROMOTION:
+                turnOfPlayer.getClientHandler().sendMessage("<Promotion>");
+                return true;
+            case REMOVE:
+                turnOfPlayer.getClientHandler().sendMessage("<Remove>");
+                return true;
+            default:
+                turnOfPlayer.getClientHandler().sendMessage("<Sucess>");
+                this.turnOfPlayer = getTheOtherPlayer(turnOfPlayer);
+                switch(game){
+                    case "Chess":
+                        turnOfPlayer.getClientHandler().sendMessage("<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard) gameBoard) + ">");
+                        return true;
+                    case "Mill":
+                        turnOfPlayer.getClientHandler().sendMessage("<Gameboard=" + MillMoveConverter.convertPiecesToString((MillBoard) gameBoard) + ">");
+                        return true;
+                    default:
+                        return true;
+                }
+        }
+    }
+    
+    public void incrementRoundnumber(){
+        roundnumber ++;
+    }
+    /**
+     * Returns the other player of the gameroom.
+     * 
+     * @param player
+     * @return The other Player
+     */
+    public Player getTheOtherPlayer( Player player){
+        if (player1 == player && player2 != null)
+            return player2;
+        else if( player2 == player && player1 != null)
+            return player1;
+        else
+            return null;
+    }
+    
+
+    /***********Getter********/
+
+    public boolean getTurn(Player player){
+        return player == turnOfPlayer;
+    }
+
+    public int getNumberOfPlayer()          {return numberOfPlayer;}
+
+    public Game getGame()                   {return currentGame;}
+
+    public Player getPlayer1()              {return player1;}
+
+    public Player getPlayer2()              {return player2;}
+
+    public GameBoard getGameBoard()         {return gameBoard;}
+
+    public Rules getRules()                 {return rule;}
+
+    /***********Setter********/
+
+        /**
+         * 
      * Depending on the GameMode the new Board with the new Move will be handeled different
      * 
-     * @author Alexander Posch
      * @param information
      * @return Message, if allowed or not
      */
@@ -111,10 +224,9 @@ public class GameRoom{
     }
 
     /**
-     * New GameBoard with new Move will be testet in the Methode isMoveAllowed.
+     * New GameBoard with new Move will be testet in the Methode executeMove.
      * This Methode will handle the outcome and set the new Board if the Move is allowed.
      * 
-     * @author Alexander Posch
      * @param information
      * @return Message, if allowed or not
      */
@@ -141,16 +253,13 @@ public class GameRoom{
             }
             switch(message){
                 case VICTORY:
-                    getTheOtherPlayer(turnOfPlayer).getClientHandler().sendMessage("<Loss>");
                     return "<Win>";
                 case DEFEATED:
-                    getTheOtherPlayer(turnOfPlayer).getClientHandler().sendMessage("<Win>");
                     return "<Loss>";
                 case DRAW:
                     return "<Gameend=Draw>";
                 case MOVE_ALLOWED:
                 case GO_ON:
-                    this.turnOfPlayer = getTheOtherPlayer(turnOfPlayer);
                     roundnumber ++;
                     return "<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard) this.gameBoard) + ">";
                 case ERROR_WRONGMOVEMENT_DIRECTION_BISHOP:
@@ -188,6 +297,13 @@ public class GameRoom{
         return null;
     }
 
+    /**
+     * New GameBoard with new Move will be testet in the Methode executeMove.
+     * This Methode will handle the outcome and set the new Board if the Move is allowed.
+     * 
+     * @param information
+     * @return Message, if allowed or not
+     */
     private String setMillInput(String information){
         try{
             Messages message;
@@ -208,7 +324,6 @@ public class GameRoom{
                 case GO_ON:
                     roundnumber ++;
                     gameBoard.setNewBoard(information);
-                    this.turnOfPlayer = getTheOtherPlayer(turnOfPlayer);
                     return "<Gameboard=" + MillMoveConverter.convertPiecesToString((MillBoard) this.gameBoard) + ">";
                 case ERROR_WRONGMOVEMENT:
                     return "<Error=Wrong Movement>";
@@ -232,41 +347,6 @@ public class GameRoom{
     public void setTurn(Player player){
         this.turnOfPlayer = player;
     }
-
-    public void incrementRoundnumber(){
-        roundnumber ++;
-    }
-    /**
-     * Returns the other player of the gameroom.
-     * 
-     * @author Alexander Posch
-     * @param player
-     * @return The other Player
-     */
-    public Player getTheOtherPlayer( Player player){
-        if (player1 == player && player2 != null)
-            return player2;
-        else if( player2 == player && player1 != null)
-            return player1;
-        else
-            return null;
-    }
-    
-    public boolean getTurn(Player player){
-        return player == turnOfPlayer;
-    }
-
-    public int getNumberOfPlayer()      {return numberOfPlayer;}
-
-    public Game getGame()               {return currentGame;}
-
-    public Player getPlayer1()          {return player1;}
-
-    public Player getPlayer2()          {return player2;}
-
-    public GameBoard getGameBoard()     {return gameBoard;}
-
-    public Rules getRules()              {return rule;}
 
 
     public String toString(){

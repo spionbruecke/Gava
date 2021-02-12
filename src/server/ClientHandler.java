@@ -9,7 +9,7 @@ import src.organisation.*;
 
 /**
  * @author Alexander Posch
- * @version 0.2
+ * @version 4.0
  * 
  * For each connection there is own ClientHandler,who sends and recieve informations
  */
@@ -21,9 +21,6 @@ public class ClientHandler extends Thread {
     private DataInputStream inputStream;
     private DataOutputStream outputStream;
     private GameController controller;
-    private Player player;
-    private GameRoom gameRoom;
-    private boolean connected;
 
     protected ClientHandler(Socket newConnection, DataInputStream inputStream, DataOutputStream outputStream,
             GameController controller) {
@@ -33,13 +30,20 @@ public class ClientHandler extends Thread {
         this.controller = controller;
     }
 
-
+    /**
+     * 
+     *  Handls every incoming message and send the output of the gameroom to the client
+     * 
+     *  @throws WrongInformationFormatException
+     */
     @Override
     public void run() {
         String input;
         String information;
-        
-
+        Player player;
+        GameRoom gameRoom;
+        boolean connected;
+    
         connected = true;
             try {
                 if(newConnection != null){
@@ -61,20 +65,9 @@ public class ClientHandler extends Thread {
                                 break;
                             case GAMEBOARD:
                                 if(gameRoom != null){
-                                        handleGame(information);
+                                    connected = gameRoom.handleGame(information);
                                 }
-                                break;
-                            case LOGIN:
-                            	if (information.equals("tobi,123")){
-                                    outputStream.writeUTF("<Login=True>");
-                                    player.setName("tobi");
-                                }
-                            	else
-                            		outputStream.writeUTF("<Login=False>");
-                                break;
-                            case CREATEACCOUNT:
-                                //dummyfunctionLogin(Name, pW)
-                                break;                           
+                                break;                    
                             case PROMOTION:
                                 gameRoom.setPromotion(information);
                                 gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard)gameRoom.getGameBoard()) + ">");
@@ -91,7 +84,6 @@ public class ClientHandler extends Thread {
                                 } else {
                                     outputStream.writeUTF("<Error=You aren't allowed to remove from a mill>");
                                 }
-
                                 break;
                             case CONNECTIONSTATUS:
                                 if(information.equals("Exit"))
@@ -103,11 +95,9 @@ public class ClientHandler extends Thread {
                                 connected = false; 
                                 break;
                             default:
-
-                                break;
+                                throw new WrongInformationFormatException();
                         }
                     }
-                    
                     outputStream.writeUTF("You disconnect now"); //for test purpose
                     newConnection.close();
                     inputStream.close();
@@ -122,39 +112,5 @@ public class ClientHandler extends Thread {
 
         public void sendMessage(String message) throws IOException {
             outputStream.writeUTF(message);
-        }
-
-        private void handleGame(String information) throws WrongInformationFormatException, IOException {
-            String tmp;
-            InformationsTypes typ;
-
-            tmp = gameRoom.setInput(information);
-            typ = StringConverter.getInformationType(tmp);
-            if(typ.equals(InformationsTypes.ERROR)){
-                outputStream.writeUTF(tmp);
-            } else if( typ.equals(InformationsTypes.WIN)){
-                outputStream.writeUTF("<Win>"); 
-                if(this.gameRoom.getGame() instanceof ChessGame){
-                    gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard)gameRoom.getGameBoard()) + ">");
-                }
-                connected = false; 
-            } else if(typ.equals(InformationsTypes.LOSS)){
-                outputStream.writeUTF("<Loss>"); 
-                if(this.gameRoom.getGame() instanceof ChessGame){
-                    gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard)gameRoom.getGameBoard()) + ">");
-                }
-                connected = false; 
-            } else if(typ.equals(InformationsTypes.PROMOTION)){
-                outputStream.writeUTF("<Promotion>"); 
-            } else if(typ.equals(InformationsTypes.REMOVE)){
-                outputStream.writeUTF("<Remove>"); 
-            } else {
-                outputStream.writeUTF("<Sucess>"); 
-                if(this.gameRoom.getGame() instanceof ChessGame){ 
-                    gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard)gameRoom.getGameBoard()) + ">");
-                } else if (this.gameRoom.getGame() instanceof MillGame){ 
-                    gameRoom.getTheOtherPlayer(player).getClientHandler().sendMessage("<Gameboard=" + MillMoveConverter.convertPiecesToString((MillBoard)gameRoom.getGameBoard()) + ">");
-                }
-            }
         }
 }

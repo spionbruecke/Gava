@@ -467,13 +467,13 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 			try {
 				input = dis.readUTF();
 				information = StringConverter.getInformation(input);
-				switch(StringConverter.getInformationType(input)){
+				/*switch(StringConverter.getInformationType(input)){
 					case LOGIN:
 						receiveData = true;
 						break;				
 					default:
 						break;			
-				}
+				}*/
 			} catch (Exception e) {
 			}
 		}	
