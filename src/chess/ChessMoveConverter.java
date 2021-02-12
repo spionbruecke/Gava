@@ -1,7 +1,6 @@
 package src.chess;
 
 import src.games.*;
-//import sun.tools.jar.resources.jar;
 
 /**
  * @author Alexander Posch, Begüm Tosun
