@@ -3,8 +3,6 @@ package src.server;
 import java.io.*;
 import java.net.*;
 import src.chess.*;
-import src.games.*;
-import src.mill.*;
 import src.organisation.*;
 
 /**
