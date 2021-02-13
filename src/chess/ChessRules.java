@@ -6,13 +6,13 @@ import src.organisation.Player;
 
 
 /**
- * ChessRules implements Rules from src.Games and checks if the given move is valid.
+ * ChessRules implements Rules from src.Games and checks the chess rules.
  *
  * @author Begüm Tosun
  */
 public class ChessRules implements Rules {
 
-    //Notlösung
+    /*Notlösung
     public static boolean isKingDead(GameBoard gameboard, Player player){
 
         for(int i = 0; i < gameboard.getPlayingPieces().length; i++ ){
@@ -23,6 +23,7 @@ public class ChessRules implements Rules {
         }
         return false;
     }
+    */
 
     /**
      * Checks if the target square/field of the given move is occupied by ones own playing piece.
@@ -50,7 +51,7 @@ public class ChessRules implements Rules {
      * Checks whether the given move is valid.
      * @param gameBoard GameBoard
      * @param stateToCheck ChessPlayingPiece[][]
-     * @return boolean
+     * @return Messages
      */
     public static Messages isMoveAllowed(GameBoard gameBoard, PlayingPiece[][] stateToCheck) {
         ChessMoveConverter converter = new ChessMoveConverter();
@@ -59,6 +60,15 @@ public class ChessRules implements Rules {
         return checkEachPossibleMove(gameBoard, move, "move");
     }
 
+    /**
+     * Checks whether the given move is valid. The method returns Messages.MOVE_ALLOWED
+     * or the corresponding error message.
+     * @param gameBoard GameBoard
+     * @param move String
+     * @param mode String: There are two different modes. When a normal move is checked the mode is "move".
+     *             When a possible attack is checked the mode is "attack".
+     * @return Messages
+     */
     private static Messages checkEachPossibleMove(GameBoard gameBoard, String move, String mode){
 
         int row = ChessMoveConverter.convertPosIntoArrayCoordinate(move.charAt(1));
@@ -104,8 +114,13 @@ public class ChessRules implements Rules {
         
     }
 
-    //public for test purposes
-    public static Messages checkPawnMoves(GameBoard gameBoard, String move){
+    /**
+     * Checks pawn moves. The method returns Messages.MOVE_ALLOWED or Messages.ERROR_WRONGMOVEMENT_DIRECTION_PAWN.
+     * @param gameBoard GameBoard
+     * @param move String
+     * @return Messages
+     */
+    private static Messages checkPawnMoves(GameBoard gameBoard, String move){
 
         Field target = ChessMoveConverter.getChessTargetField(move);
         Field start = ChessMoveConverter.getChessStartField(move);
@@ -168,6 +183,13 @@ public class ChessRules implements Rules {
         return Messages.ERROR_WRONGMOVEMENT_DIRECTION_PAWN;
     }
 
+    /**
+     * Checks whether the last move was a promotion. In case of a promotion the method returns
+     * a String description of the target field otherwise it returns the String "false".
+     * @param gameBoard GameBoard
+     * @param stateToCheck PlayingPiece[][]
+     * @return String
+     */
     public static String isPromotion(GameBoard gameBoard, PlayingPiece[][] stateToCheck){
         ChessMoveConverter converter = new ChessMoveConverter();
         Field target = converter.getChessTargetField(converter.stateToString(gameBoard.getState(), stateToCheck));
@@ -192,6 +214,7 @@ public class ChessRules implements Rules {
         return "false";
     }
 
+
     public static void setPromotion(GameBoard gameBoard, String information, String position)
             throws WrongFormatException {
         PlayingPiece[] list = gameBoard.getPlayingPieces();
@@ -214,6 +237,12 @@ public class ChessRules implements Rules {
 
     }
 
+    /**
+     * Checks whether the path of the pawns move is free.
+     * @param board GameBoard
+     * @param start Field
+     * @return boolean
+     */
     private static boolean isPawnPathFree(GameBoard board, Field start){
         if(board.getState()[start.getRow()][start.getColumn()].getColour().equals("black"))
             return !Rules.isFieldOccupied(board.getState(), start.getRow()+1, start.getColumn());
@@ -221,6 +250,13 @@ public class ChessRules implements Rules {
             return !Rules.isFieldOccupied(board.getState(), start.getRow()-1, start.getColumn());
     }
 
+    /**
+     * Checks the rule en passant.
+     * @param board GameBoard
+     * @param start Field
+     * @param target Field
+     * @return boolean
+     */
     private static boolean isEnPassantAllowed(GameBoard board, Field start, Field target){
         return !board.getStateFromMemento().getState()[start.getRow()][target.getColumn()]
                     .equals(board.getState()[start.getRow()][target.getColumn()])
@@ -229,6 +265,16 @@ public class ChessRules implements Rules {
                         .equals(board.getState()[start.getRow()][start.getColumn()].getColour());
     }
 
+    /**
+     * Checks whether the given move of the king is valid. If the move is valid the method will
+     * return Messages.MOVE_ALLOWED otherwise Messages.ERROR_WRONGMOVEMENT_DIRECTION_KING.
+     * @param board GameBard
+     * @param move String
+     * @param mode String: If the move which is to be checked is just a normal king move the mode
+     *             should be "move". If a possible attack from the opponent king is checked then
+     *             the mode should be "attack".
+     * @return Messages
+     */
     private static Messages checkKingMoves(GameBoard board, String move, String mode){
         ArrayList<Field> possibleLocations = new ArrayList<>();
 
@@ -241,7 +287,7 @@ public class ChessRules implements Rules {
         if(mode.equals("move") && isFieldAttacked(board, target.getRow(), target.getColumn()))
             return Messages.ERROR_WRONGMOVEMENT_DIRECTION_KING;
 
-
+        //determine every theoretically possible move and add the target field into a list
         if( (start.getRow()-1 >= 0) && (start.getColumn()-1 >= 0) ){
             possibleLocations.add(new Field(start.getRow()-1, start.getColumn()-1));
         }
@@ -274,6 +320,7 @@ public class ChessRules implements Rules {
             possibleLocations.add(new Field(start.getRow(), start.getColumn()-1));
         }
 
+        //check whether the target is one of the possible locations
         for (Field possibleLocation : possibleLocations) {
             if (possibleLocation.equals(target)) {
                 return Messages.MOVE_ALLOWED;
@@ -283,11 +330,22 @@ public class ChessRules implements Rules {
         return Messages.ERROR_WRONGMOVEMENT_DIRECTION_KING;
     }
 
+    /**
+     * Checks whether the target field of a king move is occupied by a playing piece of its own colour.
+     * @param gameBoard GameBoard
+     * @param move String
+     * @return boolean
+     */
     private static boolean isKingTargetFree(GameBoard gameBoard, String move){
         return !isFieldOccupiedByOwnPlayingP(gameBoard, move);
     }
 
-
+    /**
+     * Checks the move of a queen. Depending on whether the move was valid or not
+     * the method will return Messages.MOVE_ALLOWED or Messages.ERROR_WRONGMOVEMENT_DIRECTION_QUEEN.
+     * @param move String
+     * @return Messages
+     */
     private static Messages checkQueenMoves(String move){
         if (checkVerticalAndHorizontalMoves(move) || checkDiagonalMoves(move))
             return Messages.MOVE_ALLOWED;
@@ -295,10 +353,22 @@ public class ChessRules implements Rules {
             return Messages.ERROR_WRONGMOVEMENT_DIRECTION_QUEEN;
     }
 
+    /**
+     * Checks whether the path of the move done by a queen is free.
+     * @param gameBoard GameBoard
+     * @param move String
+     * @return boolean
+     */
     private static boolean isQueenPathFree(GameBoard gameBoard, String move){
         return areVerticalOrHorizontalPathsFree(gameBoard, move) || areDiagonalPathsFree(gameBoard, move);
     }
 
+    /**
+     * Checks the move of a bishop. Depending on whether the move was valid or not
+     * the method will return Messages.MOVE_ALLOWED or Messages.ERROR_WRONGMOVEMENT_DIRECTION_BISHOP.
+     * @param move String
+     * @return Messages
+     */
     private static Messages checkBishopMoves(String move){
         if(checkDiagonalMoves(move))
             return Messages.MOVE_ALLOWED;
@@ -306,15 +376,29 @@ public class ChessRules implements Rules {
             return Messages.ERROR_WRONGMOVEMENT_DIRECTION_BISHOP;
     }
 
+    /**
+     * Checks whether the path of the move done by a bishop is free.
+     * @param gameBoard GameBoard
+     * @param move String
+     * @return boolean
+     */
     private static boolean isBishopPathFree(GameBoard gameBoard, String move){
         return areDiagonalPathsFree(gameBoard, move);
     }
 
+    /**
+     * Checks the move of a knight. Depending on whether the move was valid or not
+     * the method will return Messages.MOVE_ALLOWED or Messages.ERROR_WRONGMOVEMENT_DIRECTION_KNIGHT.
+     * @param move String
+     * @return Messages
+     */
     private static Messages checkKnightMoves(String move){
         ArrayList<Field> possibleLocations = new ArrayList<>();
 
         Field target = ChessMoveConverter.getChessTargetField(move);
         Field start = ChessMoveConverter.getChessStartField(move);
+
+        //determine every theoretically possible move and add the target field into a list
 
         //up-left
         if( (start.getRow()-2 >= 0) && (start.getColumn()-1 >= 0) ){
@@ -356,7 +440,7 @@ public class ChessRules implements Rules {
             possibleLocations.add(new Field(start.getRow()+1, start.getColumn()+2));
         }
 
-        //check whether the target is one of the possible locations and
+        //check whether the target is one of the possible locations
         for (Field possibleLocation : possibleLocations) {
             if (possibleLocation.equals(target)) {
                 return Messages.MOVE_ALLOWED;
@@ -366,10 +450,22 @@ public class ChessRules implements Rules {
         return Messages.ERROR_WRONGMOVEMENT_DIRECTION_KNIGHT;
     }
 
+    /**
+     * Checks whether the target field of a knight move is occupied by a playing piece of its own colour.
+     * @param gameBoard GameBoard
+     * @param move String
+     * @return boolean
+     */
     private static boolean isKnightTargetFree(GameBoard gameBoard, String move){
         return !isFieldOccupiedByOwnPlayingP(gameBoard, move);
     }
 
+    /**
+     * Checks the move of a rook. Depending on whether the move was valid or not
+     * the method will return Messages.MOVE_ALLOWED or Messages.ERROR_WRONGMOVEMENT_DIRECTION_ROOK.
+     * @param move String
+     * @return Messages
+     */
     private static Messages checkRookMoves(String move){
         if(checkVerticalAndHorizontalMoves(move))
             return Messages.MOVE_ALLOWED;
@@ -377,10 +473,22 @@ public class ChessRules implements Rules {
             return Messages.ERROR_WRONGMOVEMENT_DIRECTION_ROOK;
     }
 
+    /**
+     * Checks whether the path of the move done by a rook is free.
+     * @param gameBoard GameBoard
+     * @param move String
+     * @return boolean
+     */
     private static boolean isRookPathFree(GameBoard gameBoard, String move){
         return areVerticalOrHorizontalPathsFree(gameBoard, move);
     }
 
+    /**
+     * Checks whether the move done by a king was castling.
+     * @param gameBoard GameBoard
+     * @param move String
+     * @return boolean
+     */
     private static boolean isMoveCastling(GameBoard gameBoard, String move){
         int startRow = ChessMoveConverter.getChessStartField(move).getRow();
         int startColumn = ChessMoveConverter.getChessStartField(move).getColumn();
@@ -414,6 +522,12 @@ public class ChessRules implements Rules {
         return false;
     }
 
+    /**
+     * Checks whether the path of the move castling is free.
+     * @param board GameBoard
+     * @param rook Field
+     * @return boolean
+     */
     private static boolean isCastlingPathFree(GameBoard board, Field rook){
         if(rook.getRow()==0 && rook.getColumn()==0){
             for (int i = 1; i < 4; i++) {
@@ -444,6 +558,13 @@ public class ChessRules implements Rules {
         return true;
     }
 
+    /**
+     * Checks whether the given field is attacked or not.
+     * @param board GameBoard
+     * @param row int
+     * @param column int
+     * @return boolean
+     */
     private static boolean isFieldAttacked(GameBoard board, int row, int column){
         String move = "";
         StringBuilder stringB = new StringBuilder();
@@ -467,6 +588,13 @@ public class ChessRules implements Rules {
         return false;
     }
 
+    /**
+     * Checks whether the king can escape or not.
+     * @param board GameBoard
+     * @param row int
+     * @param column int
+     * @return boolean
+     */
     private static boolean kingCannotEscape(GameBoard board, int row, int column){
         StringBuilder stBuilder = new StringBuilder();
         stBuilder.append(ChessMoveConverter.convertArrayCoordinateIntoPosColumn(column));
@@ -581,7 +709,7 @@ public class ChessRules implements Rules {
 
         String colour = board.getState()[row][column].getColour();
 
-        //check if castling possible
+        //check if castling is possible
         if(board.getState()[row][0].getName().equals("rook")
             && board.getState()[row][0].getColour().equals(colour)
             && !board.getState()[row][0].hasMoved()
@@ -599,11 +727,18 @@ public class ChessRules implements Rules {
         return true;
     }
 
+    /**
+     * Checks whether the diagonal move was valid.
+     * @param move String
+     * @return boolean
+     */
     private static boolean checkDiagonalMoves(String move){
         ArrayList<Field> possibleLocations = new ArrayList<>();
 
         Field target = ChessMoveConverter.getChessTargetField(move);
         Field start = ChessMoveConverter.getChessStartField(move);
+
+        //determine every theoretically possible move and add the target field into a list
 
         //left-up diagonal
         int row = start.getRow() - 1;
@@ -653,7 +788,12 @@ public class ChessRules implements Rules {
         return false;
     }
 
-
+    /**
+     * Checks whether the path of a diagonal move is free.
+     * @param gameBoard GameBoard
+     * @param move String
+     * @return boolean
+     */
     private static boolean areDiagonalPathsFree(GameBoard gameBoard, String move){
         Field target = ChessMoveConverter.getChessTargetField(move);
         Field start = ChessMoveConverter.getChessStartField(move);
@@ -719,6 +859,11 @@ public class ChessRules implements Rules {
         return true;
     }
 
+    /**
+     * Checks vertical and horizontal moves.
+     * @param move String
+     * @return boolean
+     */
     private static boolean checkVerticalAndHorizontalMoves(String move){
         ArrayList<Field> possibleLocations = new ArrayList<>();
 
@@ -761,6 +906,12 @@ public class ChessRules implements Rules {
         return false;
     }
 
+    /**
+     * Checks whether the path of a vertical/horizontal move is free.
+     * @param gameBoard GameBoard
+     * @param move String
+     * @return boolean
+     */
     private static boolean areVerticalOrHorizontalPathsFree(GameBoard gameBoard, String move){
         Field target = ChessMoveConverter.getChessTargetField(move);
         Field start = ChessMoveConverter.getChessStartField(move);
@@ -809,8 +960,13 @@ public class ChessRules implements Rules {
         return true;
     }
 
-    //private
-    public static boolean checkmate(GameBoard gameBoard, String colour){
+    /**
+     * Checks the rule checkmate.
+     * @param gameBoard GameBoard
+     * @param colour String
+     * @return boolean
+     */
+    private static boolean checkmate(GameBoard gameBoard, String colour){
         int row = -1;
         int column = -1;
 
@@ -828,6 +984,12 @@ public class ChessRules implements Rules {
         return (row == -1) || (kingCannotEscape(gameBoard, row, column) && isFieldAttacked(gameBoard, row, column));
     }
 
+    /**
+     * Checks the rule stalemate.
+     * @param board GameBoard
+     * @param colour String
+     * @return boolean
+     */
     private static boolean isStalemate(GameBoard board, String colour){
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -841,6 +1003,12 @@ public class ChessRules implements Rules {
         return true;
     }
 
+    /**
+     * Checks if a possible move for a playing piece which is described through his start field exists.
+     * @param board GameBoard
+     * @param start Field
+     * @return
+     */
     private static boolean possibleMoveExists(GameBoard board, Field start){
         StringBuilder move = new StringBuilder();
         move.append(ChessMoveConverter.convertArrayCoordinateIntoPosColumn(start.getColumn()));
@@ -880,8 +1048,13 @@ public class ChessRules implements Rules {
         return black_counter <= 1 && white_counter <= 1;
     }
 
-
-    //String colour: colour of player whose turn it is to move
+    /**
+     * After the execution of a move the method checks if the game is finished. Messages.DEFEATED,
+     * Messages.VICTORY, Messages.DRAW and Messages.GO_ON are possible return values.
+     * @param board GameBoard
+     * @param colour String: colour of player whose turn it is to move
+     * @return Messages
+     */
     public static Messages isGameFinished(GameBoard board, String colour){
         String othercolour = "white";
 
@@ -898,6 +1071,13 @@ public class ChessRules implements Rules {
             return Messages.GO_ON;            
     }
 
+    /**
+     * Checks whether the last move was allowed and if after the last move the game is finished.
+     * @param board GameBoard
+     * @param colour String
+     * @param stateToCheck PlayingPiece[][]
+     * @return Messages
+     */
     public static Messages executeMove(GameBoard board, String colour, PlayingPiece[][] stateToCheck){
         Messages message;
 
