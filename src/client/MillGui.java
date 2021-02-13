@@ -1,9 +1,6 @@
 package src.client;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -14,8 +11,13 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
+
+
+/**
+ * MillGui implements the GUI for mill
+ *
+ * @author Tobias Mitterreiter
+ */
 
 public class MillGui extends JFrame{
 	
@@ -51,14 +53,14 @@ public class MillGui extends JFrame{
 		this.remove = remove;
 		this.tokencounter = counter;
 		
-		if (counter > 8)  //9
+		if (counter > 8)
 			fly = true;
 		
 		this.setPreferredSize(boardSize);
 		this.getContentPane().setLayout(null);
 		
 		try {
-			this.setContentPane(new JLabel(new ImageIcon(ImageIO.read(new File("resources/mill/spielbrett.png"))))); //"/home/tobias/Downloads/mill2.png"
+			this.setContentPane(new JLabel(new ImageIcon(ImageIO.read(new File("resources/mill/spielbrett.png")))));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -150,9 +152,6 @@ public class MillGui extends JFrame{
 		}
 		
 		newState = white + black;
-		
-		//newState = builder.toString();
-		System.out.println("NEW: " + newState);
 	}
 	
 	
@@ -162,8 +161,6 @@ public class MillGui extends JFrame{
 		String hasMoved = null;
 		char row = '0';
 		char column = '0';
-		
-		//int count = 1;
 		
 		for (int i = 0; i < currentState.length(); i++) {
 			if (currentState.charAt(i) == '<') {
@@ -204,8 +201,6 @@ public class MillGui extends JFrame{
 					i++;
 				}
 			}
-			//System.out.println(count + "   " + name + " " + color + " " + hasMoved +  " " + row + " " + column);
-			//count++;
 			if (row != '0' && column != '0')
 				setupBoard(row, column, color, hasMoved);
 		}
@@ -467,7 +462,6 @@ public class MillGui extends JFrame{
 	    			return;
 	    	}
 	    	
-
 	    	if (fly == true && movePerformed == false && myTurn == true) {
 	    		if (color.equals(playercolor)) {
 	    			label.setIcon(null);
@@ -482,7 +476,6 @@ public class MillGui extends JFrame{
 	    			return;
 	    		}
 	    	}
-	    	
 	    	if (newTokenSet == true) {
 	    		if (iconset == false) {
 	    			if (playercolor == "black")
@@ -499,8 +492,7 @@ public class MillGui extends JFrame{
 	    		}
 	    		return;
 	    	}
-	    		
-	    	
+	    		    	
 	    	if (remove == true && iconset == true && movePerformed == false && myTurn == true) {
 	    		if (color.equals(playercolor) == false && color != null) {
 	    			label.setIcon(null);
@@ -511,7 +503,6 @@ public class MillGui extends JFrame{
 	    			createString();
 	    		}
 	    	}
-	    	
 	    	if (movePerformed == false && myTurn == true && fly == false) {
 	    		setToken();
 	    	}
@@ -532,6 +523,6 @@ public class MillGui extends JFrame{
 	    	}
 	    }
 	}	
-	
+
 }
 

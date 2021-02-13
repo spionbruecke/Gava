@@ -34,7 +34,7 @@ public class GameController {
      * @return the gameroom, that was selected for the player
      * @throws IOException
      */
-    public GameRoom addPlayer(Player player) throws IOException {
+    public GameRoom addPlayer(Player player) throws IOException, UnsupportedGameMode {
         GameRoom currentGame;
         if(player.getGameRoom() == null ){
             //Check if there is a room already. Is there no GameRoom yet, then create a new one

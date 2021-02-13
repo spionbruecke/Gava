@@ -38,7 +38,6 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 	protected boolean isPlaying = false;
 	
 	private String playerName = null;
-	private String currentGame = null;
 	private boolean isLoggedIn = false;
 	private Object selection;
 	
@@ -70,14 +69,7 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 	protected boolean remove = false;
 	int tokencounter = 0;
 	
-//	protected String newState = " ";	
-//	protected String oldState = "<rook,black,0=A8><knight,black,0=B8><bishop,black,0=C8><queen,black,0=D8><king,black,0=E8><bishop,black,0=F8><knight,black,0=G8><rook,black,0=H8><pawn,black,0=A7><pawn,black,0=B7><pawn,black,0=C7><pawn,black,0=D7><pawn,black,0=E7><pawn,black,0=F7><pawn,black,0=G7><pawn,black,0=H7><rook,white,0=A1><knight,white,0=B1><bishop,white,0=C1><queen,white,0=D1><king,white,0=E1><bishop,white,0=F1><knight,white,0=G1><rook,white,0=H1><pawn,white,0=A2><pawn,white,0=B2><pawn,white,0=C2><pawn,white,0=D2><pawn,white,0=E2><pawn,white,0=F2><pawn,white,0=G2><pawn,white,0=H2>";
-//	protected String defaultSetup = "<rook,black,0=A8><knight,black,0=B8><bishop,black,0=C8><queen,black,0=D8><king,black,0=E8><bishop,black,0=F8><knight,black,0=G8><rook,black,0=H8><pawn,black,0=A7><pawn,black,0=B7><pawn,black,0=C7><pawn,black,0=D7><pawn,black,0=E7><pawn,black,0=F7><pawn,black,0=G7><pawn,black,0=H7><rook,white,0=A1><knight,white,0=B1><bishop,white,0=C1><queen,white,0=D1><king,white,0=E1><bishop,white,0=F1><knight,white,0=G1><rook,white,0=H1><pawn,white,0=A2><pawn,white,0=B2><pawn,white,0=C2><pawn,white,0=D2><pawn,white,0=E2><pawn,white,0=F2><pawn,white,0=G2><pawn,white,0=H2>";
 
-//	protected String newState = " ";
-//	protected String oldState = "<token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null>";
-//	protected String defaultSetup = "<token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,white,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null><token,black,0=null>";
-	
 	protected String newState;
 	protected String oldState;
 	protected String defaultSetup;
@@ -96,20 +88,14 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 			connection = new Socket(host, port);
 			dis = new DataInputStream(connection.getInputStream()); // get data from sever
 			dos = new DataOutputStream(connection.getOutputStream()); // get data to server
-			//setupGUI();
-			//String s = dis.readUTF();
-			
-			
+						
 			JDialog.setDefaultLookAndFeelDecorated(true);
 		    Object[] selectionValues = { "Chess", "Mill"};
 		    String initialSelection = "Chess";
 		    selection = JOptionPane.showInputDialog(null, "Select a Game",
 		        "Select a game", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
-		    System.out.println(selection);
 
-		    setupStates();
-			
-			
+		    setupStates();		
 			this.start();
 			
 		} catch (IOException ieo) {
@@ -146,21 +132,15 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 		}
 		isPlaying = true;
 		
-		//setupGameBoard(defaultSetup);
-		//JOptionPane.showMessageDialog(null, "Wait for second player", "Wait", JOptionPane.INFORMATION_MESSAGE);	
-		
 		while(isPlaying) {
 			try {
 				input = dis.readUTF();
 				information = StringConverter.getInformation(input);
 				
-				System.out.println("receive  " + information);
-				
 				switch(StringConverter.getInformationType(input)){
 				
 				case START:
 					if (information.equals("1")) {
-						System.out.println("start  " + information);
 						color = "white";
 						myTurn = true;		
 						setupGameBoard(defaultSetup);			
@@ -198,38 +178,37 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 					setupGameBoard(information);
 					JOptionPane.showMessageDialog(null, "Its your turn", "Your Turn", JOptionPane.INFORMATION_MESSAGE);	
 					oldState = information;
+					
 					while(newState == " ") {
 						newState = ((MillGui) board).getNewState();
 					}
-						
 					currentState = newState;	
 					try {
 						dos.writeUTF("<Gameboard=" + newState + ">");
 					} catch (IOException e) {	}	
-				
+					
 					newState = " ";
 					break;
 					
 				case ERROR:
 					board.dispose();
 					myTurn = true;
-					System.out.println("error  " + information);
 					setupGameBoard(oldState);
-					JOptionPane.showMessageDialog(null, information, "Error", JOptionPane.INFORMATION_MESSAGE); //TODO error meldung
+					JOptionPane.showMessageDialog(null, information, "Error", JOptionPane.INFORMATION_MESSAGE);
+					
 					while(newState == " ") {
 						newState = ((MillGui) board).getNewState();
 					}
 						try {
 							dos.writeUTF("<Gameboard=" + newState + ">");
 						} catch (IOException e) {	}	
+						
 					newState = " ";
 					break;
 				
 				case SUCESS:
 					oldState = currentState;
-					System.out.println("success");
 					tokencounter++;
-					System.out.println(tokencounter);
 					break;
 					
 				case WIN:
@@ -243,8 +222,8 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 					isPlaying = false;
 					result = "loss";
 					break;
+					
 				case REMOVE:
-					System.out.println("REMOVE");
 					board.dispose();
 					myTurn = true;
 					remove = true;
@@ -254,7 +233,7 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 					while(newState == " ") {
 						newState = ((MillGui) board).getNewState();
 					}
-					
+
 					currentState = newState;	
 					try {
 						dos.writeUTF("<Remove=" + newState + ">");
@@ -264,13 +243,11 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 					newState = " ";
 					break;
 					
-					
 				default:
 					break;			
 			}
 				
 			} catch (Exception e) {
-				// TODO: handle exception
 			}
 				
 		}
@@ -286,21 +263,15 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 			}
 			isPlaying = true;
 			
-			//setupGameBoard(defaultSetup);
-			//JOptionPane.showMessageDialog(null, "Wait for second player", "Wait", JOptionPane.INFORMATION_MESSAGE);	
-			
 			while(isPlaying) {
 				try {
 					input = dis.readUTF();
 					information = StringConverter.getInformation(input);
 					
-					System.out.println("receive  " + information);
-					
 					switch(StringConverter.getInformationType(input)){
 					
 					case START:
 						if (information.equals("1")) {
-							System.out.println("start  " + information);
 							color = "white";
 							myTurn = true;		
 							setupGameBoard(defaultSetup);			
@@ -384,7 +355,6 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 					
 					case SUCESS:
 						oldState = currentState;
-						System.out.println("success");
 						break;
 						
 					case WIN:
@@ -400,13 +370,10 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 						break;
 						
 					case PROMOTION:
-						//System.out.println("promotion");
-						String s = "nope";
+						String s = "null";
 						
 						String incomingDialog = JOptionPane.showInputDialog("0=Queen ; 1=Rook ; 2=Knight ; 3=Bishop");
 						int choice = Integer.parseInt(incomingDialog);
-						
-						//System.out.println("choice: " + choice);
 						
 						if (choice == 1)
 							s = "rook";
@@ -428,7 +395,6 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 				}
 					
 				} catch (Exception e) {
-					// TODO: handle exception
 				}
 					
 			}
@@ -439,7 +405,6 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 	{
 		runner = new Thread(this);
 		runner.start();
-
 	}
 
 	
@@ -467,13 +432,13 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 			try {
 				input = dis.readUTF();
 				information = StringConverter.getInformation(input);
-				switch(StringConverter.getInformationType(input)){
+				/*switch(StringConverter.getInformationType(input)){
 					case LOGIN:
 						receiveData = true;
 						break;				
 					default:
 						break;			
-				}
+				}*/
 			} catch (Exception e) {
 			}
 		}	
@@ -612,7 +577,6 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 		playChessButton = new JButton("Play Chess");
 		playChessButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				currentGame = "Chess";
 				try {
 					dos.writeUTF("<Gamemode=Chess>");
 				} catch (IOException e) {
@@ -628,7 +592,6 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 		playMillButton = new JButton("Play Mill");
 		playMillButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				currentGame = "Mill";
 				try {
 					dos.writeUTF("<Gamemode=Mill>");
 				} catch (IOException e) {
@@ -693,37 +656,6 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 			restoreGameButton.setVisible(true);
 		}
 	}
-
-
-//	public void setupGameBoard(String s) {
-//		
-//		if (color == null)
-//			board = new ChessBoard();
-//		else
-//			board = new ChessBoard(color, s, myTurn);
-//		
-//		board.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//		board.pack();
-//		board.setResizable(true);
-//		board.setLocationRelativeTo( null );
-//		board.setVisible(true);
-//		
-//		
-//		board.addWindowListener(new WindowAdapter() {
-//			@Override
-//			public void windowClosing(WindowEvent e) {
-//				try {
-//					dos.writeUTF("<Connectionstatus=Exit>");
-//					isPlaying = false;
-//				} catch (IOException e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				}
-//				e.getWindow().dispose();
-//			}
-//		});
-//		
-//	}
 	
 	
 	public void setupGameBoard(String s) {
@@ -745,8 +677,7 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 		board.setResizable(true);
 		board.setLocationRelativeTo( null );
 		board.setVisible(true);
-		
-		
+
 		board.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -754,13 +685,11 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 					dos.writeUTF("<Connectionstatus=Exit>");
 					isPlaying = false;
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				e.getWindow().dispose();
 			}
-		});
-		
+		});	
 	}
 	
 	
@@ -772,9 +701,6 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 	
 	
 	public void makeMove() {
-		
-
-		
 		while(newState == " ") {
 			newState = ((ChessBoard) board).getNewState();
 		}
@@ -783,14 +709,8 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 			dos.writeUTF("<Gameboard=" + newState + ">");
 		} catch (IOException e) {	
 		}
-		
-		//return newState;
-		
-//		this.newState = " ";
-//		myTurn = false;
+
 		
 	}
-	
-	public abstract void undoMove();
 }
 

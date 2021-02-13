@@ -3,6 +3,11 @@ package src.mill;
 import src.games.GameBoard;
 import src.games.PlayingPiece;
 
+/**
+ * MillBoard extends the class GameBoard from src.Games and is used for
+ * constructing an initial Mill board.
+ * @author Begüm Tosun, Alexander Posch
+ */
 public class MillBoard extends GameBoard {
 
     private PlayingPiece[] playingPieces = new PlayingPiece[18];
@@ -110,7 +115,6 @@ public class MillBoard extends GameBoard {
                         counter++;
                 }
         }
-
         return counter;
     }
 

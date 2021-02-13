@@ -1,6 +1,4 @@
 package src.client;
-
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,7 +10,11 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
-import src.client.ChessBoard.TimeClass;
+/**
+ * ChessBoard implements the GUI for chess
+ *
+ * @author Tobias Mitterreiter
+ */
 
 public class ChessBoard extends JFrame implements MouseListener, MouseMotionListener {
 	
@@ -392,9 +394,6 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 		
 		if (movePerformed == true) //TODO
 			return;
-		
-//		moveFrom[0] = row;
-//		moveFrom[1] = col;
 			
 		Point parentLocation = c.getParent().getLocation();
 		x = parentLocation.x - me.getX() +35;
@@ -418,8 +417,8 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 		int row = me.getY() / c.getWidth();
 		int col = me.getX() / c.getHeight();
 		
-		moveTo[0] = row; //TODO evtl löschen
-		moveTo[1] = col; //TODO evtl löschen
+		moveTo[0] = row;
+		moveTo[1] = col;
 		 
 		if (c instanceof JLabel){
 			Container parent = c.getParent();
@@ -431,7 +430,7 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 			f2.setBeaten(true);
 			f.setColumn(moveTo[1]);
 			f.setRow(moveTo[0]);
-			updateBoard(); //TODO brauch ich das?
+			updateBoard();
 		} else {
 			Container parent = (Container)c;
 			parent.add( chessPiece );
@@ -439,7 +438,7 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 			Figure f = boardMatrix[moveFrom[1]][moveFrom[0]];
 			f.setColumn(moveTo[1]);
 			f.setRow(moveTo[0]);
-			updateBoard(); //TODO brauch ich das?
+			updateBoard();
 		} 
 		chessPiece.setVisible(true);
 		movePerformed = true;

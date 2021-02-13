@@ -2,6 +2,9 @@ package src.mill;
 
 import src.games.*;
 
+/**
+ * @author Begüm Tosun, Alexander Posch
+ */
 public class MillMoveConverter implements MoveConverter {
 
     @Override

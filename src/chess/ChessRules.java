@@ -8,7 +8,7 @@ import src.organisation.Player;
 /**
  * ChessRules implements Rules from src.Games and checks the chess rules.
  *
- * @author Begüm Tosun
+ * @author Begüm Tosun, Alexander Posch
  */
 public class ChessRules implements Rules {
 
@@ -154,12 +154,12 @@ public class ChessRules implements Rules {
 
         //en passant
         if(target.getRow() == start.getRow()+1
-                && ((target.getColumn() == start.getColumn()+1 || target.getColumn() == start.getColumn()-1))
+                && (target.getColumn() == start.getColumn()+1 || target.getColumn() == start.getColumn()-1)
                 && gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("black")
                 && isEnPassantAllowed(gameBoard, start, target)){
             return Messages.MOVE_ALLOWED;
         }else if(target.getRow() == start.getRow()-1
-                && ((target.getColumn() == start.getColumn()+1 || target.getColumn() == start.getColumn()-1))
+                && (target.getColumn() == start.getColumn()+1 || target.getColumn() == start.getColumn()-1)
                 && gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("white")
                 && isEnPassantAllowed(gameBoard, start, target)){
             return Messages.MOVE_ALLOWED;
@@ -167,13 +167,13 @@ public class ChessRules implements Rules {
 
         //move one square diagonally forward (only if there is a playing piece from the opponent)
         if(target.getRow() == start.getRow()+1
-                && ((target.getColumn() == start.getColumn()+1 || target.getColumn() == start.getColumn()-1))
+                && (target.getColumn() == start.getColumn()+1 || target.getColumn() == start.getColumn()-1)
                 && gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("black")
                 && !isFieldOccupiedByOwnPlayingP(gameBoard, move)
                 && Rules.isFieldOccupied(gameBoard.getState(), target.getRow(), target.getColumn())){
             return Messages.MOVE_ALLOWED;
         }else if(target.getRow() == start.getRow()-1
-                && ((target.getColumn() == start.getColumn()+1 || target.getColumn() == start.getColumn()-1))
+                && (target.getColumn() == start.getColumn()+1 || target.getColumn() == start.getColumn()-1)
                 && gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("white")
                 && !isFieldOccupiedByOwnPlayingP(gameBoard, move)
                 && Rules.isFieldOccupied(gameBoard.getState(), target.getRow(), target.getColumn())){
@@ -192,11 +192,11 @@ public class ChessRules implements Rules {
      */
     public static String isPromotion(GameBoard gameBoard, PlayingPiece[][] stateToCheck){
         ChessMoveConverter converter = new ChessMoveConverter();
-        Field target = converter.getChessTargetField(converter.stateToString(gameBoard.getState(), stateToCheck));
-        Field start = converter.getChessStartField(converter.stateToString(gameBoard.getState(), stateToCheck));
+        Field target = ChessMoveConverter.getChessTargetField(converter.stateToString(gameBoard.getState(), stateToCheck));
+        Field start = ChessMoveConverter.getChessStartField(converter.stateToString(gameBoard.getState(), stateToCheck));
 
-        String stringTarget = converter.convertArrayCoordinateIntoPosColumn(target.getColumn())
-                                + converter.convertArrayCoordinateIntoPosRow(target.getRow());
+        String stringTarget = ChessMoveConverter.convertArrayCoordinateIntoPosColumn(target.getColumn())
+                                + ChessMoveConverter.convertArrayCoordinateIntoPosRow(target.getRow());
 
         if(!gameBoard.getState()[start.getRow()][start.getColumn()].getName().equals("pawn") ||
             checkPawnMoves(gameBoard, converter.stateToString(gameBoard.getState(), stateToCheck)) != Messages.MOVE_ALLOWED)
