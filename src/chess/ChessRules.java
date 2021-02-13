@@ -8,7 +8,7 @@ import src.organisation.Player;
 /**
  * ChessRules implements Rules from src.Games and checks if the given move is valid.
  *
- * @author Begüm Tosun
+ * @author Begüm Tosun, Alexander Posch
  */
 public class ChessRules implements Rules {
 

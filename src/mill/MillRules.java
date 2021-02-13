@@ -2,6 +2,11 @@ package src.mill;
 
 import src.games.*;
 
+/**
+ * MillRules implements Rules from src.Games and checks if the given move is valid.
+ * 
+ * @author Begüm Tosun, Alexander Posch
+ */
 public class MillRules implements Rules {
 
     public static Messages isMoveAllowed(GameBoard gameBoard, PlayingPiece[][] stateToCheck,int roundnumber) {
