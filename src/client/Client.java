@@ -35,13 +35,6 @@ public class Client extends FrameworkClient{
 	}
 
 	@Override
-	public void undoMove() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
 		
