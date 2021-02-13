@@ -2,34 +2,20 @@ package src.chess;
 
 import java.util.ArrayList;
 import src.games.*;
-import src.organisation.Player;
-
 
 /**
- * ChessRules implements Rules from src.Games and checks the chess rules.
+ * ChessRules implements Rules from src.games and checks the chess rules.
  *
  * @author Begüm Tosun, Alexander Posch
  */
 public class ChessRules implements Rules {
-
-    /*Notlösung
-    public static boolean isKingDead(GameBoard gameboard, Player player){
-
-        for(int i = 0; i < gameboard.getPlayingPieces().length; i++ ){
-            if(gameboard.getPlayingPieces()[i].getName().equals("king") 
-            && gameboard.getPlayingPieces()[i].getColour().equals(player.getColour()) 
-            && gameboard.getPlayingPieces()[i].getPosition().equals("null"))
-                return true;
-        }
-        return false;
-    }
-    */
 
     /**
      * Checks if the target square/field of the given move is occupied by ones own playing piece.
      * @param board GameBoard
      * @param move String
      * @return boolean
+     * @author Begüm Tosun
      */
     public static boolean isFieldOccupiedByOwnPlayingP(GameBoard board, String move) {
 
@@ -52,6 +38,7 @@ public class ChessRules implements Rules {
      * @param gameBoard GameBoard
      * @param stateToCheck ChessPlayingPiece[][]
      * @return Messages
+     * @author Begüm Tosun
      */
     public static Messages isMoveAllowed(GameBoard gameBoard, PlayingPiece[][] stateToCheck) {
         ChessMoveConverter converter = new ChessMoveConverter();
@@ -68,6 +55,7 @@ public class ChessRules implements Rules {
      * @param mode String: There are two different modes. When a normal move is checked the mode is "move".
      *             When a possible attack is checked the mode is "attack".
      * @return Messages
+     * @author Begüm Tosun
      */
     private static Messages checkEachPossibleMove(GameBoard gameBoard, String move, String mode){
 
@@ -119,6 +107,7 @@ public class ChessRules implements Rules {
      * @param gameBoard GameBoard
      * @param move String
      * @return Messages
+     * @author Begüm Tosun
      */
     private static Messages checkPawnMoves(GameBoard gameBoard, String move){
 
@@ -189,6 +178,7 @@ public class ChessRules implements Rules {
      * @param gameBoard GameBoard
      * @param stateToCheck PlayingPiece[][]
      * @return String
+     * @author Begüm Tosun
      */
     public static String isPromotion(GameBoard gameBoard, PlayingPiece[][] stateToCheck){
         ChessMoveConverter converter = new ChessMoveConverter();
@@ -214,7 +204,14 @@ public class ChessRules implements Rules {
         return "false";
     }
 
-
+    /**
+     * Updates the promoted pawn in the String list.
+     * @param gameBoard GameBoard
+     * @param information String
+     * @param position String
+     * @throws WrongFormatException Exception
+     * @author Alexander Posch
+     */
     public static void setPromotion(GameBoard gameBoard, String information, String position)
             throws WrongFormatException {
         PlayingPiece[] list = gameBoard.getPlayingPieces();
@@ -231,10 +228,8 @@ public class ChessRules implements Rules {
             output.append(list[i]);
             output.append(">");
         }
-        
 
         gameBoard.setNewBoard(output.toString());
-
     }
 
     /**
@@ -242,6 +237,7 @@ public class ChessRules implements Rules {
      * @param board GameBoard
      * @param start Field
      * @return boolean
+     * @author Begüm Tosun
      */
     private static boolean isPawnPathFree(GameBoard board, Field start){
         if(board.getState()[start.getRow()][start.getColumn()].getColour().equals("black"))
@@ -256,6 +252,7 @@ public class ChessRules implements Rules {
      * @param start Field
      * @param target Field
      * @return boolean
+     * @author Begüm Tosun
      */
     private static boolean isEnPassantAllowed(GameBoard board, Field start, Field target){
         return !board.getStateFromMemento().getState()[start.getRow()][target.getColumn()]
@@ -274,6 +271,7 @@ public class ChessRules implements Rules {
      *             should be "move". If a possible attack from the opponent king is checked then
      *             the mode should be "attack".
      * @return Messages
+     * @author Begüm Tosun
      */
     private static Messages checkKingMoves(GameBoard board, String move, String mode){
         ArrayList<Field> possibleLocations = new ArrayList<>();
@@ -335,6 +333,7 @@ public class ChessRules implements Rules {
      * @param gameBoard GameBoard
      * @param move String
      * @return boolean
+     * @author Begüm Tosun
      */
     private static boolean isKingTargetFree(GameBoard gameBoard, String move){
         return !isFieldOccupiedByOwnPlayingP(gameBoard, move);
@@ -345,6 +344,7 @@ public class ChessRules implements Rules {
      * the method will return Messages.MOVE_ALLOWED or Messages.ERROR_WRONGMOVEMENT_DIRECTION_QUEEN.
      * @param move String
      * @return Messages
+     * @author Begüm Tosun
      */
     private static Messages checkQueenMoves(String move){
         if (checkVerticalAndHorizontalMoves(move) || checkDiagonalMoves(move))
@@ -358,6 +358,7 @@ public class ChessRules implements Rules {
      * @param gameBoard GameBoard
      * @param move String
      * @return boolean
+     * @author Begüm Tosun
      */
     private static boolean isQueenPathFree(GameBoard gameBoard, String move){
         return areVerticalOrHorizontalPathsFree(gameBoard, move) || areDiagonalPathsFree(gameBoard, move);
@@ -368,6 +369,7 @@ public class ChessRules implements Rules {
      * the method will return Messages.MOVE_ALLOWED or Messages.ERROR_WRONGMOVEMENT_DIRECTION_BISHOP.
      * @param move String
      * @return Messages
+     * @author Begüm Tosun
      */
     private static Messages checkBishopMoves(String move){
         if(checkDiagonalMoves(move))
@@ -381,6 +383,7 @@ public class ChessRules implements Rules {
      * @param gameBoard GameBoard
      * @param move String
      * @return boolean
+     * @author Begüm Tosun
      */
     private static boolean isBishopPathFree(GameBoard gameBoard, String move){
         return areDiagonalPathsFree(gameBoard, move);
@@ -391,6 +394,7 @@ public class ChessRules implements Rules {
      * the method will return Messages.MOVE_ALLOWED or Messages.ERROR_WRONGMOVEMENT_DIRECTION_KNIGHT.
      * @param move String
      * @return Messages
+     * @author Begüm Tosun
      */
     private static Messages checkKnightMoves(String move){
         ArrayList<Field> possibleLocations = new ArrayList<>();
@@ -455,6 +459,7 @@ public class ChessRules implements Rules {
      * @param gameBoard GameBoard
      * @param move String
      * @return boolean
+     * @author Begüm Tosun
      */
     private static boolean isKnightTargetFree(GameBoard gameBoard, String move){
         return !isFieldOccupiedByOwnPlayingP(gameBoard, move);
@@ -465,6 +470,7 @@ public class ChessRules implements Rules {
      * the method will return Messages.MOVE_ALLOWED or Messages.ERROR_WRONGMOVEMENT_DIRECTION_ROOK.
      * @param move String
      * @return Messages
+     * @author Begüm Tosun
      */
     private static Messages checkRookMoves(String move){
         if(checkVerticalAndHorizontalMoves(move))
@@ -478,6 +484,7 @@ public class ChessRules implements Rules {
      * @param gameBoard GameBoard
      * @param move String
      * @return boolean
+     * @author Begüm Tosun
      */
     private static boolean isRookPathFree(GameBoard gameBoard, String move){
         return areVerticalOrHorizontalPathsFree(gameBoard, move);
@@ -488,6 +495,7 @@ public class ChessRules implements Rules {
      * @param gameBoard GameBoard
      * @param move String
      * @return boolean
+     * @author Begüm Tosun
      */
     private static boolean isMoveCastling(GameBoard gameBoard, String move){
         int startRow = ChessMoveConverter.getChessStartField(move).getRow();
@@ -527,6 +535,7 @@ public class ChessRules implements Rules {
      * @param board GameBoard
      * @param rook Field
      * @return boolean
+     * @author Begüm Tosun
      */
     private static boolean isCastlingPathFree(GameBoard board, Field rook){
         if(rook.getRow()==0 && rook.getColumn()==0){
@@ -564,6 +573,7 @@ public class ChessRules implements Rules {
      * @param row int
      * @param column int
      * @return boolean
+     * @author Begüm Tosun
      */
     private static boolean isFieldAttacked(GameBoard board, int row, int column){
         String move = "";
@@ -594,6 +604,7 @@ public class ChessRules implements Rules {
      * @param row int
      * @param column int
      * @return boolean
+     * @author Begüm Tosun
      */
     private static boolean kingCannotEscape(GameBoard board, int row, int column){
         StringBuilder stBuilder = new StringBuilder();
@@ -728,9 +739,144 @@ public class ChessRules implements Rules {
     }
 
     /**
+     * Checks whether the king can't be protected in case of check (and kingCannotEscape).
+     * @param stateToCheck PlayingPiece[][]
+     * @param row int: array coordinate of king
+     * @param column int: array coordinate of king
+     * @return boolean
+     * @author Begüm Tosun
+     */
+    private static boolean kingCannotBeProtected(PlayingPiece[][] stateToCheck, int row, int column){
+        GameBoard board = new ChessBoard();
+        board.setState(stateToCheck);
+
+        ArrayList<Field> enemies = detectAttack(board, row, column);
+
+        //check if enemy can be defeated by another playing piece
+        for (int i = 0; i < enemies.size(); i++) {
+            if(isFieldAttacked(board, enemies.get(i).getRow(), enemies.get(i).getColumn()))
+                enemies.remove(i);
+        }
+
+        //check if it's possible to put a piece between king and enemy
+        for (int i = 0; i < enemies.size(); i++) {
+
+            //if the enemy which caused check is a knight, pawn or king it does not make a
+            //difference whether it is possible to put a piece between king and the enemy
+            if(stateToCheck[enemies.get(i).getRow()][enemies.get(i).getColumn()].getName().equals("queen")
+                || stateToCheck[enemies.get(i).getRow()][enemies.get(i).getColumn()].getName().equals("rook")
+                || stateToCheck[enemies.get(i).getRow()][enemies.get(i).getColumn()].getName().equals("bishop")){
+
+                ArrayList<Field> path = getPath(new Field(row, column), enemies.get(i));
+
+                for (int j = 0; j < path.size(); j++) {
+                    if(isFieldAttacked(board, path.get(j).getRow(), path.get(j).getColumn())) {
+                        enemies.remove(i);
+                        break;
+                    }
+                }
+            }
+        }
+
+        return enemies.size() > 0;
+    }
+
+    /**
+     * Returns the path between two pieces.
+     * @param piece Field
+     * @param enemy Field
+     * @return ArrayList: list of fields
+     * @author Begüm Tosun
+     */
+    private static ArrayList<Field> getPath(Field piece, Field enemy){
+        ArrayList<Field> path = new ArrayList<>();
+
+        if(enemy.getColumn() == piece.getColumn() && enemy.getRow() < piece.getRow()){
+            for(int i = enemy.getRow()+1; i < piece.getRow(); i++){
+                path.add(new Field(i, enemy.getColumn()));
+            }
+
+        }else if(enemy.getColumn() == piece.getColumn() && enemy.getRow() > piece.getRow()){
+            for(int i = enemy.getRow()-1; i > piece.getRow(); i--){
+                path.add(new Field(i, enemy.getColumn()));
+            }
+
+        }else if(enemy.getColumn() > piece.getColumn() && enemy.getRow() == piece.getRow()){
+            for(int i = enemy.getColumn()-1; i > piece.getColumn(); i--){
+                path.add(new Field(enemy.getRow(), i));
+            }
+
+        }else if(enemy.getColumn() < piece.getColumn() && enemy.getRow() == piece.getRow()){
+            for(int i = enemy.getColumn()+1; i < piece.getColumn(); i++){
+                path.add(new Field(enemy.getRow(), i));
+            }
+
+        }else if(enemy.getColumn() > piece.getColumn() && enemy.getRow() < piece.getRow()){
+            for(int i = enemy.getColumn()-1; i > piece.getColumn(); i--){
+                for (int j = enemy.getRow()+1; j < piece.getRow(); j++)
+                    path.add(new Field(j, i));
+            }
+
+        }else if(enemy.getColumn() > piece.getColumn() && enemy.getRow() > piece.getRow()){
+            for(int i = enemy.getColumn()-1; i > piece.getColumn(); i--){
+                for (int j = enemy.getRow()-1; j > piece.getRow(); j--)
+                    path.add(new Field(j, i));
+            }
+
+        }else if(enemy.getColumn() < piece.getColumn() && enemy.getRow() > piece.getRow()){
+            for(int i = enemy.getColumn()+1; i < piece.getColumn(); i++){
+                for (int j = enemy.getRow()-1; j > piece.getRow(); j--)
+                    path.add(new Field(j, i));
+            }
+
+        }else if(enemy.getColumn() < piece.getColumn() && enemy.getRow() < piece.getRow()){
+            for(int i = enemy.getColumn()+1; i < piece.getColumn(); i++){
+                for (int j = enemy.getRow()+1; j < piece.getRow(); j++)
+                    path.add(new Field(j, i));
+            }
+
+        }
+
+        return path;
+    }
+
+    /**
+     * Detects all attacks against a given field. (used for king)
+     * @param board GameBoard
+     * @param row int
+     * @param column int
+     * @return boolean
+     * @author Begüm Tosun
+     */
+    private static ArrayList<Field> detectAttack(GameBoard board, int row, int column){
+        String move = "";
+        StringBuilder stringB = new StringBuilder();
+        ArrayList<Field> enemies= new ArrayList<>();
+
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                stringB.append(ChessMoveConverter.convertArrayCoordinateIntoPosColumn(j));
+                stringB.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(i));
+                stringB.append(" ");
+                stringB.append(ChessMoveConverter.convertArrayCoordinateIntoPosColumn(column));
+                stringB.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(row));
+
+                move = stringB.toString();
+
+                if(checkEachPossibleMove(board, move, "attack") == Messages.MOVE_ALLOWED)
+                    enemies.add(new Field(i, j));
+
+                stringB = new StringBuilder();
+            }
+        }
+        return enemies;
+    }
+
+    /**
      * Checks whether the diagonal move was valid.
      * @param move String
      * @return boolean
+     * @author Begüm Tosun
      */
     private static boolean checkDiagonalMoves(String move){
         ArrayList<Field> possibleLocations = new ArrayList<>();
@@ -793,6 +939,7 @@ public class ChessRules implements Rules {
      * @param gameBoard GameBoard
      * @param move String
      * @return boolean
+     * @author Begüm Tosun
      */
     private static boolean areDiagonalPathsFree(GameBoard gameBoard, String move){
         Field target = ChessMoveConverter.getChessTargetField(move);
@@ -863,6 +1010,7 @@ public class ChessRules implements Rules {
      * Checks vertical and horizontal moves.
      * @param move String
      * @return boolean
+     * @author Begüm Tosun
      */
     private static boolean checkVerticalAndHorizontalMoves(String move){
         ArrayList<Field> possibleLocations = new ArrayList<>();
@@ -911,6 +1059,7 @@ public class ChessRules implements Rules {
      * @param gameBoard GameBoard
      * @param move String
      * @return boolean
+     * @author Begüm Tosun
      */
     private static boolean areVerticalOrHorizontalPathsFree(GameBoard gameBoard, String move){
         Field target = ChessMoveConverter.getChessTargetField(move);
@@ -962,18 +1111,22 @@ public class ChessRules implements Rules {
 
     /**
      * Checks the rule checkmate.
-     * @param gameBoard GameBoard
+     * @param stateToCheck PlayingPiece[][]
      * @param colour String
      * @return boolean
+     * @author Begüm Tosun
      */
-    private static boolean checkmate(GameBoard gameBoard, String colour){
+    private static boolean checkmate(PlayingPiece[][] stateToCheck, String colour){
         int row = -1;
         int column = -1;
 
+        GameBoard board = new ChessBoard();
+        board.setState(stateToCheck);
+
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if(gameBoard.getState()[i][j].getColour().equals(colour)
-                        && gameBoard.getState()[i][j].getName().equals("king")) {
+                if(stateToCheck[i][j].getColour().equals(colour)
+                        && stateToCheck[i][j].getName().equals("king")) {
                     row = i;
                     column = j;
                 }
@@ -981,20 +1134,22 @@ public class ChessRules implements Rules {
         }
 
         //king is not in the game anymore or can not escape
-        return (row == -1) || (kingCannotEscape(gameBoard, row, column) && isFieldAttacked(gameBoard, row, column));
+        return (row == -1) || (kingCannotEscape(board, row, column)
+                && isFieldAttacked(board, row, column) && kingCannotBeProtected(stateToCheck, row, column));
     }
 
     /**
      * Checks the rule stalemate.
-     * @param board GameBoard
+     * @param stateToCheck PlayingPiece
      * @param colour String
      * @return boolean
+     * @author Begüm Tosun
      */
-    private static boolean isStalemate(GameBoard board, String colour){
+    private static boolean isStalemate(PlayingPiece[][] stateToCheck, String colour){
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if(board.getState()[i][j].getColour().equals(colour)
-                    && possibleMoveExists(board, new Field(i, j))){
+                if(stateToCheck[i][j].getColour().equals(colour)
+                    && possibleMoveExists(stateToCheck, new Field(i, j))){
                         return false;
                 }
             }
@@ -1005,14 +1160,18 @@ public class ChessRules implements Rules {
 
     /**
      * Checks if a possible move for a playing piece which is described through his start field exists.
-     * @param board GameBoard
+     * @param stateToCheck PlayingPiece
      * @param start Field
-     * @return
+     * @return boolean
+     * @author Begüm Tosun
      */
-    private static boolean possibleMoveExists(GameBoard board, Field start){
+    private static boolean possibleMoveExists(PlayingPiece[][] stateToCheck, Field start){
         StringBuilder move = new StringBuilder();
         move.append(ChessMoveConverter.convertArrayCoordinateIntoPosColumn(start.getColumn()));
         move.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(start.getRow())).append(" ");
+
+        GameBoard board = new ChessBoard();
+        board.setState(stateToCheck);
 
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -1030,42 +1189,93 @@ public class ChessRules implements Rules {
         return false;
     }
 
-    //TODO BEGÜM
-    private static boolean deadPosition(GameBoard board){
+    /**
+     * Checks rule dead position.
+     * @param stateToCheck PlayingPiece[][]
+     * @return boolean
+     * @author Begüm Tosun
+     */
+    private static boolean deadPosition(PlayingPiece[][] stateToCheck){
         int black_counter = 0;
         int white_counter = 0;
+        ArrayList<PlayingPiece> pieces = new ArrayList<>();
 
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if(possibleMoveExists(board, new Field(i, j)))
-                    if(board.getState()[i][j].getColour().equals("black"))
-                        black_counter++;
-                    else
-                        white_counter++;
+                if(stateToCheck[i][j].getColour().equals("black")) {
+                    pieces.add(stateToCheck[i][j]);
+                    black_counter++;
+                }else if(stateToCheck[i][j].getColour().equals("white")) {
+                    pieces.add(stateToCheck[i][j]);
+                    white_counter++;
+                }
             }
         }
 
-        return black_counter <= 1 && white_counter <= 1;
+        if(black_counter + white_counter == 2){
+            return true;
+        }else if(black_counter + white_counter > 2){
+            int king = 0;
+            int bishop = 0;
+            int knight = 0;
+
+            for (int i = 0; i < pieces.size(); i++) {
+                if(pieces.get(i).getName().equals("king"))
+                    king++;
+                else if(pieces.get(i).getName().equals("bishop"))
+                    bishop++;
+                else if(pieces.get(i).getName().equals("knight"))
+                    knight++;
+            }
+
+            if(king == 2) {
+                if (bishop == 1)
+                    return true;
+
+                if(knight == 1)
+                    return true;
+
+                if(bishop == 2){
+                    String colour = "";
+                    int helper = 0;
+
+                    for(int i = 0; i < pieces.size(); i++){
+
+                        if(pieces.get(i).getName().equals("bishop") && helper == 0) {
+                            colour = pieces.get(i).getColour();
+                            helper++;
+                        }else if(pieces.get(i).getName().equals("bishop") && helper > 0) {
+                            return pieces.get(i).getColour().equals(colour);
+                        }
+
+                    }
+                }
+            }
+
+        }
+
+        return false;
     }
 
     /**
      * After the execution of a move the method checks if the game is finished. Messages.DEFEATED,
      * Messages.VICTORY, Messages.DRAW and Messages.GO_ON are possible return values.
-     * @param board GameBoard
+     * @param stateToCheck PlayingPiece[][]
      * @param colour String: colour of player whose turn it is to move
      * @return Messages
+     * @author Begüm Tosun
      */
-    public static Messages isGameFinished(GameBoard board, String colour){
+    public static Messages isGameFinished(PlayingPiece[][] stateToCheck, String colour){
         String othercolour = "white";
 
         if(colour.equals("white"))
             othercolour = "black";
 
-        if(checkmate(board, colour))
+        if(checkmate(stateToCheck, colour))
             return Messages.DEFEATED;
-        else if (checkmate(board, othercolour))
+        else if (checkmate(stateToCheck, othercolour))
             return Messages.VICTORY;
-        else if(isStalemate(board, colour) || deadPosition(board))
+        else if(isStalemate(stateToCheck, colour) || deadPosition(stateToCheck))
             return Messages.DRAW;
         else
             return Messages.GO_ON;            
@@ -1077,13 +1287,14 @@ public class ChessRules implements Rules {
      * @param colour String
      * @param stateToCheck PlayingPiece[][]
      * @return Messages
+     * @author Begüm Tosun
      */
     public static Messages executeMove(GameBoard board, String colour, PlayingPiece[][] stateToCheck){
         Messages message;
 
         message = isMoveAllowed(board, stateToCheck);
         if(message == Messages.MOVE_ALLOWED)
-            return isGameFinished(board, colour);
+            return isGameFinished(stateToCheck, colour);
         return message;
     }
 }

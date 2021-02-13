@@ -452,6 +452,8 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
     /**
      * This method is called when user clicks "create account" button
      * it sends user name and password to sever ands adds new player to database
+	 * @param username String
+	 * @param password String
      */
 	public void createAccount(String username, String password) {
 		String send;

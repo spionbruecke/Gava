@@ -9,6 +9,13 @@ import src.games.*;
  */
 public class MillRules implements Rules {
 
+    /**
+     * Checks whether the last move was valid.
+     * @param gameBoard
+     * @param stateToCheck
+     * @param roundnumber
+     * @return Messages
+     */
     public static Messages isMoveAllowed(GameBoard gameBoard, PlayingPiece[][] stateToCheck,int roundnumber) {
         final MillMoveConverter CONVERTER = new MillMoveConverter();
         String move = CONVERTER.stateToString(gameBoard.getState(), stateToCheck);
@@ -72,7 +79,14 @@ public class MillRules implements Rules {
         }
     }
 
-    //colour of piece which has been removed
+    /**
+     * Checks whether the removed piece was allowed to be removed.
+     * @param board GameBoard
+     * @param stateToCheck PlayingPiece[][]
+     * @param colour String: colour of piece which has been removed
+     * @return Messages
+     * @author Begüm Tosun
+     */
     public static Messages checkRemovedPiece(GameBoard board, PlayingPiece[][] stateToCheck, String colour){
         int totalNumOfPiecesPrevious = MillBoard.getNumOfPieces(board.getState(), "white")
                 + MillBoard.getNumOfPieces(board.getState(), "black");
@@ -105,8 +119,21 @@ public class MillRules implements Rules {
         return Messages.ERROR_WRONGMOVEMENT;
     }
 
-    //colour of removed piece
+    /**
+     * Checks if the given playing piece is part of a mill. This method is used for checkRemovedPiece(...).
+     * @param board Gameboard
+     * @param row int
+     * @param column int
+     * @param colour String: colour of removed piece
+     * @return boolean
+     * @author Begüm Tosun
+     */
     private static boolean isPlayingPiecePartOfMill(GameBoard board, int row, int column, String colour){
+        /*
+         * Each field of the array returned by the method threeInARow(...) represents a certain
+         * row or column of the mill game board. Depending on if there is a mill on this certain
+         * row/column the value is true or false.
+         */
         boolean[] mills = threeInARow(board.getState(), colour);
 
         if(row == 0 && column == 0)
@@ -185,7 +212,13 @@ public class MillRules implements Rules {
         return false;
     }
 
-    //colour of player who made the last move
+    /**
+     * Checks after a move if the game is finished.
+     * @param stateToCheck PlayingPiece[][]
+     * @param colour String: colour of player who made the last move
+     * @param roundnumber int
+     * @return Messages
+     */
     public static Messages isGameFinished(PlayingPiece[][] stateToCheck, String colour,int roundnumber) {
         String opponentColour = "";
 
@@ -201,17 +234,34 @@ public class MillRules implements Rules {
         return Messages.GO_ON;
     }
 
+    /**
+     * If the move was allowed it checks whether the game is finished otherwise it returns
+     * the corresponding error message.
+     * @param board GameBoard
+     * @param colour String
+     * @param stateToCheck PlayingPiece[][]
+     * @param roundnumber int
+     * @return Messages
+     */
     public static Messages executeMove(GameBoard board, String colour, PlayingPiece[][] stateToCheck, int roundnumber){
-        Messages message = isMoveAllowed(board, stateToCheck,roundnumber);
-
+        Messages message = isMoveAllowed(board, stateToCheck, roundnumber);
 
         if(message == Messages.MOVE_ALLOWED)
-            return isGameFinished(stateToCheck, colour,roundnumber);
+            return isGameFinished(stateToCheck, colour, roundnumber);
 
         return message;
     }
 
-    //method should only be called if the move was checked to be true
+    /**
+     * Checks whether a new mill was created through the last move and a playing piece from
+     * the opponent can be removed.
+     * Warning: method should only be called if the move was checked to be true!
+     * @param currentState PlayingPiece[][]
+     * @param stateToCheck PlayingPiece[][]
+     * @param colour String
+     * @return Messages
+     * @author Begüm Tosun
+     */
     private static Messages removePiece(PlayingPiece[][] currentState, PlayingPiece[][] stateToCheck, String colour){
         boolean[] currentMills = threeInARow(currentState, colour);
         boolean[] millsToBeChecked = threeInARow(stateToCheck, colour);
@@ -234,6 +284,13 @@ public class MillRules implements Rules {
         return Messages.MOVE_ALLOWED;
     }
 
+    /**
+     * Checks whether the two given boolean arrays are identical.
+     * @param a boolean[]
+     * @param b boolean[]
+     * @return boolean
+     * @author Begüm Tosun
+     */
     private static boolean areArraysIdentical(boolean[] a, boolean[] b){
         if(a.length != b.length)
             return false;
@@ -246,6 +303,15 @@ public class MillRules implements Rules {
         return true;
     }
 
+    /**
+     * Searches the game board for mills. Each field of the array returned by the method
+     * threeInARow(...) represents a certain row or column of the mill game board.
+     * Depending on if there is a mill on this certain row/column the value is true or false.
+     * @param stateToCheck PlayingPiece[][]
+     * @param colour String
+     * @return boolean[]
+     * @author Begüm Tosun
+     */
     private static boolean[] threeInARow(PlayingPiece[][] stateToCheck, String colour){
         boolean[] millsList = new boolean[16];
 
@@ -335,6 +401,12 @@ public class MillRules implements Rules {
         return millsList;
     }
 
+    /**
+     * Checks if the target of the last move is valid.
+     * @param move String
+     * @return boolean
+     * @author Begüm Tosun
+     */
     private static boolean isTargetValid(String move){
         String start = move.substring(0, 2);
         String target = move.substring(3, 5);
@@ -417,7 +489,13 @@ public class MillRules implements Rules {
         }
     }
 
-    //opponentColour
+    /**
+     * Checks whether the player of the given colour can move a piece or if its pieces are blocked.
+     * @param stateToCheck PlayingPiece[][]
+     * @param colour String: colour of opponent
+     * @return boolean
+     * @author Begüm Tosun
+     */
     private static boolean canPlayingPieceMove(PlayingPiece[][] stateToCheck ,String colour){
         for(int k = 0 ; k < 7; k ++) {
             if(k == 3)
@@ -435,6 +513,14 @@ public class MillRules implements Rules {
         return false;
     }
 
+    /**
+     * Checks whether the given piece can move.
+     * @param stateToCheck PlayingPiece[][]
+     * @param row int: coordinate of piece
+     * @param column int: coordinate of piece
+     * @return boolean
+     * @author Begüm Tosun
+     */
     private static boolean possibleTargetExists(PlayingPiece[][] stateToCheck, int row, int column){
         String location = MillMoveConverter.convertArrayCoordinateIntoPosRow(row) +
                 MillMoveConverter.convertArrayCoordinateIntoPosColumn(column);

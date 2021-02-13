@@ -3,7 +3,7 @@ package src.chess;
 import src.games.*;
 
 /**
- *   ChessBoard extends the class GameBoard from src.Games and is used for
+ *   ChessBoard extends the class GameBoard from src.games and is used for
  *   constructing an initial chess board.
  *
  *   @author Begüm Tosun, Alexander Posch

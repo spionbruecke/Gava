@@ -5,7 +5,7 @@ package src.games;
  * The client only returns a simple String-description
  * of the move. MoveConverter converts this String into
  * the current state of the gameBoard.
- * @author Begüm Tosun & Alexander Posch
+ * @author Begüm Tosun, Alexander Posch
  */
 
 public interface MoveConverter {
@@ -22,7 +22,6 @@ public interface MoveConverter {
 
     /**
      * Converts the new state which is a PlayingPiece[][] into a String which describes the move.
-     * Warning!! It is provided that the move is not castling.
      * @param currentState PlayingPiece[][]
      * @param stateToCheck PlayingPiece[][]
      * @return String

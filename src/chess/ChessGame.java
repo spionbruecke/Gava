@@ -3,7 +3,7 @@ package src.chess;
 import src.games.Game;
 
 /**
- * ChessGame extends the class Game from src.Games and is used for creating a new chess game.
+ * ChessGame extends the class Game from src.games and is used for creating a new chess game.
  *
  * @author Begüm Tosun
  */

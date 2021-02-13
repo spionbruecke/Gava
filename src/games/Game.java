@@ -18,9 +18,5 @@ public abstract class Game {
     public String getName(){
         return gameName.toString();
     }
-    /*
-    public abstract void timer();
-    Do we need this method?
-     */
 
 }

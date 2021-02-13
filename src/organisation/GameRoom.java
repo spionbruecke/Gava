@@ -44,8 +44,8 @@ public class GameRoom{
      * Init the GameBoard and the rules depending on the GameMode, when there a 2
      * Players in the Room. Randomly choosing a player to start.
      * 
-     * @throws IOException
-     * @throws UnsupportedGameMode
+     * @throws IOException Exception
+     * @throws UnsupportedGameMode Exception
      */
     private void getStart() throws IOException, UnsupportedGameMode {
         //startingphase = true;

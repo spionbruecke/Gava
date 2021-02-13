@@ -66,10 +66,9 @@ public abstract class GameBoard {
     }
 
     /**
-     * Saves a given state in a Cache list. This method is used for saving the current state
-     * into the CacheManager. If there already exists a previous state for the gameBoardID
-     * it will be overwritten otherwise the method will create a new list element and add
-     * it to the list.
+     * Saves a given state into Cache. If there already exists a previous state for the gameBoardID
+     * it will be overwritten.
+     * @param state PlayingPiece[][]
      */
     private void saveStateToMemento(PlayingPiece[][] state) {
         prevState = new Cache(state);

@@ -31,8 +31,6 @@ public class ClientHandler extends Thread {
     /**
      * 
      *  Handls every incoming message and send the output of the gameroom to the client
-     * 
-     *  @throws WrongInformationFormatException
      */
     @Override
     public void run() {

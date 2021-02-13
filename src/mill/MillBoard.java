@@ -100,6 +100,13 @@ public class MillBoard extends GameBoard {
         this.setState(newBoard);
     }
 
+    /**
+     * Returns the number of pieces(on the board) of the given colour.
+     * @param state PlayingPiece[][]
+     * @param colour String
+     * @return int
+     * @author Begüm Tosun
+     */
     public static int getNumOfPieces(PlayingPiece[][] state, String colour){
         int counter = 0;
 

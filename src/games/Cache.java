@@ -1,7 +1,6 @@
 package src.games;
 
 /**
- * Memento Design Pattern
  * This class is used for undoing the last move.
  * @author Begüm Tosun
  */

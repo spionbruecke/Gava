@@ -14,7 +14,7 @@ public class LogWriter {
      * 
      * @author Alexander Posch
      * @version 1.0
-     * @param input
+     * @param input String
      */
     public static void writeToLog(String input) {
         try (BufferedWriter writeLog = new BufferedWriter( new FileWriter("Log.txt",true));) {

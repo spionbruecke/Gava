@@ -30,9 +30,9 @@ public class GameController {
      * Add the Player player to Room depending on the GameMode the Player choosed. 
      * If the room has two players and is full then the game starts.
      * 
-     * @param player
+     * @param player Player
      * @return the gameroom, that was selected for the player
-     * @throws IOException
+     * @throws IOException Exception
      */
     public GameRoom addPlayer(Player player) throws IOException, UnsupportedGameMode {
         GameRoom currentGame;

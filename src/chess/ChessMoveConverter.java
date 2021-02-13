@@ -3,6 +3,9 @@ package src.chess;
 import src.games.*;
 
 /**
+ * The ChessMoveConverter contains methods that allow to convert data types from the
+ * transformation part into the data types which are used or checking the rules.
+ *
  * @author Alexander Posch, Begüm Tosun
  */
 
@@ -10,10 +13,10 @@ public class ChessMoveConverter implements MoveConverter {
 
     /**
      * Converts the new state which is a PlayingPiece[][] into a String which describes the move.
-     * Warning!! It is provided that the move is not castling.
      * @param currentState PlayingPiece[][]
      * @param stateToCheck PlayingPiece[][]
      * @return String
+     * @author Begüm Tosun
      */
     public String stateToString(PlayingPiece[][] currentState, PlayingPiece[][] stateToCheck){
         StringBuilder move = new StringBuilder();
@@ -49,6 +52,7 @@ public class ChessMoveConverter implements MoveConverter {
      * @param gameBoard GameBoard
      * @param move String
      * @return currentState: PlayingPiece[][]
+     * @author Begüm Tosun
      */
     public PlayingPiece[][] convertStringToState(GameBoard gameBoard, String move){
         PlayingPiece[][] currentState = gameBoard.getState();
@@ -71,7 +75,8 @@ public class ChessMoveConverter implements MoveConverter {
      /**
      * Converts field name into array coordinate
      * @param c field-description
-     * @return array coordinate
+     * @return array coordinate int
+     * @author Alexander Posch
      */
     public static int convertPosIntoArrayCoordinate(char c){
         switch(c){
@@ -113,6 +118,7 @@ public class ChessMoveConverter implements MoveConverter {
      * Converts an integer array coordinate into a String description.
      * @param i int
      * @return String
+     * @author Alexander Posch
      */
     static String convertArrayCoordinateIntoPosRow(int i){
         switch (i){
@@ -150,6 +156,7 @@ public class ChessMoveConverter implements MoveConverter {
      * Converts an integer array coordinate into a String description.
      * @param i int
      * @return String
+     * @author Alexander Posch
      */
     static String convertArrayCoordinateIntoPosColumn(int i){
         switch (i){
@@ -187,6 +194,7 @@ public class ChessMoveConverter implements MoveConverter {
      * Returns the target square from a given move.
      * @param move String
      * @return Field
+     * @author Begüm Tosun
      */
     static Field getChessTargetField(String move){
         
@@ -195,9 +203,10 @@ public class ChessMoveConverter implements MoveConverter {
     }
 
     /**
-     * Returns the current square of a laying piece from a given move.
+     * Returns the current square of a playing piece from a given move.
      * @param move String
      * @return Field
+     * @author Begüm Tosun
      */
     static Field getChessStartField(String move){
         return new Field(convertPosIntoArrayCoordinate(move.charAt(1)),
@@ -205,9 +214,10 @@ public class ChessMoveConverter implements MoveConverter {
     }
 
     /**
-     * Converts the String list (not the simple String "A1 A2") into a two dim. PlayingPiece Array
+     * Converts the String list which contains all playing piece into a two dim. PlayingPiece Array
      * @param input String
      * @return PlayingPiece[][]
+     * @author Alexander Posch
      */
     public static PlayingPiece[][] getBoardFromString(String input) {
         ChessBoard board = new ChessBoard();
@@ -254,7 +264,12 @@ public class ChessMoveConverter implements MoveConverter {
     }
 
 
-    //constructs the String list
+    /**
+     * Creates the String list which contains the playing pieces.
+     * @param board ChessBoard
+     * @return String list
+     * @author Alexander Posch
+     */
     public static String convertPiecesToString(ChessBoard board) {
         StringBuilder output = new StringBuilder();
 
