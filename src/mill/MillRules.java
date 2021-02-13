@@ -50,7 +50,6 @@ public class MillRules implements Rules {
                     }
                 case "black":
                     if (MillBoard.getNumOfPieces(gameBoard.getState(), "black") > 3) {
-                        System.out.println("TargetValid"+isTargetValid(move));
                         if (isTargetValid(move) && !Rules.isFieldOccupied(gameBoard.getState(), targetRow, targetColumn))
                             return removePiece(gameBoard.getState(), stateToCheck, "black");
                         else
@@ -182,7 +181,7 @@ public class MillRules implements Rules {
     }
 
     //colour of player who made the last move
-    static Messages isGameFinished(PlayingPiece[][] stateToCheck, String colour,int roundnumber) {
+    public static Messages isGameFinished(PlayingPiece[][] stateToCheck, String colour,int roundnumber) {
         String opponentColour = "";
 
         if(colour.equals("white"))
@@ -190,7 +189,7 @@ public class MillRules implements Rules {
         else if(colour.equals("black"))
             opponentColour = "white";
 
-        if((MillBoard.getNumOfPieces(stateToCheck, opponentColour) < 3 && roundnumber > 18)
+        if((MillBoard.getNumOfPieces(stateToCheck, opponentColour) < 3 && roundnumber >= 18)
             || !canPlayingPieceMove(stateToCheck, colour))
             return Messages.VICTORY;
 
@@ -334,8 +333,6 @@ public class MillRules implements Rules {
     private static boolean isTargetValid(String move){
         String start = move.substring(0, 2);
         String target = move.substring(3, 5);
-
-        System.out.println(target);
 
         switch (start){
             case "1A":

@@ -166,7 +166,26 @@ public class GameRoom{
                 }
         }
     }
+
+    public String handleRemove(String information) throws IOException, WrongFormatException {
+        Messages message = MillRules.checkRemovedPiece(gameBoard,  MillMoveConverter.getBoardFromString(information), getTheOtherPlayer(turnOfPlayer).getColour());
+
+        if(message == Messages.MOVE_ALLOWED){
+            if(MillRules.isGameFinished(MillMoveConverter.getBoardFromString(information), turnOfPlayer.getColour(),roundnumber) == Messages.VICTORY){
+                getTheOtherPlayer(turnOfPlayer).getClientHandler().sendMessage("<Loss>");
+                return "<Win>";
+            }
+
+            gameBoard.setNewBoard(information);
+            getTheOtherPlayer(turnOfPlayer).getClientHandler().sendMessage("<Gameboard=" + MillMoveConverter.convertPiecesToString((MillBoard) gameBoard) + ">");
+            setTurn(getTheOtherPlayer(turnOfPlayer));
+            incrementRoundnumber();
+            return "<Sucess>";
+        } else 
+            return "<Error=You aren't allowed to remove from a mill>";
+    }
     
+
     public void incrementRoundnumber(){
         roundnumber ++;
     }

@@ -110,7 +110,6 @@ public class MillBoard extends GameBoard {
                         counter++;
                 }
         }
-
         return counter;
     }
 
