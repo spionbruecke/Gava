@@ -258,18 +258,6 @@ public class GameRoom{
             message = ChessRules.executeMove(gameBoard, turnOfPlayer.getColour(), ChessMoveConverter.getBoardFromString(information));
             promotion = ChessRules.isPromotion(gameBoard, ChessMoveConverter.getBoardFromString(information));
             
-            if(message == Messages.GO_ON){
-                gameBoard.setNewBoard(information);
-                if(ChessRules.isKingDead(gameBoard,getTheOtherPlayer(turnOfPlayer))){
-                    getTheOtherPlayer(turnOfPlayer).getClientHandler().sendMessage("<Loss>");
-                    return "<Win>";
-                }
-
-                if(!promotion.equals("false")){
-                    promotionPosition = promotion;
-                    return "<Promotion>";
-                }
-            }
             switch(message){
                 case VICTORY:
                     return "<Win>";
@@ -279,6 +267,12 @@ public class GameRoom{
                     return "<Gameend=Draw>";
                 case MOVE_ALLOWED:
                 case GO_ON:
+                    gameBoard.setNewBoard(information);
+                
+                    if(!promotion.equals("false")){
+                        promotionPosition = promotion;
+                        return "<Promotion>";
+                    }
                     roundnumber ++;
                     return "<Gameboard=" + ChessMoveConverter.convertPiecesToString((ChessBoard) this.gameBoard) + ">";
                 case ERROR_WRONGMOVEMENT_DIRECTION_BISHOP:
