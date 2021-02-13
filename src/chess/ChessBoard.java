@@ -171,7 +171,7 @@ public class ChessBoard extends GameBoard {
     }
 
     @Override
-    public void setNewBoard(String input) throws WrongFormatException {
+    public void setNewBoard(String input){
         PlayingPiece[][] newBoard = new PlayingPiece[8][8];
         StringBuilder position = new StringBuilder();
         int counter = 0;

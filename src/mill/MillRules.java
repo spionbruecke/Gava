@@ -2,6 +2,11 @@ package src.mill;
 
 import src.games.*;
 
+/**
+ * MillRules implements Rules from src.Games and checks if the given move is valid.
+ * 
+ * @author Begüm Tosun, Alexander Posch
+ */
 public class MillRules implements Rules {
 
     public static Messages isMoveAllowed(GameBoard gameBoard, PlayingPiece[][] stateToCheck,int roundnumber) {
@@ -36,7 +41,8 @@ public class MillRules implements Rules {
 
             switch (colour) {
                 case "white":
-                    if (MillBoard.getNumOfPieces(gameBoard.getState(), "white") > 3) { 
+
+                    if (MillBoard.getNumOfPieces(gameBoard.getState(), "white") > 3) {
                         if (isTargetValid(move) && !Rules.isFieldOccupied(gameBoard.getState(), targetRow, targetColumn))
                             return removePiece(gameBoard.getState(), stateToCheck, "white");
                         else
@@ -79,25 +85,108 @@ public class MillRules implements Rules {
             for(int k = 0 ; k < 7; k ++) {
                 if(k == 3)
                     for (int j = 0; j < 6; j ++){
-                        if(stateToCheck[k][j].getColour().equals("null") && !board.getState()[k][j].getColour().equals("null")
-                            && board.getState()[k][j].getColour().equals(colour))
+                        if(stateToCheck[k][j].getColour().equals("null")
+                            && !board.getState()[k][j].getColour().equals("null")
+                            && board.getState()[k][j].getColour().equals(colour)
+                            && !isPlayingPiecePartOfMill(board, k, j, colour))
                             return Messages.MOVE_ALLOWED;
                     }
                 else
                     for (int j = 0; j < 3; j ++){
-                        if(stateToCheck[k][j].getColour().equals("null") && !board.getState()[k][j].getColour().equals("null")
-                                && board.getState()[k][j].getColour().equals(colour))
+                        if(stateToCheck[k][j].getColour().equals("null")
+                            && !board.getState()[k][j].getColour().equals("null")
+                            && board.getState()[k][j].getColour().equals(colour)
+                            && !isPlayingPiecePartOfMill(board, k, j, colour))
                             return Messages.MOVE_ALLOWED;
                     }
             }
-
         }
 
         return Messages.ERROR_WRONGMOVEMENT;
     }
 
+    //colour of removed piece
+    private static boolean isPlayingPiecePartOfMill(GameBoard board, int row, int column, String colour){
+        boolean[] mills = threeInARow(board.getState(), colour);
+
+        if(row == 0 && column == 0)
+            return mills[0] || mills[8];
+
+        else if(row == 0 && column == 1)
+            return mills[0] || mills[11];
+
+        else if(row == 0 && column == 2)
+            return mills[0] || mills[15];
+
+        else if(row == 1 && column == 0)
+            return mills[1] || mills[9];
+
+        else if(row == 1 && column == 1)
+            return mills[1] || mills[11];
+
+        else if(row == 1 && column == 2)
+            return mills[1] || mills[14];
+
+        else if(row == 2 && column == 0)
+            return mills[2] || mills[10];
+
+        else if(row == 2 && column == 1)
+            return mills[2] || mills[11];
+
+        else if(row == 2 && column == 2)
+            return mills[2] || mills[13];
+
+        else if(row == 3 && column == 0)
+            return mills[3] || mills[8];
+
+        else if(row == 3 && column == 1)
+            return mills[3] || mills[9];
+
+        else if(row == 3 && column == 2)
+            return mills[3] || mills[10];
+
+        else if(row == 3 && column == 3)
+            return mills[4] || mills[13];
+
+        else if(row == 3 && column == 4)
+            return mills[4] || mills[14];
+
+        else if(row == 3 && column == 5)
+            return mills[4] || mills[15];
+
+        else if(row == 4 && column == 0)
+            return mills[5] || mills[10];
+
+        else if(row == 4 && column == 1)
+            return mills[5] || mills[12];
+
+        else if(row == 4 && column == 2)
+            return mills[5] || mills[13];
+
+        else if(row == 5 && column == 0)
+            return mills[6] || mills[9];
+
+        else if(row == 5 && column == 1)
+            return mills[6] || mills[12];
+
+        else if(row == 5 && column == 2)
+            return mills[6] || mills[14];
+
+        else if(row == 6 && column == 0)
+            return mills[7] || mills[8];
+
+        else if(row == 6 && column == 1)
+            return mills[7] || mills[12];
+
+        else if(row == 6 && column == 2)
+            return mills[7] || mills[15];
+
+
+        return false;
+    }
+
     //colour of player who made the last move
-    static Messages isGameFinished(PlayingPiece[][] stateToCheck, String colour,int roundnumber) {
+    public static Messages isGameFinished(PlayingPiece[][] stateToCheck, String colour,int roundnumber) {
         String opponentColour = "";
 
         if(colour.equals("white"))
@@ -105,7 +194,7 @@ public class MillRules implements Rules {
         else if(colour.equals("black"))
             opponentColour = "white";
 
-        if((MillBoard.getNumOfPieces(stateToCheck, opponentColour) < 3 && roundnumber > 18)
+        if((MillBoard.getNumOfPieces(stateToCheck, opponentColour) < 3 && roundnumber >= 18)
             || !canPlayingPieceMove(stateToCheck, colour))
             return Messages.VICTORY;
 
@@ -120,21 +209,6 @@ public class MillRules implements Rules {
             return isGameFinished(stateToCheck, colour,roundnumber);
 
         return message;
-    }
-
-    //public static Messages setToken(GameBoard board, String colour, PlayingPiece[][] stateToCheck){ return null; }
-
-    public static boolean finishedStartingPhase(PlayingPiece[][] stateToCheck){
-        MillBoard newBoard = new MillBoard();
-
-        newBoard.setState(stateToCheck);
-
-        for(int i = 0; i < 18; i++){
-            if(!newBoard.getPlayingPieces()[i].hasMoved())
-                return false;
-        }
-
-        return true;
     }
 
     //method should only be called if the move was checked to be true
@@ -152,11 +226,24 @@ public class MillRules implements Rules {
             if(millsToBeChecked[i])
                 countMillsToBeChecked++;
         }
-        
-        if(countCurrentMills < countMillsToBeChecked) 
+
+        if( ( (countCurrentMills == countMillsToBeChecked) && !areArraysIdentical(currentMills, millsToBeChecked) )
+            || (countCurrentMills < countMillsToBeChecked) )
             return Messages.MOVE_ALLOWED_REMOVE_PIECE;
-        else
-            return Messages.MOVE_ALLOWED;
+
+        return Messages.MOVE_ALLOWED;
+    }
+
+    private static boolean areArraysIdentical(boolean[] a, boolean[] b){
+        if(a.length != b.length)
+            return false;
+
+        for (int i = 0; i < a.length; i++) {
+            if (a[i] != b[i])
+                return false;
+        }
+
+        return true;
     }
 
     private static boolean[] threeInARow(PlayingPiece[][] stateToCheck, String colour){
@@ -182,6 +269,7 @@ public class MillRules implements Rules {
                 && stateToCheck[3][0].getColour().equals(stateToCheck[3][1].getColour())
                 && stateToCheck[3][0].getColour().equals(stateToCheck[3][2].getColour()))
             millsList[3] = true;
+
         if(stateToCheck[3][3].getColour().equals(colour)
                 && stateToCheck[3][3].getColour().equals(stateToCheck[3][4].getColour())
                 && stateToCheck[3][3].getColour().equals(stateToCheck[3][5].getColour()))

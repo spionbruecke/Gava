@@ -8,10 +8,9 @@ import src.organisation.Player;
 /**
  * ChessRules implements Rules from src.Games and checks if the given move is valid.
  *
- * @author Begüm Tosun
+ * @author Begüm Tosun, Alexander Posch
  */
 public class ChessRules implements Rules {
-    private static final ChessMoveConverter converter = new ChessMoveConverter();
 
     //Notlösung
     public static boolean isKingDead(GameBoard gameboard, Player player){
@@ -33,15 +32,18 @@ public class ChessRules implements Rules {
      */
     public static boolean isFieldOccupiedByOwnPlayingP(GameBoard board, String move) {
 
-        int row = converter.convertPosIntoArrayCoordinate(move.charAt(4));
-        int column = converter.convertPosIntoArrayCoordinate(move.charAt(3));
+        int targetRow = ChessMoveConverter.convertPosIntoArrayCoordinate(move.charAt(4));
+        int targetColumn = ChessMoveConverter.convertPosIntoArrayCoordinate(move.charAt(3));
 
-        String ownColour = board.getState()[converter.convertPosIntoArrayCoordinate(move.charAt(1))][converter.convertPosIntoArrayCoordinate(move.charAt(0))].getColour();
+        int startRow = ChessMoveConverter.convertPosIntoArrayCoordinate(move.charAt(1));
+        int startColumn = ChessMoveConverter.convertPosIntoArrayCoordinate(move.charAt(0));
+
+        String ownColour = board.getState()[startRow][startColumn].getColour();
     
-        if(board.getState()[row][column].getName().equals("null")){
+        if(board.getState()[targetRow][targetColumn].getName().equals("null")){
             return false;
         }else
-            return board.getState()[row][column].getColour().equals(ownColour);
+            return board.getState()[targetRow][targetColumn].getColour().equals(ownColour);
     }
 
     /**
@@ -51,15 +53,16 @@ public class ChessRules implements Rules {
      * @return boolean
      */
     public static Messages isMoveAllowed(GameBoard gameBoard, PlayingPiece[][] stateToCheck) {
+        ChessMoveConverter converter = new ChessMoveConverter();
         String move = converter.stateToString(gameBoard.getState(), stateToCheck);
 
-        return checkEachPossibleMove(gameBoard, move);
+        return checkEachPossibleMove(gameBoard, move, "move");
     }
 
-    private static Messages checkEachPossibleMove(GameBoard gameBoard, String move){
+    private static Messages checkEachPossibleMove(GameBoard gameBoard, String move, String mode){
 
-        int row = converter.convertPosIntoArrayCoordinate(move.charAt(1));
-        int column = converter.convertPosIntoArrayCoordinate(move.charAt(0));
+        int row = ChessMoveConverter.convertPosIntoArrayCoordinate(move.charAt(1));
+        int column = ChessMoveConverter.convertPosIntoArrayCoordinate(move.charAt(0));
 
         switch(gameBoard.getState()[row][column].getName()){
             case "rook":
@@ -87,7 +90,7 @@ public class ChessRules implements Rules {
                     return Messages.ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_QUEEN;
 
             case "king":
-                if((checkKingMoves(gameBoard, move) == Messages.MOVE_ALLOWED) && isKingTargetFree(gameBoard, move))
+                if((checkKingMoves(gameBoard, move, mode) == Messages.MOVE_ALLOWED) && isKingTargetFree(gameBoard, move))
                     return Messages.MOVE_ALLOWED;
                 else
                     return Messages.ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_KING;
@@ -101,55 +104,11 @@ public class ChessRules implements Rules {
         
     }
 
-    private static Messages checkEachPossibleAttack(GameBoard gameBoard, String move){
-
-        int row = converter.convertPosIntoArrayCoordinate(move.charAt(1));
-        int column = converter.convertPosIntoArrayCoordinate(move.charAt(0));
-
-        switch(gameBoard.getState()[row][column].getName()){
-            case "rook":
-                if((checkRookMoves(move) == Messages.MOVE_ALLOWED) && isRookPathFree(gameBoard, move) )
-                    return Messages.MOVE_ALLOWED;
-                else
-                    return Messages.ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_ROOK;
-
-            case "knight":
-                if((checkKnightMoves(move) == Messages.MOVE_ALLOWED) && isKnightTargetFree(gameBoard, move))
-                    return Messages.MOVE_ALLOWED;
-                else
-                    return Messages.ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_KNIGHT;
-
-            case "bishop":
-                if((checkBishopMoves(move) == Messages.MOVE_ALLOWED) && isBishopPathFree(gameBoard, move))
-                    return Messages.MOVE_ALLOWED;
-                else
-                    return Messages.ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_BISHOP;
-
-            case "queen":
-                if((checkQueenMoves(move) == Messages.MOVE_ALLOWED) && isQueenPathFree(gameBoard, move))
-                    return Messages.MOVE_ALLOWED;
-                else
-                    return Messages.ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_QUEEN;
-
-            case "king":
-                if((attackFromOpponentKing(gameBoard, move) == Messages.MOVE_ALLOWED) && isKingTargetFree(gameBoard, move))
-                    return Messages.MOVE_ALLOWED;
-                else
-                    return Messages.ERROR_WRONGMOVEMENT_PIECES_IN_THE_WAY_KING;
-
-            case "pawn":
-                return checkPawnMoves(gameBoard, move);
-
-            default:
-                return Messages.ERROR_NO_SUCH_PLAYINGPIECE;
-        }
-
-    }
-
     //public for test purposes
     public static Messages checkPawnMoves(GameBoard gameBoard, String move){
-        Field target = converter.getChessTargetField(move);
-        Field start = converter.getChessStartField(move);
+
+        Field target = ChessMoveConverter.getChessTargetField(move);
+        Field start = ChessMoveConverter.getChessStartField(move);
         // move two squares forward
         if(target.getRow() == start.getRow()+2
                 && !gameBoard.getState()[start.getRow()][start.getColumn()].hasMoved()
@@ -180,12 +139,12 @@ public class ChessRules implements Rules {
 
         //en passant
         if(target.getRow() == start.getRow()+1
-                && ((target.getColumn() == start.getColumn()+1 || target.getColumn() == start.getColumn()-1))
+                && (target.getColumn() == start.getColumn()+1 || target.getColumn() == start.getColumn()-1)
                 && gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("black")
                 && isEnPassantAllowed(gameBoard, start, target)){
             return Messages.MOVE_ALLOWED;
         }else if(target.getRow() == start.getRow()-1
-                && ((target.getColumn() == start.getColumn()+1 || target.getColumn() == start.getColumn()-1))
+                && (target.getColumn() == start.getColumn()+1 || target.getColumn() == start.getColumn()-1)
                 && gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("white")
                 && isEnPassantAllowed(gameBoard, start, target)){
             return Messages.MOVE_ALLOWED;
@@ -193,13 +152,13 @@ public class ChessRules implements Rules {
 
         //move one square diagonally forward (only if there is a playing piece from the opponent)
         if(target.getRow() == start.getRow()+1
-                && ((target.getColumn() == start.getColumn()+1 || target.getColumn() == start.getColumn()-1))
+                && (target.getColumn() == start.getColumn()+1 || target.getColumn() == start.getColumn()-1)
                 && gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("black")
                 && !isFieldOccupiedByOwnPlayingP(gameBoard, move)
                 && Rules.isFieldOccupied(gameBoard.getState(), target.getRow(), target.getColumn())){
             return Messages.MOVE_ALLOWED;
         }else if(target.getRow() == start.getRow()-1
-                && ((target.getColumn() == start.getColumn()+1 || target.getColumn() == start.getColumn()-1))
+                && (target.getColumn() == start.getColumn()+1 || target.getColumn() == start.getColumn()-1)
                 && gameBoard.getState()[start.getRow()][start.getColumn()].getColour().equals("white")
                 && !isFieldOccupiedByOwnPlayingP(gameBoard, move)
                 && Rules.isFieldOccupied(gameBoard.getState(), target.getRow(), target.getColumn())){
@@ -210,14 +169,15 @@ public class ChessRules implements Rules {
     }
 
     public static String isPromotion(GameBoard gameBoard, PlayingPiece[][] stateToCheck){
-        Field target = converter.getChessTargetField(converter.stateToString(gameBoard.getState(), stateToCheck));
-        Field start = converter.getChessStartField(converter.stateToString(gameBoard.getState(), stateToCheck));
+        ChessMoveConverter converter = new ChessMoveConverter();
+        Field target = ChessMoveConverter.getChessTargetField(converter.stateToString(gameBoard.getState(), stateToCheck));
+        Field start = ChessMoveConverter.getChessStartField(converter.stateToString(gameBoard.getState(), stateToCheck));
 
-        String stringTarget = converter.convertArrayCoordinateIntoPosColumn(target.getColumn())
-                                + converter.convertArrayCoordinateIntoPosRow(target.getRow());
+        String stringTarget = ChessMoveConverter.convertArrayCoordinateIntoPosColumn(target.getColumn())
+                                + ChessMoveConverter.convertArrayCoordinateIntoPosRow(target.getRow());
 
         if(!gameBoard.getState()[start.getRow()][start.getColumn()].getName().equals("pawn") ||
-                checkPawnMoves(gameBoard, converter.stateToString(gameBoard.getState(), stateToCheck)) != Messages.MOVE_ALLOWED)
+            checkPawnMoves(gameBoard, converter.stateToString(gameBoard.getState(), stateToCheck)) != Messages.MOVE_ALLOWED)
             return "false";
 
         //promotion
@@ -236,9 +196,9 @@ public class ChessRules implements Rules {
             throws WrongFormatException {
         PlayingPiece[] list = gameBoard.getPlayingPieces();
         StringBuilder output = new StringBuilder();
-        for(int i = 0; i < list.length; i ++){
-            if(list[i].getPosition().equals(position)){
-                list[i].setName(information);
+        for (PlayingPiece piece : list) {
+            if (piece.getPosition().equals(position)) {
+                piece.setName(information);
                 break;
             }
         }
@@ -264,68 +224,21 @@ public class ChessRules implements Rules {
     private static boolean isEnPassantAllowed(GameBoard board, Field start, Field target){
         return !board.getStateFromMemento().getState()[start.getRow()][target.getColumn()]
                     .equals(board.getState()[start.getRow()][target.getColumn()])
-                && board.getState()[start.getRow()][target.getColumn()].getName() != "null"
+                && board.getState()[start.getRow()][target.getColumn()].getName().equals("null")
                 && !board.getState()[start.getRow()][target.getColumn()].getColour()
                         .equals(board.getState()[start.getRow()][start.getColumn()].getColour());
     }
 
-    private static Messages attackFromOpponentKing(GameBoard board, String move){
-        ArrayList<Field> possibleLocations = new ArrayList<Field>();
+    private static Messages checkKingMoves(GameBoard board, String move, String mode){
+        ArrayList<Field> possibleLocations = new ArrayList<>();
 
-        Field target = converter.getChessTargetField(move);
-        Field start = converter.getChessStartField(move);
+        Field target = ChessMoveConverter.getChessTargetField(move);
+        Field start = ChessMoveConverter.getChessStartField(move);
 
-        if( (start.getRow()-1 >= 0) && (start.getColumn()-1 >= 0) ){
-            possibleLocations.add(new Field(start.getRow()-1, start.getColumn()-1));
-        }
-
-        if(start.getRow()-1 >= 0){
-            possibleLocations.add(new Field(start.getRow()-1, start.getColumn()));
-        }
-
-        if( (start.getRow()-1 >= 0) && (start.getColumn()+1 <= 7) ){
-            possibleLocations.add(new Field(start.getRow()-1, start.getColumn()+1));
-        }
-
-        if(start.getColumn()+1 <= 7){
-            possibleLocations.add(new Field(start.getRow(), start.getColumn()+1));
-        }
-
-        if( (start.getRow()+1 <= 7) && (start.getColumn()+1 <= 7) ){
-            possibleLocations.add(new Field(start.getRow()+1, start.getColumn()+1));
-        }
-
-        if(start.getRow()+1 <= 7){
-            possibleLocations.add(new Field(start.getRow()+1, start.getColumn()));
-        }
-
-        if( (start.getRow()+1 <= 7) && (start.getColumn()-1 >= 0) ){
-            possibleLocations.add(new Field(start.getRow()+1, start.getColumn()-1));
-        }
-
-        if(start.getColumn()-1 >= 0){
-            possibleLocations.add(new Field(start.getRow(), start.getColumn()-1));
-        }
-
-        for (Field possibleLocation : possibleLocations) {
-            if (possibleLocation.equals(target)) {
-                return Messages.MOVE_ALLOWED;
-            }
-        }
-
-        return Messages.ERROR_WRONGMOVEMENT_DIRECTION_KING;
-    }
-
-    private static Messages checkKingMoves(GameBoard board, String move){
-        ArrayList<Field> possibleLocations = new ArrayList<Field>();
-
-        Field target = converter.getChessTargetField(move);
-        Field start = converter.getChessStartField(move);
-
-        if(isMoveCastling(board, move))
+        if(mode.equals("move") && isMoveCastling(board, move))
             return Messages.MOVE_ALLOWED;
 
-        if(isFieldAttacked(board, target.getRow(), target.getColumn()))
+        if(mode.equals("move") && isFieldAttacked(board, target.getRow(), target.getColumn()))
             return Messages.ERROR_WRONGMOVEMENT_DIRECTION_KING;
 
 
@@ -398,10 +311,10 @@ public class ChessRules implements Rules {
     }
 
     private static Messages checkKnightMoves(String move){
-        ArrayList<Field> possibleLocations = new ArrayList<Field>();
+        ArrayList<Field> possibleLocations = new ArrayList<>();
 
-        Field target = converter.getChessTargetField(move);
-        Field start = converter.getChessStartField(move);
+        Field target = ChessMoveConverter.getChessTargetField(move);
+        Field start = ChessMoveConverter.getChessStartField(move);
 
         //up-left
         if( (start.getRow()-2 >= 0) && (start.getColumn()-1 >= 0) ){
@@ -537,15 +450,15 @@ public class ChessRules implements Rules {
 
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                stringB.append(converter.convertArrayCoordinateIntoPosColumn(j));
-                stringB.append(converter.convertArrayCoordinateIntoPosRow(i));
+                stringB.append(ChessMoveConverter.convertArrayCoordinateIntoPosColumn(j));
+                stringB.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(i));
                 stringB.append(" ");
-                stringB.append(converter.convertArrayCoordinateIntoPosColumn(column));
-                stringB.append(converter.convertArrayCoordinateIntoPosRow(row));
+                stringB.append(ChessMoveConverter.convertArrayCoordinateIntoPosColumn(column));
+                stringB.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(row));
 
                 move = stringB.toString();
 
-                if(checkEachPossibleAttack(board, move) == Messages.MOVE_ALLOWED)
+                if(checkEachPossibleMove(board, move, "attack") == Messages.MOVE_ALLOWED)
                     return true;
 
                 stringB = new StringBuilder();
@@ -557,7 +470,7 @@ public class ChessRules implements Rules {
     private static boolean kingCannotEscape(GameBoard board, int row, int column){
         StringBuilder stBuilder = new StringBuilder();
         stBuilder.append(ChessMoveConverter.convertArrayCoordinateIntoPosColumn(column));
-        stBuilder.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(row) + " ");
+        stBuilder.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(row)).append(" ");
 
         String move = "";
 
@@ -687,10 +600,10 @@ public class ChessRules implements Rules {
     }
 
     private static boolean checkDiagonalMoves(String move){
-        ArrayList<Field> possibleLocations = new ArrayList<Field>();
+        ArrayList<Field> possibleLocations = new ArrayList<>();
 
-        Field target = converter.getChessTargetField(move);
-        Field start = converter.getChessStartField(move);
+        Field target = ChessMoveConverter.getChessTargetField(move);
+        Field start = ChessMoveConverter.getChessStartField(move);
 
         //left-up diagonal
         int row = start.getRow() - 1;
@@ -742,8 +655,8 @@ public class ChessRules implements Rules {
 
 
     private static boolean areDiagonalPathsFree(GameBoard gameBoard, String move){
-        Field target = converter.getChessTargetField(move);
-        Field start = converter.getChessStartField(move);
+        Field target = ChessMoveConverter.getChessTargetField(move);
+        Field start = ChessMoveConverter.getChessStartField(move);
 
         if(isFieldOccupiedByOwnPlayingP(gameBoard, move))
             return false;
@@ -807,10 +720,10 @@ public class ChessRules implements Rules {
     }
 
     private static boolean checkVerticalAndHorizontalMoves(String move){
-        ArrayList<Field> possibleLocations = new ArrayList<Field>();
+        ArrayList<Field> possibleLocations = new ArrayList<>();
 
-        Field target = converter.getChessTargetField(move);
-        Field start = converter.getChessStartField(move);
+        Field target = ChessMoveConverter.getChessTargetField(move);
+        Field start = ChessMoveConverter.getChessStartField(move);
 
         //determine every theoretically possible move and add the target field into a list
         for (int i = start.getRow(); i >= 0; i--) {
@@ -849,8 +762,8 @@ public class ChessRules implements Rules {
     }
 
     private static boolean areVerticalOrHorizontalPathsFree(GameBoard gameBoard, String move){
-        Field target = converter.getChessTargetField(move);
-        Field start = converter.getChessStartField(move);
+        Field target = ChessMoveConverter.getChessTargetField(move);
+        Field start = ChessMoveConverter.getChessStartField(move);
 
         if(isFieldOccupiedByOwnPlayingP(gameBoard, move))
             return false;
@@ -912,10 +825,7 @@ public class ChessRules implements Rules {
         }
 
         //king is not in the game anymore or can not escape
-        if((row == -1) || (kingCannotEscape(gameBoard, row, column) && isFieldAttacked(gameBoard, row, column)))
-            return true;
-
-        return false;
+        return (row == -1) || (kingCannotEscape(gameBoard, row, column) && isFieldAttacked(gameBoard, row, column));
     }
 
     private static boolean isStalemate(GameBoard board, String colour){
@@ -934,14 +844,14 @@ public class ChessRules implements Rules {
     private static boolean possibleMoveExists(GameBoard board, Field start){
         StringBuilder move = new StringBuilder();
         move.append(ChessMoveConverter.convertArrayCoordinateIntoPosColumn(start.getColumn()));
-        move.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(start.getRow()) + " ");
+        move.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(start.getRow())).append(" ");
 
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 move.append(ChessMoveConverter.convertArrayCoordinateIntoPosColumn(j));
                 move.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(i));
 
-                if(checkEachPossibleMove(board, move.toString()) == Messages.MOVE_ALLOWED){
+                if(checkEachPossibleMove(board, move.toString(), "move") == Messages.MOVE_ALLOWED){
                     return true;
                 }
                 move.deleteCharAt(4);
@@ -967,10 +877,7 @@ public class ChessRules implements Rules {
             }
         }
 
-        if(black_counter > 1 || white_counter > 1)
-            return false;
-
-        return true;
+        return black_counter <= 1 && white_counter <= 1;
     }
 
 

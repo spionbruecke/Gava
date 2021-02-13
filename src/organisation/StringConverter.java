@@ -3,10 +3,9 @@ package src.organisation;
 /**
  * 
  * @author Alexander Posch
- * @version 1.0
+ * @version 2.0
  * 
- * This Class should get every String from the Server and recognize which Information this is.
- * It also should to the Work the other Way
+ * This Class get every String from the Server and recognize which Information this is.
  * 
  */
 public class StringConverter{
@@ -27,8 +26,6 @@ public class StringConverter{
                 return InformationsTypes.GAMEMODE;
             case "Gameboard":
                 return InformationsTypes.GAMEBOARD;
-            case "Login":
-                return InformationsTypes.LOGIN;
             case "Connectionstatus" :
                 return InformationsTypes.CONNECTIONSTATUS;
             case "Message" :
@@ -88,7 +85,6 @@ public class StringConverter{
     /**
      * Get the information of the string, which is located after the '='.
      * 
-     * @author Alexander Posch
      * @param input
      * @return information the String contains
      */

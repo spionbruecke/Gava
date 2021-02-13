@@ -10,7 +10,7 @@ import src.mill.*;
 
 /**
  * @author Alexander Posch
- * @version 0.2
+ * @version 2.0
  * 
  * Every Client get his own Player class with every nessacery information
  */
@@ -26,8 +26,6 @@ public class Player {
     private String latestMove;
     private String colour;
     private ClientHandler clienthandler;
-    //private ArrayList<PlayingPiece> palyingPieces;
-    //private int points;
 
 
     public Player(){
@@ -39,16 +37,6 @@ public class Player {
         // Each Player get a unique ID
         playerID = UUID.randomUUID().toString();
     }
-
-    //**** Functions ****
-         
-    /* Benötigt Zugang zur Datenbank
-    public Boolean logIn(String name, String password) {
-        return false;
-    }
-
-    */
-
     
     //**** Getter ****
     public String getName()                                 {return playerName;}

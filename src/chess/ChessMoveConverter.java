@@ -1,7 +1,6 @@
 package src.chess;
 
 import src.games.*;
-//import sun.tools.jar.resources.jar;
 
 /**
  * @author Alexander Posch, Begüm Tosun
@@ -209,7 +208,6 @@ public class ChessMoveConverter implements MoveConverter {
      * Converts the String list (not the simple String "A1 A2") into a two dim. PlayingPiece Array
      * @param input String
      * @return PlayingPiece[][]
-     * @throws WrongFormatException
      */
     public static PlayingPiece[][] getBoardFromString(String input) {
         ChessBoard board = new ChessBoard();
