@@ -1,6 +1,4 @@
 package src.client;
-
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,7 +10,11 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
-import src.client.ChessBoard.TimeClass;
+/**
+ * ChessBoard implements the GUI for chess
+ *
+ * @author Tobias Mitterreiter
+ */
 
 public class ChessBoard extends JFrame implements MouseListener, MouseMotionListener {
 	

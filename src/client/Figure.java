@@ -4,6 +4,12 @@ package src.client;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+/**
+ * Figure contains all the information for chess figures
+ *
+ * @author Tobias Mitterreiter
+ */
+
 public class Figure {
 	
 	protected ImageIcon icon;

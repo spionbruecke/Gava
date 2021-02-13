@@ -1,9 +1,6 @@
 package src.client;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -14,8 +11,13 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
+
+
+/**
+ * MillGui implements the GUI for mill
+ *
+ * @author Tobias Mitterreiter
+ */
 
 public class MillGui extends JFrame{
 	
