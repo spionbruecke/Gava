@@ -869,9 +869,10 @@ public class ChessRules implements Rules {
 
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if(!pieceThatMoves.equals(new Field(i, j))
-                        && !board.getState()[i][j].getColour().equals(ownColour)
-                        && !board.getState()[i][j].getColour().equals("null")) {
+                if( !pieceThatMoves.equals(new Field(i, j))
+                    && !board.getState()[i][j].getColour().equals(ownColour)
+                    && !board.getState()[i][j].getColour().equals("null")) {
+                    
                     stringB.append(ChessMoveConverter.convertArrayCoordinateIntoPosColumn(j));
                     stringB.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(i));
                     stringB.append(" ");
