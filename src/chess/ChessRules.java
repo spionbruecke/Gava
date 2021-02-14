@@ -279,10 +279,11 @@ public class ChessRules implements Rules {
         Field target = ChessMoveConverter.getChessTargetField(move);
         Field start = ChessMoveConverter.getChessStartField(move);
 
+
         if(mode.equals("move") && isMoveCastling(board, move))
             return Messages.MOVE_ALLOWED;
 
-        if(mode.equals("move") && isFieldAttacked(board, target.getRow(), target.getColumn()))
+        if(mode.equals("move") && isFieldAttacked(board, target.getRow(), target.getColumn(), start))
             return Messages.ERROR_WRONGMOVEMENT_DIRECTION_KING;
 
         //determine every theoretically possible move and add the target field into a list
@@ -324,6 +325,7 @@ public class ChessRules implements Rules {
                 return Messages.MOVE_ALLOWED;
             }
         }
+
 
         return Messages.ERROR_WRONGMOVEMENT_DIRECTION_KING;
     }
@@ -540,25 +542,25 @@ public class ChessRules implements Rules {
     private static boolean isCastlingPathFree(GameBoard board, Field rook){
         if(rook.getRow()==0 && rook.getColumn()==0){
             for (int i = 1; i < 4; i++) {
-                if(Rules.isFieldOccupied(board.getState(), 0, i) || isFieldAttacked(board, 0, i)){
+                if(Rules.isFieldOccupied(board.getState(), 0, i) || isFieldAttacked(board, 0, i, rook)){
                     return false;
                 }
             }
         }else if(rook.getRow()==0 && rook.getColumn()==7){
             for (int i = 5; i < 7; i++) {
-                if(Rules.isFieldOccupied(board.getState(), 0, i) || isFieldAttacked(board, 0, i)){
+                if(Rules.isFieldOccupied(board.getState(), 0, i) || isFieldAttacked(board, 0, i, rook)){
                     return false;
                 }
             }
         }else if(rook.getRow()==7 && rook.getColumn()==0){
             for (int i = 1; i < 4; i++) {
-                if(Rules.isFieldOccupied(board.getState(), 7, i) || isFieldAttacked(board, 7, i)){
+                if(Rules.isFieldOccupied(board.getState(), 7, i) || isFieldAttacked(board, 7, i, rook)){
                     return false;
                 }
             }
         }else{
             for (int i = 5; i < 7; i++) {
-                if(Rules.isFieldOccupied(board.getState(), 7, i) || isFieldAttacked(board, 7, i)){
+                if(Rules.isFieldOccupied(board.getState(), 7, i) || isFieldAttacked(board, 7, i, rook)){
                     return false;
                 }
             }
@@ -575,24 +577,33 @@ public class ChessRules implements Rules {
      * @return boolean
      * @author Begüm Tosun
      */
-    private static boolean isFieldAttacked(GameBoard board, int row, int column){
+    private static boolean isFieldAttacked(GameBoard board, int row, int column, Field pieceThatMoves){
         String move = "";
         StringBuilder stringB = new StringBuilder();
 
+        String ownColour = board.getState()[pieceThatMoves.getRow()][pieceThatMoves.getColumn()].getColour();
+
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                stringB.append(ChessMoveConverter.convertArrayCoordinateIntoPosColumn(j));
-                stringB.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(i));
-                stringB.append(" ");
-                stringB.append(ChessMoveConverter.convertArrayCoordinateIntoPosColumn(column));
-                stringB.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(row));
+                if( !pieceThatMoves.equals(new Field(i, j))
+                    && !board.getState()[i][j].getColour().equals(ownColour)
+                    && !board.getState()[i][j].getColour().equals("null")) {
 
-                move = stringB.toString();
+                    stringB.append(ChessMoveConverter.convertArrayCoordinateIntoPosColumn(j));
+                    stringB.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(i));
+                    stringB.append(" ");
+                    stringB.append(ChessMoveConverter.convertArrayCoordinateIntoPosColumn(column));
+                    stringB.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(row));
 
-                if(checkEachPossibleMove(board, move, "attack") == Messages.MOVE_ALLOWED)
-                    return true;
+                    move = stringB.toString();
 
-                stringB = new StringBuilder();
+                    if (checkEachPossibleMove(board, move, "attack") == Messages.MOVE_ALLOWED)
+                        return true;
+
+
+                    stringB = new StringBuilder();
+                }
+
             }
         }
         return false;
@@ -607,6 +618,7 @@ public class ChessRules implements Rules {
      * @author Begüm Tosun
      */
     private static boolean kingCannotEscape(GameBoard board, int row, int column){
+        Field king = new Field(row, column);
         StringBuilder stBuilder = new StringBuilder();
         stBuilder.append(ChessMoveConverter.convertArrayCoordinateIntoPosColumn(column));
         stBuilder.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(row)).append(" ");
@@ -619,7 +631,7 @@ public class ChessRules implements Rules {
             stBuilder.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(row-1));
             move = stBuilder.toString();
 
-            if(!isFieldAttacked(board, row-1, column-1) && !isFieldOccupiedByOwnPlayingP(board, move))
+            if(!isFieldAttacked(board, row-1, column-1, king) && !isFieldOccupiedByOwnPlayingP(board, move))
                 return false;
 
             stBuilder.deleteCharAt(4);
@@ -632,7 +644,7 @@ public class ChessRules implements Rules {
             stBuilder.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(row-1));
             move = stBuilder.toString();
 
-            if(!isFieldAttacked(board, row-1, column) && !isFieldOccupiedByOwnPlayingP(board, move))
+            if(!isFieldAttacked(board, row-1, column, king) && !isFieldOccupiedByOwnPlayingP(board, move))
                 return false;
 
             stBuilder.deleteCharAt(4);
@@ -645,7 +657,7 @@ public class ChessRules implements Rules {
             stBuilder.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(row-1));
             move = stBuilder.toString();
 
-            if(!isFieldAttacked(board, row-1, column+1) && !isFieldOccupiedByOwnPlayingP(board, move))
+            if(!isFieldAttacked(board, row-1, column+1, king) && !isFieldOccupiedByOwnPlayingP(board, move))
                 return false;
 
             stBuilder.deleteCharAt(4);
@@ -658,7 +670,7 @@ public class ChessRules implements Rules {
             stBuilder.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(row));
             move = stBuilder.toString();
 
-            if(!isFieldAttacked(board, row, column+1) && !isFieldOccupiedByOwnPlayingP(board, move))
+            if(!isFieldAttacked(board, row, column+1, king) && !isFieldOccupiedByOwnPlayingP(board, move))
                 return false;
 
             stBuilder.deleteCharAt(4);
@@ -671,7 +683,7 @@ public class ChessRules implements Rules {
             stBuilder.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(row+1));
             move = stBuilder.toString();
 
-            if(!isFieldAttacked(board, row+1, column+1) && !isFieldOccupiedByOwnPlayingP(board, move))
+            if(!isFieldAttacked(board, row+1, column+1, king) && !isFieldOccupiedByOwnPlayingP(board, move))
                 return false;
 
             stBuilder.deleteCharAt(4);
@@ -684,7 +696,7 @@ public class ChessRules implements Rules {
             stBuilder.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(row+1));
             move = stBuilder.toString();
 
-            if(!isFieldAttacked(board, row+1, column) && !isFieldOccupiedByOwnPlayingP(board, move))
+            if(!isFieldAttacked(board, row+1, column, king) && !isFieldOccupiedByOwnPlayingP(board, move))
                 return false;
 
             stBuilder.deleteCharAt(4);
@@ -697,7 +709,7 @@ public class ChessRules implements Rules {
             stBuilder.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(row+1));
             move = stBuilder.toString();
 
-            if(!isFieldAttacked(board, row+1, column-1) && !isFieldOccupiedByOwnPlayingP(board, move))
+            if(!isFieldAttacked(board, row+1, column-1, king) && !isFieldOccupiedByOwnPlayingP(board, move))
                 return false;
 
             stBuilder.deleteCharAt(4);
@@ -710,7 +722,7 @@ public class ChessRules implements Rules {
             stBuilder.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(row));
             move = stBuilder.toString();
 
-            if(!isFieldAttacked(board, row, column-1) && !isFieldOccupiedByOwnPlayingP(board, move))
+            if(!isFieldAttacked(board, row, column-1, king) && !isFieldOccupiedByOwnPlayingP(board, move))
                 return false;
 
             stBuilder.deleteCharAt(4);
@@ -747,14 +759,15 @@ public class ChessRules implements Rules {
      * @author Begüm Tosun
      */
     private static boolean kingCannotBeProtected(PlayingPiece[][] stateToCheck, int row, int column){
+        Field king = new Field(row, column);
         GameBoard board = new ChessBoard();
         board.setState(stateToCheck);
 
-        ArrayList<Field> enemies = detectAttack(board, row, column);
+        ArrayList<Field> enemies = detectAttack(board, row, column, new Field(row, column));
 
         //check if enemy can be defeated by another playing piece
         for (int i = 0; i < enemies.size(); i++) {
-            if(isFieldAttacked(board, enemies.get(i).getRow(), enemies.get(i).getColumn()))
+            if(isFieldAttacked(board, enemies.get(i).getRow(), enemies.get(i).getColumn(), king))
                 enemies.remove(i);
         }
 
@@ -770,7 +783,7 @@ public class ChessRules implements Rules {
                 ArrayList<Field> path = getPath(new Field(row, column), enemies.get(i));
 
                 for (int j = 0; j < path.size(); j++) {
-                    if(isFieldAttacked(board, path.get(j).getRow(), path.get(j).getColumn())) {
+                    if(isFieldAttacked(board, path.get(j).getRow(), path.get(j).getColumn(), king)) {
                         enemies.remove(i);
                         break;
                     }
@@ -848,25 +861,30 @@ public class ChessRules implements Rules {
      * @return boolean
      * @author Begüm Tosun
      */
-    private static ArrayList<Field> detectAttack(GameBoard board, int row, int column){
+    private static ArrayList<Field> detectAttack(GameBoard board, int row, int column, Field pieceThatMoves){
+        String ownColour = board.getState()[row][column].getColour();
         String move = "";
         StringBuilder stringB = new StringBuilder();
         ArrayList<Field> enemies= new ArrayList<>();
 
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                stringB.append(ChessMoveConverter.convertArrayCoordinateIntoPosColumn(j));
-                stringB.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(i));
-                stringB.append(" ");
-                stringB.append(ChessMoveConverter.convertArrayCoordinateIntoPosColumn(column));
-                stringB.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(row));
+                if(!pieceThatMoves.equals(new Field(i, j))
+                        && !board.getState()[i][j].getColour().equals(ownColour)
+                        && !board.getState()[i][j].getColour().equals("null")) {
+                    stringB.append(ChessMoveConverter.convertArrayCoordinateIntoPosColumn(j));
+                    stringB.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(i));
+                    stringB.append(" ");
+                    stringB.append(ChessMoveConverter.convertArrayCoordinateIntoPosColumn(column));
+                    stringB.append(ChessMoveConverter.convertArrayCoordinateIntoPosRow(row));
 
-                move = stringB.toString();
+                    move = stringB.toString();
 
-                if(checkEachPossibleMove(board, move, "attack") == Messages.MOVE_ALLOWED)
-                    enemies.add(new Field(i, j));
+                    if (checkEachPossibleMove(board, move, "attack") == Messages.MOVE_ALLOWED)
+                        enemies.add(new Field(i, j));
 
-                stringB = new StringBuilder();
+                    stringB = new StringBuilder();
+                }
             }
         }
         return enemies;
@@ -1135,7 +1153,8 @@ public class ChessRules implements Rules {
 
         //king is not in the game anymore or can not escape
         return (row == -1) || (kingCannotEscape(board, row, column)
-                && isFieldAttacked(board, row, column) && kingCannotBeProtected(stateToCheck, row, column));
+                && isFieldAttacked(board, row, column, new Field(row, column))
+                && kingCannotBeProtected(stateToCheck, row, column));
     }
 
     /**
