@@ -267,7 +267,7 @@ public class ChessMoveConverter implements MoveConverter {
     /**
      * Creates the String list which contains the playing pieces.
      * @param board ChessBoard
-     * @return String list
+     * @return String: list of playing pieces
      * @author Alexander Posch
      */
     public static String convertPiecesToString(ChessBoard board) {

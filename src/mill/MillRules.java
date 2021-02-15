@@ -30,6 +30,8 @@ public class MillRules implements Rules {
         int targetRow = MillMoveConverter.convertPosIntoArrayCoordinate(move.charAt(3));
         int targetColumn = MillMoveConverter.convertPosIntoArrayCoordinate(move.charAt(4));
         
+        if(noMoveWasDone(gameBoard, stateToCheck))
+            return Messages.ERROR_YOU_HAVE_TO_MOVE;
 
         //startingPhase
         if(roundnumber < 18){
@@ -77,6 +79,30 @@ public class MillRules implements Rules {
             }
 
         }
+    }
+
+    /**
+     * Checks whether a move was done.
+     * @param board GameBoard
+     * @param stateToCheck PlayingPiece[][]
+     * @return boolean
+     * @author Begüm Tosun
+     */
+    private static boolean noMoveWasDone(GameBoard board, PlayingPiece[][] stateToCheck){
+        for(int k = 0 ; k < 7; k ++) {
+            if(k == 3)
+                for (int j = 0; j < 6; j ++){
+                   if(!board.getState()[k][j].getColour().equals(stateToCheck[k][j].getColour()))
+                       return false;
+                }
+            else
+                for (int j = 0; j < 3; j ++){
+                    if(!board.getState()[k][j].getColour().equals(stateToCheck[k][j].getColour()))
+                        return false;
+                }
+        }
+
+        return true;
     }
 
     /**

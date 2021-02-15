@@ -853,7 +853,7 @@ public class ChessRules implements Rules {
     }
 
     /**
-     * Detects all attacks against a given field. (used for king)
+     * Detects all attacks against a given field.
      * @param board GameBoard
      * @param row int
      * @param column int

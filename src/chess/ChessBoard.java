@@ -110,7 +110,7 @@ public class ChessBoard extends GameBoard {
 
     /**
      * The method setUpBoard() returns a chess board with an initial setup.
-     * @return ChessPlayingPiece[][]
+     * @return PlayingPiece[][]
      */
     @Override
     protected PlayingPiece[][] setUpBoard(){
@@ -165,11 +165,21 @@ public class ChessBoard extends GameBoard {
 
         return initialState;
     }
-    
+
+    /**
+     * Returns the PlayingPiece list which is used to initialize the board.
+     * @return PlayingPiece[]
+     */
     public PlayingPiece[] getPlayingPieces(){
         return playingPieces;
     }
 
+    /**
+     * The method gets the new state of the game board as a simple String,
+     * converts it into a two dimensional PlayingPiece array and updates
+     * the game board state.
+     * @param input String
+     */
     @Override
     public void setNewBoard(String input){
         PlayingPiece[][] newBoard = new PlayingPiece[8][8];
