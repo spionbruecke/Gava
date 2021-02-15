@@ -349,6 +349,8 @@ public class ChessRules implements Rules {
      * @author Begüm Tosun
      */
     private static Messages checkQueenMoves(String move){
+        System.out.println();
+        System.out.println("");
         if (checkVerticalAndHorizontalMoves(move) || checkDiagonalMoves(move))
             return Messages.MOVE_ALLOWED;
         else
@@ -363,7 +365,13 @@ public class ChessRules implements Rules {
      * @author Begüm Tosun
      */
     private static boolean isQueenPathFree(GameBoard gameBoard, String move){
-        return areVerticalOrHorizontalPathsFree(gameBoard, move) || areDiagonalPathsFree(gameBoard, move);
+        Field start = ChessMoveConverter.getChessStartField(move);
+        Field target = ChessMoveConverter.getChessTargetField(move);
+
+        if( (start.getRow() != target.getRow()) && (start.getColumn() != target.getColumn()) )
+            return areDiagonalPathsFree(gameBoard, move);
+        else
+            return areVerticalOrHorizontalPathsFree(gameBoard, move);
     }
 
     /**
@@ -1124,6 +1132,7 @@ public class ChessRules implements Rules {
             }
 
         }
+
         return true;
     }
 
