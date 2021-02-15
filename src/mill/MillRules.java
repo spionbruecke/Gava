@@ -17,6 +17,9 @@ public class MillRules implements Rules {
      * @return Messages
      */
     public static Messages isMoveAllowed(GameBoard gameBoard, PlayingPiece[][] stateToCheck,int roundnumber) {
+        if(noMoveWasDone(gameBoard, stateToCheck))
+            return Messages.ERROR_YOU_HAVE_TO_MOVE;
+
         final MillMoveConverter CONVERTER = new MillMoveConverter();
         String move = CONVERTER.stateToString(gameBoard.getState(), stateToCheck);
 
@@ -30,8 +33,6 @@ public class MillRules implements Rules {
         int targetRow = MillMoveConverter.convertPosIntoArrayCoordinate(move.charAt(3));
         int targetColumn = MillMoveConverter.convertPosIntoArrayCoordinate(move.charAt(4));
         
-        if(noMoveWasDone(gameBoard, stateToCheck))
-            return Messages.ERROR_YOU_HAVE_TO_MOVE;
 
         //startingPhase
         if(roundnumber < 18){
