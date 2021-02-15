@@ -87,7 +87,7 @@ public class MillRules implements Rules {
      * @return Messages
      * @author Begüm Tosun
      */
-    public static Messages checkRemovedPiece(GameBoard board, PlayingPiece[][] stateToCheck, String colour){
+    public static Messages checkRemovedPiece(GameBoard board, PlayingPiece[][] stateToCheck, String colour, int roundnumber){
         int totalNumOfPiecesPrevious = MillBoard.getNumOfPieces(board.getState(), "white")
                 + MillBoard.getNumOfPieces(board.getState(), "black");
 
@@ -102,7 +102,7 @@ public class MillRules implements Rules {
                         if(stateToCheck[k][j].getColour().equals("null")
                             && !board.getState()[k][j].getColour().equals("null")
                             && board.getState()[k][j].getColour().equals(colour)
-                            && !isPlayingPiecePartOfMill(board, k, j, colour))
+                            && !isPlayingPiecePartOfMill(board, k, j, colour,roundnumber))
                             return Messages.MOVE_ALLOWED;
                     }
                 else
@@ -110,7 +110,7 @@ public class MillRules implements Rules {
                         if(stateToCheck[k][j].getColour().equals("null")
                             && !board.getState()[k][j].getColour().equals("null")
                             && board.getState()[k][j].getColour().equals(colour)
-                            && !isPlayingPiecePartOfMill(board, k, j, colour))
+                            && !isPlayingPiecePartOfMill(board, k, j, colour,roundnumber))
                             return Messages.MOVE_ALLOWED;
                     }
             }
@@ -128,13 +128,17 @@ public class MillRules implements Rules {
      * @return boolean
      * @author Begüm Tosun
      */
-    private static boolean isPlayingPiecePartOfMill(GameBoard board, int row, int column, String colour){
+    private static boolean isPlayingPiecePartOfMill(GameBoard board, int row, int column, String colour,int roundnumber){
         /*
          * Each field of the array returned by the method threeInARow(...) represents a certain
          * row or column of the mill game board. Depending on if there is a mill on this certain
          * row/column the value is true or false.
          */
         boolean[] mills = threeInARow(board.getState(), colour);
+
+        if (MillBoard.getNumOfPieces(board.getState(), "black") <= 3 && roundnumber > 17)
+            return false;
+
 
         if(row == 0 && column == 0)
             return mills[0] || mills[8];

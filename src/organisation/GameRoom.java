@@ -24,11 +24,12 @@ public class GameRoom{
     private Player player2;
     private Player turnOfPlayer;
     private int numberOfPlayer;
+    private int roundnumber;
     private GameBoard gameBoard;
+    private GameBoard tmpBoard;
     private Rules rule;
     private String game;
-    private String promotionPosition;
-    private int roundnumber;
+    private String promotionPosition;    
 
     public GameRoom(Game gamemode){
         roundnumber = 0;
@@ -168,7 +169,7 @@ public class GameRoom{
     }
 
     public String handleRemove(String information) throws IOException, WrongFormatException {
-        Messages message = MillRules.checkRemovedPiece(gameBoard,  MillMoveConverter.getBoardFromString(information), getTheOtherPlayer(turnOfPlayer).getColour());
+        Messages message = MillRules.checkRemovedPiece(tmpBoard,  MillMoveConverter.getBoardFromString(information), getTheOtherPlayer(turnOfPlayer).getColour(),roundnumber);
 
         if(message == Messages.MOVE_ALLOWED){
             if(MillRules.isGameFinished(MillMoveConverter.getBoardFromString(information), turnOfPlayer.getColour(),roundnumber) == Messages.VICTORY){
@@ -341,7 +342,8 @@ public class GameRoom{
                 case ERROR_WRONGMOVEMENT:
                     return "<Error=Wrong Movement>";
                 case MOVE_ALLOWED_REMOVE_PIECE:
-                    gameBoard.setNewBoard(information);
+                    tmpBoard = new MillBoard();
+                    tmpBoard.setNewBoard(information);
                     return "<Remove>";
                 default:
                     System.out.println("Set Input for Mill Error");

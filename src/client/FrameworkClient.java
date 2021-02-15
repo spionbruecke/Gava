@@ -24,7 +24,7 @@ import src.organisation.StringConverter;
 
 
 /**
- * @author Tobias Mitterreiter
+ * @author Tobias Mitterreiter, Alexander Posch
  * @version 1.0
  * this abstract class handles the client side
  */
@@ -196,17 +196,20 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 					setupGameBoard(oldState);
 					JOptionPane.showMessageDialog(null, information, "Error", JOptionPane.INFORMATION_MESSAGE);
 					
-					while(newState == " ") {
-						newState = ((MillGui) board).getNewState();
+					if(remove)
+						remove();
+					else {
+						while(newState == " ") {
+							newState = ((MillGui) board).getNewState();
+						}
+							try {
+								dos.writeUTF("<Gameboard=" + newState + ">");
+							} catch (IOException e) {	}	
 					}
-						try {
-							dos.writeUTF("<Gameboard=" + newState + ">");
-						} catch (IOException e) {	}	
-						
-					newState = " ";
 					break;
 				
 				case SUCESS:
+					remove = false;
 					oldState = currentState;
 					tokencounter++;
 					break;
@@ -224,23 +227,8 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 					break;
 					
 				case REMOVE:
-					board.dispose();
-					myTurn = true;
-					remove = true;
-					setupGameBoard(currentState);
-					JOptionPane.showMessageDialog(null, "you can remove a token", "Remove Token", JOptionPane.INFORMATION_MESSAGE);
-					
-					while(newState == " ") {
-						newState = ((MillGui) board).getNewState();
-					}
-
-					currentState = newState;	
-					try {
-						dos.writeUTF("<Remove=" + newState + ">");
-					} catch (IOException e) {	}	
-					
-					remove = false;
-					newState = " ";
+					oldState = currentState;
+					remove();
 					break;
 					
 				default:
@@ -401,6 +389,26 @@ public abstract class FrameworkClient extends JFrame implements Runnable, Action
 		}
 	}
 	
+
+	private void remove(){
+		board.dispose();
+		myTurn = true;
+		remove = true;
+		setupGameBoard(oldState);
+		JOptionPane.showMessageDialog(null, "you can remove a token", "Remove Token", JOptionPane.INFORMATION_MESSAGE);
+		
+		while(newState == " ") {
+			newState = ((MillGui) board).getNewState();
+		}
+
+		currentState = newState;	
+		try {
+			dos.writeUTF("<Remove=" + newState + ">");
+		} catch (IOException e) {	}	
+		
+		newState = " ";
+	}
+
 	public void start()
 	{
 		runner = new Thread(this);
