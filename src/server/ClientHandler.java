@@ -7,7 +7,7 @@ import src.organisation.*;
 
 /**
  * @author Alexander Posch
- * @version 4.0
+ * @version 2.5
  * 
  * For each connection there is own ClientHandler,who sends and recieve informations
  */
