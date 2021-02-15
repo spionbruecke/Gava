@@ -13,7 +13,7 @@ import src.mill.*;
  * @version 4.0
  * 
  * The GameRoom organize and control the Game.
- * It checks for Rules and decides whos turn it is
+ * It checks for Rules and decides whose turn it is
  * 
  */
 public class GameRoom{
@@ -79,13 +79,13 @@ public class GameRoom{
     
 
     /**
-     * Simply adds a Player an return a boolean, when it was sucessfull.
-     * If the second player was added, the methode getStart will be called.
+     * Simply adds a Player an return a boolean, when it was successful.
+     * If the second player was added, the method getStart will be called.
      * 
-     * @param player
-     * @throws IOException
-     * @throws UnsupportedGameMode
-     * @return was it sucessfull
+     * @param player Player
+     * @throws IOException Exception
+     * @throws UnsupportedGameMode Exception
+     * @return was it successful
      */
      protected boolean addPlayer(Player player) throws IOException, UnsupportedGameMode{
         if(numberOfPlayer == 0) {
@@ -104,10 +104,10 @@ public class GameRoom{
 
     /**
      * 
-     * @param information
+     * @param information String
      * @return Connection-Status
-     * @throws WrongInformationFormatException
-     * @throws IOException
+     * @throws WrongInformationFormatException Exception
+     * @throws IOException Exception
      */
 
     public  boolean handleGame(String information) throws WrongInformationFormatException, IOException {
@@ -191,9 +191,9 @@ public class GameRoom{
         roundnumber ++;
     }
     /**
-     * Returns the other player of the gameroom.
+     * Returns the other player of the gameRoom.
      * 
-     * @param player
+     * @param player Player
      * @return The other Player
      */
     public Player getTheOtherPlayer( Player player){
@@ -228,9 +228,9 @@ public class GameRoom{
 
         /**
          * 
-     * Depending on the GameMode the new Board with the new Move will be handeled different
+     * Depending on the GameMode the new Board with the new Move will be handled different
      * 
-     * @param information
+     * @param information String
      * @return Message, if allowed or not
      */
     public String setInput(String information){
@@ -244,10 +244,10 @@ public class GameRoom{
     }
 
     /**
-     * New GameBoard with new Move will be testet in the Methode executeMove.
-     * This Methode will handle the outcome and set the new Board if the Move is allowed.
+     * New GameBoard with new Move will be tested in the method executeMove.
+     * This method will handle the outcome and set the new Board if the Move is allowed.
      * 
-     * @param information
+     * @param information String
      * @return Message, if allowed or not
      */
     private String setChessInput(String information){
@@ -312,10 +312,10 @@ public class GameRoom{
     }
 
     /**
-     * New GameBoard with new Move will be testet in the Methode executeMove.
-     * This Methode will handle the outcome and set the new Board if the Move is allowed.
+     * New GameBoard with new Move will be testee in the method executeMove.
+     * This method will handle the outcome and set the new Board if the Move is allowed.
      * 
-     * @param information
+     * @param information String
      * @return Message, if allowed or not
      */
     private String setMillInput(String information){

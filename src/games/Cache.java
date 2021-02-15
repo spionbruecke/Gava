@@ -9,7 +9,7 @@ public class Cache {
 
     /**
      * Constructs a Cache-object.
-     * @param state PlayingPiece
+     * @param state PlayingPiece[][]
      */
     public Cache(PlayingPiece[][] state){
         this.state = state;
@@ -17,7 +17,7 @@ public class Cache {
 
     /**
      * Returns a multidimensional PlayingPiece array.
-     * @return state
+     * @return state: PlayingPiece[][]
      */
     public PlayingPiece[][] getState(){
         return state;

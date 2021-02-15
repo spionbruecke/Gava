@@ -50,8 +50,13 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 	protected JLabel timerLabel;
 	protected Timer timer;
 	protected int count = 15;
-	
-	
+
+	/**
+	 * Constructor creates initial ChessBoard.
+	 * @param color String
+	 * @param currentState String
+	 * @param myTurn boolean
+	 */
 	public ChessBoard(String color, String currentState, boolean myTurn) {	
 		this.currentState = currentState;
 		this.oldState = currentState;
@@ -62,7 +67,10 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 		
 		initialize(currentState);
 	}
-	
+
+	/**
+	 * Default constructor.
+	 */
 	public ChessBoard() {
 		setupBoard();
 	}
@@ -119,7 +127,13 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 			}
 		}
 	}
-	
+
+	/**
+	 * Returns the corresponding image.
+	 * @param name String
+	 * @param color String
+	 * @return
+	 */
 	public ImageIcon getImageIcon(String name, String color) {
 		
 		ImageIcon icon = null;
@@ -196,13 +210,15 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 			timer.stop();
 		}
 	}
-	
-	
+
+	/**
+	 * Returns the new state.
+	 * @return String: newState
+	 */
 	public String getNewState() {
 		return this.newState;
 	}
 
-	
 	public void setupBoard() {
 		layeredPane = new JLayeredPane();
 		getContentPane().add(layeredPane, BorderLayout.NORTH);
@@ -257,7 +273,10 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 		if (myTurn == true)
 			timer.start();
 	}
-	
+
+	/**
+	 * Implementation of timer.
+	 */
 	public class TimeClass implements ActionListener {
 		int counter;
 		public TimeClass(int counter) {
@@ -276,7 +295,7 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 			}
 		}
 	}
-	
+
 	public void setUpFrameNumbers(int x, int y, int w, int h) {
 		String[] numbersW = {"1", "2", "3", "4", "5", "6", "7", "8"};
 		String[] numbersB = {"8", "7", "6", "5", "4", "3", "2", "1"};
@@ -329,7 +348,9 @@ public class ChessBoard extends JFrame implements MouseListener, MouseMotionList
 		}
 	}
 
-	
+	/**
+	 * Updates the board.
+	 */
 	public void updateBoard() {
 		this.boardMatrix = new Figure[8][8];
 		for (int i = 0; i < figuresList.size(); i++) {

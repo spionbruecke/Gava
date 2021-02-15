@@ -19,13 +19,15 @@ public class GameController {
     private static List<GameRoom> currentGames = new ArrayList<>(); //Every Room with minimum one Player
 
 
-    //Opens a new Room, add it to the List and return the new Room
+    /**
+     * Opens a new Room, add it to the List and return the new Room
+     * @param game Game
+     */
     private static GameRoom openNewRoom(Game game) {
         currentGames.add(new GameRoom(game));
         return currentGames.get(currentGames.size() - 1);
     }
 
-    //Add the Player player to Room depending on the GameMode the Player choosed
     /**
      * Add the Player player to Room depending on the GameMode the Player choosed. 
      * If the room has two players and is full then the game starts.

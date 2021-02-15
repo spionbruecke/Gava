@@ -16,7 +16,7 @@ public class StringConverter{
     /**
      * Scans the input-String for a Type, which is neccesary for the server. 
      * 
-     * @param input
+     * @param input String
      * @return InformationTyp
      * @throws WrongInformationFormatException
      */
@@ -56,7 +56,7 @@ public class StringConverter{
     /**
      * Scans the input until '=' appears and send them back
      * 
-     * @param input
+     * @param input String
      * @return keyword As String
      * @throws WrongInformationFormatException
      */
@@ -85,7 +85,7 @@ public class StringConverter{
     /**
      * Get the information of the string, which is located after the '='.
      * 
-     * @param input
+     * @param input String
      * @return information the String contains
      */
     public static String getInformation(String input){

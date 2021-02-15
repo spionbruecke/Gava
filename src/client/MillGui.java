@@ -83,6 +83,11 @@ public class MillGui extends JFrame{
 		}
 		
 	}
+
+	/**
+	 * Returns the new state of the mill board.
+	 * @return String: new state
+	 */
 	public String getNewState() {
 		return this.newState;
 	}	

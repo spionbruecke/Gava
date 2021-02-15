@@ -10,7 +10,8 @@ public class LogWriter {
 
 
     /**
-     * Writes every input in a file named "Log.txt". The input mostly contains informations for the server, like who connected etc.
+     * Writes every input in a file named "Log.txt". The input mostly contains information for the server,
+     * like who connected etc.
      * 
      * @author Alexander Posch
      * @version 1.0

@@ -1,7 +1,6 @@
 
 package src.client;
 
-import java.awt.*;
 import java.awt.event.ActionEvent;
 
 import javax.swing.*;
