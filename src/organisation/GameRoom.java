@@ -279,11 +279,11 @@ public class GameRoom{
                 case ERROR_WRONGMOVEMENT_DIRECTION_BISHOP:
                     return "<Error=Bishop is only allowed to move directional>";
                 case ERROR_WRONGMOVEMENT_DIRECTION_KING:
-                    return "<Error=King is only allowed to move one Step>";
+                    return "<Error=King is only allowed to move one step>";
                 case ERROR_WRONGMOVEMENT_DIRECTION_KNIGHT:
-                    return "<Error=Knight is only allowed to move one Step in one Axes and two Steps in another>";
+                    return "<Error=Knight is only allowed to move one step in one Axes and two steps in another>";
                 case ERROR_WRONGMOVEMENT_DIRECTION_PAWN:
-                    return "<Error=Pawn is only allowed tom move two Steps forward, when he hasn't moved jet. Otherwise he move one Step forward or directional to strike against an enemy piece>";
+                    return "<Error=Pawn is only allowed to move two steps forward, when he hasn't moved yet. Otherwise he moves one step forward or diagonal to strike against an enemy piece>";
                 case ERROR_WRONGMOVEMENT_DIRECTION_QUEEN:
                     return "<Error=Queen is only allowed to move straight in every direction>";
                 case ERROR_WRONGMOVEMENT_DIRECTION_ROOK:
@@ -312,7 +312,7 @@ public class GameRoom{
     }
 
     /**
-     * New GameBoard with new Move will be testee in the method executeMove.
+     * New GameBoard with new Move will be tested in the method executeMove.
      * This method will handle the outcome and set the new Board if the Move is allowed.
      * 
      * @param information String
