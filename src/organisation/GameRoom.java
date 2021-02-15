@@ -341,6 +341,8 @@ public class GameRoom{
                     return "<Gameboard=" + MillMoveConverter.convertPiecesToString((MillBoard) this.gameBoard) + ">";
                 case ERROR_WRONGMOVEMENT:
                     return "<Error=Wrong Movement>";
+                case ERROR_YOU_HAVE_TO_MOVE:
+                    return "<Error=You have to move>";
                 case MOVE_ALLOWED_REMOVE_PIECE:
                     tmpBoard = new MillBoard();
                     tmpBoard.setNewBoard(information);
