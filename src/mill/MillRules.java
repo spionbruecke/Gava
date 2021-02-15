@@ -136,9 +136,9 @@ public class MillRules implements Rules {
          */
         boolean[] mills = threeInARow(board.getState(), colour);
 
-        if (MillBoard.getNumOfPieces(board.getState(), "black") <= 3 && roundnumber > 17)
+        //if the opponent only has three pieces it does not matter whether they are part of a mill or not
+        if (MillBoard.getNumOfPieces(board.getState(), colour) <= 3 && roundnumber > 17)
             return false;
-
 
         if(row == 0 && column == 0)
             return mills[0] || mills[8];
