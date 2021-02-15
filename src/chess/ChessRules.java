@@ -432,12 +432,12 @@ public class ChessRules implements Rules {
         }
 
         //left-down
-        if( (start.getColumn()-2 >= 0) && (start.getRow()-1 <= 7) ){
-            possibleLocations.add(new Field(start.getRow()-1, start.getColumn()-2));
+        if( (start.getColumn()-2 >= 0) && (start.getRow()+1 <= 7) ){
+            possibleLocations.add(new Field(start.getRow()+1, start.getColumn()-2));
         }
 
         //right-up
-        if( (start.getColumn()+2 <= 7) && (start.getRow()-1 <= 0) ){
+        if( (start.getColumn()+2 <= 7) && (start.getRow()-1 >= 0) ){
             possibleLocations.add(new Field(start.getRow()-1, start.getColumn()+2));
         }
 
@@ -448,9 +448,8 @@ public class ChessRules implements Rules {
 
         //check whether the target is one of the possible locations
         for (Field possibleLocation : possibleLocations) {
-            if (possibleLocation.equals(target)) {
+            if (possibleLocation.equals(target))
                 return Messages.MOVE_ALLOWED;
-            }
         }
 
         return Messages.ERROR_WRONGMOVEMENT_DIRECTION_KNIGHT;
