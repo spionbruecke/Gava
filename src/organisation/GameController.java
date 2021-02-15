@@ -7,7 +7,7 @@ import src.games.*;
 
 /**
  * @author Alexander Posch
- * @version 0.2
+ * @version 1.0
  * 
  * Organize every GameRoom.
  * Add Players to the Room with the right Game-Mode or opens a new if needed
